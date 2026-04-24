@@ -1,0 +1,2594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nosso espaço</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Lato:wght@300;400&family=Cinzel:wght@400;600&family=Dancing+Script:wght@400;600&family=Merriweather:ital,wght@0,300;1,300&family=Josefin+Sans:wght@300;400&family=IM+Fell+English:ital@0;1&family=Satisfy&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --text: #e8e8e8;
+    --text-muted: #666666;
+    --accent: #c8b87a;
+    --accent-dim: rgba(200,184,122,0.12);
+    --red: #c87a7a;
+    --green: #7ac8a0;
+  }
+
+  :root.light {
+    --bg: #f5f2ec;
+    --surface: #ffffff;
+    --surface2: #ede9e1;
+    --border: #d8d2c6;
+    --text: #1a1a1a;
+    --text-muted: #999990;
+    --accent: #9a7c2e;
+    --accent-dim: rgba(154,124,46,0.10);
+    --red: #b05050;
+    --green: #4a9e70;
+  }
+
+  :root {
+    --font-body: 'DM Mono', monospace;
+    --font-display: 'Cormorant Garamond', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    min-height: 100vh;
+    font-size: 13px;
+  }
+
+  /* ─── LOGIN ─────────────────────────────────────────── */
+  #login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px;
+    gap: 40px;
+  }
+
+  .login-title {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    color: var(--text);
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  .login-subtitle {
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 10px;
+    text-align: center;
+    margin-top: -28px;
+  }
+
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .user-select {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .user-btn {
+    background: var(--surface);
+    border: none;
+    color: var(--text-muted);
+    padding: 12px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .user-btn.active {
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .field-label {
+    color: var(--text-muted);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  input[type="password"], input[type="text"], input[type="date"], textarea, select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 10px 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+  }
+
+  .btn {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    padding: 12px 24px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s;
+  }
+
+  .btn:hover { opacity: 0.85; }
+  .btn.secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .btn.danger {
+    background: var(--red);
+    color: #0a0a0a;
+  }
+  .btn.gold {
+    background: var(--accent);
+    color: #0a0a0a;
+  }
+
+  .error-msg {
+    color: var(--red);
+    font-size: 11px;
+    text-align: center;
+  }
+
+  /* ─── APP SHELL ─────────────────────────────────────── */
+  #app { display: none; flex-direction: column; min-height: 100vh; }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  :root.light header {
+    background: rgba(245,242,236,0.92);
+  }
+
+  .header-logo {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--text);
+    letter-spacing: 0.04em;
+  }
+
+  .header-user {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .user-badge {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(200,184,122,0.25);
+    padding: 4px 10px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+  .logout-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .logout-btn:hover { color: var(--text); }
+
+  /* ─── NAV ────────────────────────────────────────────── */
+  nav {
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    padding: 0 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: rgba(10,10,10,0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: sticky;
+    top: 56px;
+    z-index: 99;
+  }
+
+  :root.light nav {
+    background: rgba(245,242,236,0.88);
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  .nav-item {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .nav-item.active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ─── MAIN ───────────────────────────────────────────── */
+  main {
+    padding: 32px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    margin-bottom: 32px;
+  }
+
+  /* ─── CARDS ──────────────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 12px;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-style: italic;
+  }
+
+  .card-meta {
+    color: var(--text-muted);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  .card-body {
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 13px;
+    white-space: pre-wrap;
+  }
+
+  .card-tag {
+    display: inline-block;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(200,184,122,0.2);
+    padding: 2px 8px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+
+  .card-tag.blue {
+    background: rgba(122,140,200,0.1);
+    color: #7a8cc8;
+    border-color: rgba(122,140,200,0.2);
+  }
+
+  .card-tag.green {
+    background: rgba(122,200,160,0.1);
+    color: var(--green);
+    border-color: rgba(122,200,160,0.2);
+  }
+
+  .card-tag.red {
+    background: rgba(200,122,122,0.1);
+    color: var(--red);
+    border-color: rgba(200,122,122,0.2);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: flex-end;
+  }
+
+  .icon-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 11px;
+    padding: 6px 12px;
+    font-family: var(--font-body);
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+
+  .icon-btn:hover { border-color: var(--text-muted); color: var(--text); }
+  .icon-btn.del:hover { border-color: var(--red); color: var(--red); }
+
+  /* ─── FORMS ──────────────────────────────────────────── */
+  .form-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+
+  .form-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .form-actions .btn { width: auto; flex: 1; }
+
+  /* ─── DATES ──────────────────────────────────────────── */
+  .dates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .date-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .date-number {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .date-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; margin-top: 4px; }
+  .date-name { font-size: 14px; margin-top: 8px; }
+  .date-countdown { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ─── APOLOGY ────────────────────────────────────────── */
+  .apology-target {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .target-btn {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 10px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .target-btn.selected {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .apology-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 16px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .apology-from {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .apology-msg {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .apology-extra {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 16px;
+    line-height: 1.7;
+  }
+
+  .unread-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ─── EMPTY STATE ────────────────────────────────────── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--text-muted);
+  }
+
+  .empty-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    opacity: 0.4;
+  }
+
+  .empty-text {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── MODAL ──────────────────────────────────────────── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+
+  /* ─── GAMES SECTION ──────────────────────────────────── */
+  .game-tabs {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+
+  .game-tab {
+    background: var(--surface);
+    border: none;
+    color: var(--text-muted);
+    padding: 10px 18px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .game-tab.active {
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 12px 20px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* ─── CARTA MODAL ────────────────────────────────────── */
+  .carta-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(4px);
+  }
+  .carta-modal-overlay.open { display: flex; }
+
+  .carta-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .carta-modal-header {
+    padding: 28px 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .carta-modal-close {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .carta-modal-close:hover { border-color: var(--red); color: var(--red); }
+
+  .carta-modal-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-style: italic;
+    line-height: 1.2;
+  }
+
+  .carta-modal-body {
+    padding: 20px 28px 28px;
+  }
+
+  .carta-modal-text {
+    font-size: 14px;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+  }
+
+  .carta-modal-img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .carta-modal-meta {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ─── COR DA CARTA ────────────────────────────────────── */
+  .color-picker-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+  }
+  .color-dot:hover { transform: scale(1.2); }
+  .color-dot.selected { border-color: var(--text); transform: scale(1.15); }
+
+  /* ─── IMAGE UPLOAD ────────────────────────────────────── */
+  .img-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px dashed var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 10px 14px;
+    transition: all 0.2s;
+    width: 100%;
+    justify-content: center;
+  }
+  .img-upload-label:hover { border-color: var(--accent); color: var(--accent); }
+  .img-upload-label input { display: none; }
+
+  .img-preview {
+    position: relative;
+    margin-top: 8px;
+  }
+  .img-preview img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+  }
+  .img-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.7);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card.clickable { cursor: pointer; transition: border-color 0.2s; }
+  .card.clickable:hover { border-color: var(--accent); }
+
+  /* ─── LOL SELECTORS ─────────────────────────────────────── */
+  .lol-search-wrap { position: relative; }
+
+  .lol-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    max-height: 260px;
+    overflow-y: auto;
+    z-index: 150;
+    scrollbar-width: thin;
+  }
+
+  .lol-drop-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .lol-drop-item:last-child { border-bottom: none; }
+  .lol-drop-item:hover { background: var(--accent-dim); }
+
+  .lol-drop-item img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .lol-drop-item span {
+    font-size: 12px;
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  .lol-drop-item .lol-drop-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    display: block;
+  }
+
+  .lol-selected-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(200,184,122,0.2);
+  }
+
+  .lol-selected-item img { width: 36px; height: 36px; object-fit: cover; }
+  .lol-selected-item span { font-size: 13px; color: var(--accent); }
+  .lol-selected-item button {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .lol-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .lol-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 4px 8px 4px 4px;
+    font-size: 11px;
+    color: var(--text);
+  }
+
+  .lol-chip img { width: 24px; height: 24px; object-fit: cover; }
+
+  .lol-chip button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0 2px;
+    line-height: 1;
+  }
+
+  .lol-loading {
+    padding: 16px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── BACKGROUND PERSONALIZADO ───────────────────────── */
+  body.custom-bg {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+  }
+
+  body.custom-bg #login-screen,
+  body.custom-bg #app {
+    background: transparent;
+  }
+
+  body.custom-bg header,
+  body.custom-bg .form-panel,
+  body.custom-bg .card,
+  body.custom-bg .apology-card,
+  body.custom-bg .date-card,
+  body.custom-bg .carta-modal,
+  body.custom-bg .modal {
+    backdrop-filter: blur(4px);
+    background: rgba(0,0,0,0.6) !important;
+  }
+
+  :root.light body.custom-bg header,
+  :root.light body.custom-bg .form-panel,
+  :root.light body.custom-bg .card {
+    background: rgba(255,255,255,0.65) !important;
+  }
+
+  /* ─── RUNA PANEL ─────────────────────────────────────── */
+  .runa-tree-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 70px;
+  }
+  .runa-tree-btn:hover { border-color: var(--accent); }
+  .runa-tree-btn.active { border-color: var(--accent); background: var(--accent-dim); }
+  .runa-tree-btn img { width: 36px; height: 36px; }
+  .runa-tree-btn span { font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .runa-tree-btn.active span { color: var(--accent); }
+
+  .runa-slot {
+    margin-bottom: 12px;
+  }
+  .runa-slot-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    padding-left: 2px;
+  }
+  .runa-slot-options {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .runa-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
+    border: 2px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 72px;
+  }
+  .runa-option:hover { border-color: var(--accent); }
+  .runa-option.selected { border-color: var(--accent); background: var(--accent-dim); }
+  .runa-option img { width: 40px; height: 40px; object-fit: contain; }
+  .runa-option span { font-size: 9px; color: var(--text-muted); text-align: center; line-height: 1.2; }
+  .runa-option.selected span { color: var(--accent); }
+
+  .runa-keystone .runa-option { width: 88px; }
+  .runa-keystone .runa-option img { width: 52px; height: 52px; }
+
+  /* ─── FONT SELECTOR ─────────────────────────────────── */
+  .font-opt {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 8px 14px;
+    font-size: 13px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .font-opt:hover { border-color: var(--accent); color: var(--text); }
+  .font-opt.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  @media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+    main { padding: 20px 16px; }
+    header { padding: 0 16px; }
+    nav { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
+<div id="login-screen">
+  <div>
+    <div class="login-title">nosso espaço</div>
+    <div class="login-subtitle">um lugar só nosso</div>
+  </div>
+
+  <div class="login-box">
+    <div>
+      <div class="field-label">entrar como</div>
+      <div class="user-select">
+        <button class="user-btn active" onclick="selectUser('player1')" id="btn-p1">jogador 1</button>
+        <button class="user-btn" onclick="selectUser('player2')" id="btn-p2">jogador 2</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="field-label">senha</div>
+      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+
+    <div class="error-msg" id="login-error"></div>
+    <button class="btn" onclick="doLogin()">entrar</button>
+
+    <div style="text-align:center; color: var(--text-muted); font-size:10px; letter-spacing:0.1em; margin-top:4px;">
+      primeira vez? use a senha padrão: <span style="color:var(--accent)">1234</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="app">
+  <header>
+    <div class="header-logo">nosso espaço</div>
+    <div class="header-user">
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="alternar tema">◐</button>
+      <span class="user-badge" id="header-username">—</span>
+      <button class="logout-btn" onclick="logout()">sair</button>
+    </div>
+  </header>
+
+  <nav>
+    <button class="nav-item active" onclick="showSection('cartas')">✉ cartas</button>
+    <button class="nav-item" onclick="showSection('planos')">✦ planos</button>
+    <button class="nav-item" onclick="showSection('datas')">◎ datas</button>
+    <button class="nav-item" onclick="showSection('jogos')">⌗ jogos</button>
+    <button class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
+    <button class="nav-item" onclick="showSection('config')">⚙ config</button>
+  </nav>
+
+  <main>
+
+    <!-- ─── CARTAS ─── -->
+    <section id="sec-cartas" class="section active">
+      <div class="section-title">cartas</div>
+      <div class="section-desc">mensagens do coração — para guardar para sempre</div>
+
+      <div class="form-panel">
+        <div class="form-grid">
+          <div class="form-group">
+            <div class="field-label">para</div>
+            <select id="carta-para">
+              <option value="player2">jogador 2</option>
+              <option value="player1">jogador 1</option>
+              <option value="ambos">nós dois</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <div class="field-label">título</div>
+            <input type="text" id="carta-titulo" placeholder="um pensamento de hoje...">
+          </div>
+          <div class="form-group">
+            <div class="field-label">mensagem</div>
+            <textarea id="carta-texto" rows="5" placeholder="escreva aqui..."></textarea>
+          </div>
+          <div class="form-group">
+            <div class="field-label">cor de fundo da carta</div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-muted);font-size:11px;letter-spacing:0.1em">
+                <input type="color" id="carta-color-input" value="#111111"
+                  style="width:36px;height:36px;border:1px solid var(--border);background:none;cursor:pointer;padding:2px"
+                  oninput="cartaColorSelecionada=this.value">
+                escolher cor
+              </label>
+              <button type="button" onclick="cartaColorSelecionada='';document.getElementById('carta-color-input').value='#111111'" 
+                style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;cursor:pointer;font-family:inherit;font-size:11px;letter-spacing:0.1em">
+                resetar
+              </button>
+              <span id="carta-color-preview" style="font-size:10px;color:var(--text-muted);letter-spacing:0.1em">cor livre — qualquer cor</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">imagem (opcional)</div>
+            <label class="img-upload-label">
+              ＋ adicionar imagem
+              <input type="file" id="carta-img-input" accept="image/*" onchange="previewCartaImg(this)">
+            </label>
+            <div class="img-preview" id="carta-img-preview" style="display:none">
+              <img id="carta-img-thumb" src="">
+              <button class="img-remove" onclick="removeCartaImg()">✕</button>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn gold" onclick="addCarta()">enviar carta</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="cartas-list"></div>
+    </section>
+
+    <!-- ─── PLANOS ─── -->
+    <section id="sec-planos" class="section">
+      <div class="section-title">planos & sonhos</div>
+      <div class="section-desc">tudo que queremos fazer juntos algum dia</div>
+
+      <div class="form-panel">
+        <div class="form-grid">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">nome do plano</div>
+              <input type="text" id="plano-nome" placeholder="ex: viajar pra praia">
+            </div>
+            <div class="form-group">
+              <div class="field-label">categoria</div>
+              <select id="plano-cat">
+                <option value="viagem">✈ viagem</option>
+                <option value="experiencia">🎯 experiência</option>
+                <option value="objetivo">⭐ objetivo</option>
+                <option value="sonho">💭 sonho</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">descrição</div>
+            <textarea id="plano-desc" rows="3" placeholder="conte mais..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="btn gold" onclick="addPlano()">adicionar plano</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="planos-list"></div>
+    </section>
+
+    <!-- ─── DATAS ─── -->
+    <section id="sec-datas" class="section">
+      <div class="section-title">datas especiais</div>
+      <div class="section-desc">aniversários, comemorações, momentos para nunca esquecer</div>
+
+      <div id="next-dates" class="dates-grid"></div>
+
+      <div class="form-panel">
+        <div class="form-grid">
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">nome da data</div>
+              <input type="text" id="data-nome" placeholder="ex: nosso aniversário">
+            </div>
+            <div class="form-group">
+              <div class="field-label">data</div>
+              <input type="date" id="data-val">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">tipo</div>
+            <select id="data-tipo">
+              <option value="aniversario">💑 aniversário do casal</option>
+              <option value="niver">🎂 aniversário de alguém</option>
+              <option value="especial">✨ data especial</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button class="btn gold" onclick="addData()">salvar data</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="datas-list"></div>
+    </section>
+
+    <!-- ─── JOGOS ─── -->
+    <section id="sec-jogos" class="section">
+      <div class="section-title">jogos</div>
+      <div class="section-desc">builds, estratégias e anotações de gaming</div>
+
+      <div class="game-tabs">
+        <button class="game-tab active" onclick="switchGame('lol')" id="gtab-lol">League of Legends</button>
+        <button class="game-tab" onclick="switchGame('mhw')" id="gtab-mhw">Monster Hunter</button>
+        <button class="game-tab" onclick="switchGame('outros')" id="gtab-outros">outros</button>
+      </div>
+
+      <div id="game-lol">
+        <div class="form-panel">
+          <div class="form-grid">
+
+            <!-- Campeão -->
+            <div class="form-group">
+              <div class="field-label">campeão / main</div>
+              <div class="lol-search-wrap" id="champ-wrap">
+                <input type="text" id="lol-champ-search" placeholder="buscar campeão..." autocomplete="off"
+                  oninput="filtrarCampeoes(this.value)" onfocus="abrirDropLol('champ')" onblur="setTimeout(()=>fecharDropLol('champ'),200)">
+                <input type="hidden" id="lol-champ">
+                <div class="lol-dropdown" id="champ-drop" style="display:none"></div>
+              </div>
+              <div id="champ-selected" class="lol-selected-item" style="display:none"></div>
+            </div>
+
+            <!-- Papel -->
+            <div class="form-group">
+              <div class="field-label">papel</div>
+              <select id="lol-role">
+                <option value="top">Top</option>
+                <option value="jungle">Jungle</option>
+                <option value="mid">Mid</option>
+                <option value="adc">ADC</option>
+                <option value="support">Support</option>
+              </select>
+            </div>
+
+            <!-- Itens -->
+            <div class="form-group" style="position:relative">
+              <div class="field-label">itens da build (clique para adicionar)</div>
+              <input type="text" id="lol-item-search" placeholder="buscar item..." autocomplete="off"
+                oninput="filtrarItens(this.value)" onfocus="abrirDropLol('item')" onblur="setTimeout(()=>fecharDropLol('item'),200)">
+              <div class="lol-dropdown" id="item-drop" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:200"></div>
+              <div id="itens-selected" class="lol-chips" style="margin-top:8px"></div>
+              <input type="hidden" id="lol-itens">
+            </div>
+
+            <!-- Runas -->
+            <div class="form-group">
+              <div class="field-label">runas</div>
+              <button type="button" class="btn secondary" onclick="abrirRunaPanel()" style="width:auto;padding:10px 20px">
+                🔮 selecionar runas
+              </button>
+              <div id="runas-selected" class="lol-chips" style="margin-top:8px"></div>
+              <input type="hidden" id="lol-runas">
+            </div>
+
+            <div class="form-group">
+              <div class="field-label">notas / estratégia</div>
+              <textarea id="lol-notas" rows="4" placeholder="dicas de matchup, rotação, timing..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn gold" onclick="addJogo('lol')">salvar build LoL</button>
+            </div>
+          </div>
+        </div>
+        <div id="lol-list"></div>
+      </div>
+
+      <div id="game-mhw" style="display:none">
+        <div class="form-panel">
+          <div class="form-grid">
+            <div class="form-row">
+              <div class="form-group">
+                <div class="field-label">arma / set</div>
+                <input type="text" id="mhw-arma" placeholder="ex: Switch Axe — Almudron">
+              </div>
+              <div class="form-group">
+                <div class="field-label">tipo de caça</div>
+                <select id="mhw-tipo">
+                  <option value="solo">Solo</option>
+                  <option value="coop">Co-op</option>
+                  <option value="speedrun">Speedrun</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="field-label">armadura / decorações</div>
+              <input type="text" id="mhw-armor" placeholder="ex: Teostra Head + Narwa Chest...">
+            </div>
+            <div class="form-group">
+              <div class="field-label">habilidades ativas</div>
+              <input type="text" id="mhw-skills" placeholder="ex: Attack Boost 7, Critical Eye 5...">
+            </div>
+            <div class="form-group">
+              <div class="field-label">estratégia / notas</div>
+              <textarea id="mhw-notas" rows="4" placeholder="dicas de fraquezas, pontos de ataque..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn gold" onclick="addJogo('mhw')">salvar build MHW</button>
+            </div>
+          </div>
+        </div>
+        <div id="mhw-list"></div>
+      </div>
+
+      <div id="game-outros" style="display:none">
+        <div class="form-panel">
+          <div class="form-grid">
+            <div class="form-row">
+              <div class="form-group">
+                <div class="field-label">nome do jogo</div>
+                <input type="text" id="out-jogo" placeholder="ex: Valorant, Minecraft...">
+              </div>
+              <div class="form-group">
+                <div class="field-label">tipo de anotação</div>
+                <select id="out-tipo">
+                  <option value="build">Build</option>
+                  <option value="estrategia">Estratégia</option>
+                  <option value="dica">Dica</option>
+                  <option value="geral">Geral</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="field-label">título</div>
+              <input type="text" id="out-titulo" placeholder="nome da build ou estratégia">
+            </div>
+            <div class="form-group">
+              <div class="field-label">conteúdo</div>
+              <textarea id="out-notas" rows="5" placeholder="anote tudo que precisar..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn gold" onclick="addJogo('outros')">salvar anotação</button>
+            </div>
+          </div>
+        </div>
+        <div id="outros-list"></div>
+      </div>
+    </section>
+
+    <!-- ─── DESCULPAS ─── -->
+    <section id="sec-desculpas" class="section">
+      <div class="section-title">pedido de desculpas</div>
+      <div class="section-desc">quando as palavras importam mais do que qualquer coisa</div>
+
+      <div class="form-panel">
+        <div class="form-grid">
+          <div class="form-group">
+            <div class="field-label">enviar para</div>
+            <div class="apology-target">
+              <button class="target-btn selected" id="apo-target-p1" onclick="selectApoTarget('player1')">jogador 1</button>
+              <button class="target-btn" id="apo-target-p2" onclick="selectApoTarget('player2')">jogador 2</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">mensagem principal</div>
+            <textarea id="apo-msg" rows="4" placeholder="o que você quer dizer do fundo do coração..."></textarea>
+          </div>
+          <div class="form-group">
+            <div class="field-label">o que você promete fazer diferente?</div>
+            <textarea id="apo-promessa" rows="3" placeholder="seja honesto(a)..."></textarea>
+          </div>
+          <div class="form-group">
+            <div class="field-label">o que você ama na outra pessoa? (opcional)</div>
+            <textarea id="apo-amor" rows="2" placeholder="lembre o outro do que sente..."></textarea>
+          </div>
+          <div class="form-group">
+            <div class="field-label">imagem (opcional)</div>
+            <label class="img-upload-label">
+              ＋ adicionar imagem
+              <input type="file" id="apo-img-input" accept="image/*" onchange="previewApoImg(this)">
+            </label>
+            <div class="img-preview" id="apo-img-preview" style="display:none">
+              <img id="apo-img-thumb" src="">
+              <button class="img-remove" onclick="removeApoImg()">✕</button>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn danger" onclick="addDesculpa()">enviar pedido de desculpas</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="desculpas-list"></div>
+    </section>
+
+    <!-- ─── CONFIG ─── -->
+    <section id="sec-config" class="section">
+      <div class="section-title">configurações</div>
+      <div class="section-desc">altere seu nome e sua senha</div>
+
+      <div class="form-panel">
+        <div class="form-grid">
+          <div class="field-label" style="font-size:12px; color: var(--text); margin-bottom:-4px">nome de exibição</div>
+          <div class="form-group">
+            <div class="field-label" id="cfg-name-label">seu nome ou apelido</div>
+            <input type="text" id="cfg-name" placeholder="seu nome ou apelido">
+          </div>
+          <div class="field-label" style="font-size:12px; color: var(--text); margin-top:8px; margin-bottom:-4px">senha</div>
+          <div class="form-group">
+            <div class="field-label">nova senha</div>
+            <input type="password" id="cfg-pass" placeholder="••••••••">
+          </div>
+          <div class="form-group">
+            <div class="field-label">confirmar nova senha</div>
+            <input type="password" id="cfg-pass-confirm" placeholder="••••••••">
+          </div>
+          <div class="field-label" style="font-size:12px; color: var(--text); margin-top:16px; margin-bottom:-4px">fonte do site</div>
+          <div class="form-group">
+            <div class="field-label">fonte de exibição (títulos)</div>
+            <div id="font-display-opts" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px"></div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">fonte do texto (corpo)</div>
+            <div id="font-body-opts" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+          </div>
+          <div class="field-label" style="font-size:12px; color: var(--text); margin-top:16px; margin-bottom:-4px">background personalizado</div>
+          <div class="form-group">
+            <div class="field-label">imagem de fundo do site (só para você)</div>
+            <label class="img-upload-label">
+              ＋ escolher imagem de fundo
+              <input type="file" id="bg-img-input" accept="image/*" onchange="previewBgImg(this)">
+            </label>
+            <div id="bg-img-preview" style="display:none;margin-top:8px;position:relative">
+              <img id="bg-img-thumb" src="" style="width:100%;max-height:120px;object-fit:cover;border:1px solid var(--border)">
+              <button class="img-remove" onclick="removeBgImg()">✕</button>
+            </div>
+            <div style="margin-top:6px;font-size:10px;color:var(--text-muted);letter-spacing:0.08em">
+              a imagem fica salva no seu navegador e aparece em todas as abas
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn gold" onclick="saveConfig()">salvar configurações</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══════════════ RUNA PANEL ═══════════════ -->
+<div class="carta-modal-overlay" id="runa-panel-overlay" onclick="fecharRunaPanel(event)" style="z-index:400">
+  <div class="carta-modal" id="runa-panel-box" style="max-width:700px;background:var(--bg)">
+    <div class="carta-modal-header" style="padding:20px 20px 0;border-bottom:1px solid var(--border);padding-bottom:16px">
+      <div class="carta-modal-title" style="font-size:1.4rem">runas</div>
+      <button class="carta-modal-close" onclick="document.getElementById('runa-panel-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div style="padding:16px 20px 24px;overflow-y:auto;max-height:70vh">
+      <!-- Seletor de árvore primária -->
+      <div style="margin-bottom:16px">
+        <div class="field-label" style="margin-bottom:8px">estilo principal</div>
+        <div id="runa-trees-primary" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+      <!-- Runas da árvore primária -->
+      <div id="runa-primary-slots" style="margin-bottom:20px"></div>
+      <!-- Seletor de árvore secundária -->
+      <div style="margin-bottom:12px">
+        <div class="field-label" style="margin-bottom:8px">estilo secundário</div>
+        <div id="runa-trees-secondary" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+      <!-- Runas da árvore secundária (2 slots) -->
+      <div id="runa-secondary-slots" style="margin-bottom:20px"></div>
+      <!-- Selecionadas -->
+      <div id="runa-selected-preview" style="margin-bottom:16px"></div>
+      <button class="btn gold" onclick="confirmarRunas()">confirmar runas</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CARTA MODAL ═══════════════ -->
+<div class="carta-modal-overlay" id="carta-modal-overlay" onclick="closeCartaModal(event)">
+  <div class="carta-modal" id="carta-modal-box">
+    <div class="carta-modal-header">
+      <div class="carta-modal-title" id="cm-titulo"></div>
+      <button class="carta-modal-close" onclick="fecharCartaModal()">✕</button>
+    </div>
+    <div class="carta-modal-body">
+      <img class="carta-modal-img" id="cm-img" src="" style="display:none">
+      <div class="carta-modal-text" id="cm-texto"></div>
+      <div class="carta-modal-meta" id="cm-meta"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <div class="modal-title" id="modal-title"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<script>
+// ─── Firebase Init ───────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyC8MswCGEfHzCKeKT2lxHsr56L9E_gijps",
+  authDomain: "nosso-espaco-59510.firebaseapp.com",
+  databaseURL: "https://nosso-espaco-59510-default-rtdb.firebaseio.com",
+  projectId: "nosso-espaco-59510",
+  storageBucket: "nosso-espaco-59510.firebasestorage.app",
+  messagingSenderId: "404824068918",
+  appId: "1:404824068918:web:c4f6ddbb65b92f7d3c9997"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// ═══ STATE ════════════════════════════════════════════
+let currentUser = null;
+let apoTarget = 'player1';
+
+// ─── LoL Data Dragon ─────────────────────────────────────
+const DDV = '16.8.1';
+const DDBase = `https://ddragon.leagueoflegends.com/cdn/${DDV}`;
+
+let lolCampeoes = [];
+let lolItens = [];
+let lolRunas = [];
+let lolItensSelected = [];
+let lolRunasSelected = [];
+let lolChampSelected = null;
+
+async function carregarDDragon() {
+  if (lolCampeoes.length && lolItens.length) return; // já carregado
+  try {
+    // Campeões
+    const rc = await fetch(`${DDBase}/data/pt_BR/champion.json`).then(r=>r.json());
+    lolCampeoes = Object.values(rc.data).map(ch => ({
+      id: ch.id, name: ch.name,
+      img: `${DDBase}/img/champion/${ch.image.full}`
+    })).sort((a,b)=>a.name.localeCompare(b.name));
+
+    // Itens
+    const ri = await fetch(`${DDBase}/data/pt_BR/item.json`).then(r=>r.json());
+    lolItens = Object.entries(ri.data)
+      .filter(([id,it]) => it.gold && it.gold.purchasable && it.gold.total >= 400 && !it.hideFromAll)
+      .map(([id,it]) => ({
+        id, name: it.name,
+        img: `${DDBase}/img/item/${it.image.full}`
+      })).sort((a,b)=>a.name.localeCompare(b.name));
+
+    // Runas carregadas sob demanda em abrirRunaPanel()
+  } catch(e) { console.warn('DDragon load error:', e); }
+}
+
+function abrirDropLol(tipo) {
+  if (tipo === 'runa') return; // runas agora usam painel visual
+  const drop = document.getElementById(tipo === 'champ' ? 'champ-drop' : 'item-drop');
+  const query = document.getElementById(tipo === 'champ' ? 'lol-champ-search' : 'lol-item-search').value;
+  if (tipo === 'champ') filtrarCampeoes(query);
+  else filtrarItens(query);
+  drop.style.display = 'block';
+}
+
+function fecharDropLol(tipo) {
+  if (tipo === 'runa') return;
+  const drop = document.getElementById(tipo === 'champ' ? 'champ-drop' : 'item-drop');
+  drop.style.display = 'none';
+}
+
+// ─── Painel visual de runas ───────────────────────────────
+let runaTreeData = []; // dados crus do DDragon
+let runaPrimaryTree = null;
+let runaSecondaryTree = null;
+let runaSelections = {}; // { slotIndex: runaObj } por árvore+slot
+let runaSecSelections = {}; // 2 runas secundárias
+
+async function abrirRunaPanel() {
+  if (!runaTreeData.length) {
+    try {
+      const r = await fetch(`${DDBase}/data/pt_BR/runesReforged.json`).then(r=>r.json());
+      runaTreeData = r;
+    } catch(e) { toast('erro ao carregar runas'); return; }
+  }
+  renderRunaTrees();
+  document.getElementById('runa-panel-overlay').classList.add('open');
+}
+
+function fecharRunaPanel(e) {
+  if (e.target === document.getElementById('runa-panel-overlay'))
+    document.getElementById('runa-panel-overlay').classList.remove('open');
+}
+
+function renderRunaTrees() {
+  var primEl = document.getElementById('runa-trees-primary');
+  var secEl = document.getElementById('runa-trees-secondary');
+
+  primEl.innerHTML = runaTreeData.map(function(tree) {
+    var active = runaPrimaryTree && runaPrimaryTree.id === tree.id ? ' active' : '';
+    return '<button type="button" class="runa-tree-btn' + active + '" onclick="selecionarPrimaryTree(' + tree.id + ')">'
+      + '<img src="https://ddragon.leagueoflegends.com/cdn/img/' + tree.icon + '" alt="' + esc(tree.name) + '" onerror="this.style.opacity=0.3">'
+      + '<span>' + esc(tree.name) + '</span></button>';
+  }).join('');
+
+  secEl.innerHTML = runaTreeData.filter(function(t) {
+    return !runaPrimaryTree || t.id !== runaPrimaryTree.id;
+  }).map(function(tree) {
+    var active = runaSecondaryTree && runaSecondaryTree.id === tree.id ? ' active' : '';
+    return '<button type="button" class="runa-tree-btn' + active + '" onclick="selecionarSecondaryTree(' + tree.id + ')">'
+      + '<img src="https://ddragon.leagueoflegends.com/cdn/img/' + tree.icon + '" alt="' + esc(tree.name) + '" onerror="this.style.opacity=0.3">'
+      + '<span>' + esc(tree.name) + '</span></button>';
+  }).join('');
+
+  if (runaPrimaryTree) renderPrimarySlots();
+  else document.getElementById('runa-primary-slots').innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:8px 0">selecione um estilo acima</div>';
+  if (runaSecondaryTree) renderSecondarySlots();
+  else document.getElementById('runa-secondary-slots').innerHTML = '';
+  renderRunaSelectedPreview();
+}
+
+function selecionarPrimaryTree(id) {
+  runaPrimaryTree = runaTreeData.find(t=>t.id===id);
+  runaSelections = {};
+  if (runaSecondaryTree && runaSecondaryTree.id === id) runaSecondaryTree = null;
+  renderRunaTrees();
+}
+
+function selecionarSecondaryTree(id) {
+  runaSecondaryTree = runaTreeData.find(t=>t.id===id);
+  runaSecSelections = {};
+  renderRunaTrees();
+}
+
+function renderPrimarySlots() {
+  var el = document.getElementById('runa-primary-slots');
+  if (!runaPrimaryTree) return;
+  var html = '';
+  runaPrimaryTree.slots.forEach(function(slot, si) {
+    var isKeystone = si === 0;
+    var runeHtml = '';
+    slot.runes.forEach(function(r, ri) {
+      var sel = runaSelections[si] && runaSelections[si].id === r.id;
+      runeHtml += '<div class="runa-option' + (sel ? ' selected' : '') + '" data-si="' + si + '" data-ri="' + ri + '" data-tipo="primary" onclick="clickRuna(this)">'
+        + '<img src="https://ddragon.leagueoflegends.com/cdn/img/' + r.icon + '" alt="" title="' + esc(r.name) + '" onerror="this.src=String()">'
+        + '<span>' + esc(r.name) + '</span></div>';
+    });
+    html += '<div class="runa-slot' + (isKeystone ? ' runa-keystone' : '') + '">'
+      + '<div class="runa-slot-label">' + (isKeystone ? '⬡ keystone' : 'slot ' + si) + '</div>'
+      + '<div class="runa-slot-options">' + runeHtml + '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderSecondarySlots() {
+  var el = document.getElementById('runa-secondary-slots');
+  if (!runaSecondaryTree) return;
+  var html = '';
+  runaSecondaryTree.slots.slice(1).forEach(function(slot, si) {
+    var realSi = si + 1;
+    var runeHtml = '';
+    slot.runes.forEach(function(r, ri) {
+      var sel = runaSecSelections[realSi] && runaSecSelections[realSi].id === r.id;
+      runeHtml += '<div class="runa-option' + (sel ? ' selected' : '') + '" data-si="' + realSi + '" data-ri="' + ri + '" data-tipo="secondary" onclick="clickRuna(this)">'
+        + '<img src="https://ddragon.leagueoflegends.com/cdn/img/' + r.icon + '" alt="" title="' + esc(r.name) + '" onerror="this.src=String()">'
+        + '<span>' + esc(r.name) + '</span></div>';
+    });
+    html += '<div class="runa-slot"><div class="runa-slot-label">slot ' + realSi + '</div>'
+      + '<div class="runa-slot-options">' + runeHtml + '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function clickRuna(el) {
+  var si = parseInt(el.dataset.si);
+  var ri = parseInt(el.dataset.ri);
+  var tipo = el.dataset.tipo;
+  var tree = tipo === 'primary' ? runaPrimaryTree : runaSecondaryTree;
+  var slotIdx = tipo === 'primary' ? si : si;
+  var slot = tipo === 'primary' ? tree.slots[si] : tree.slots[si]; // si already adjusted
+  var r = tipo === 'primary' ? runaPrimaryTree.slots[si].runes[ri] : runaSecondaryTree.slots[si].runes[ri];
+  selecionarRuna(slotIdx, r, tipo);
+}
+
+function selecionarRuna(slotIdx, runa, tipo) {
+  if (tipo === 'primary') {
+    runaSelections[slotIdx] = runa;
+    renderPrimarySlots();
+  } else {
+    // máx 2 runas secundárias
+    const already = runaSecSelections[slotIdx];
+    if (already && already.id === runa.id) {
+      delete runaSecSelections[slotIdx];
+    } else {
+      const totalSec = Object.keys(runaSecSelections).length;
+      if (totalSec >= 2 && !runaSecSelections[slotIdx]) {
+        toast('máximo 2 runas secundárias'); return;
+      }
+      runaSecSelections[slotIdx] = runa;
+    }
+    renderSecondarySlots();
+  }
+  renderRunaSelectedPreview();
+}
+
+function renderRunaSelectedPreview() {
+  var el = document.getElementById('runa-selected-preview');
+  var all = [];
+  if (runaPrimaryTree) all.push({ name: runaPrimaryTree.name, img: 'https://ddragon.leagueoflegends.com/cdn/img/' + runaPrimaryTree.icon, type: 'árvore' });
+  Object.values(runaSelections).forEach(function(r) { all.push({ name: r.name, img: 'https://ddragon.leagueoflegends.com/cdn/img/' + r.icon, type: 'principal' }); });
+  Object.values(runaSecSelections).forEach(function(r) { all.push({ name: r.name, img: 'https://ddragon.leagueoflegends.com/cdn/img/' + r.icon, type: 'secundária' }); });
+  if (!all.length) { el.innerHTML = ''; return; }
+  var chipsHtml = all.map(function(x) {
+    return '<div class="lol-chip"><img src="' + x.img + '" style="max-width:24px" onerror="this.hidden=true">' + esc(x.name) + ' <span style="opacity:.5;margin-left:3px">' + esc(x.type) + '</span></div>';
+  }).join('');
+  el.innerHTML = '<div class="field-label" style="margin-bottom:8px">selecionadas</div><div class="lol-chips">' + chipsHtml + '</div>';
+}
+
+function confirmarRunas() {
+  lolRunasSelected = [];
+  if (runaPrimaryTree) lolRunasSelected.push({ id: runaPrimaryTree.id, name: runaPrimaryTree.name, img: 'https://ddragon.leagueoflegends.com/cdn/img/' + runaPrimaryTree.icon });
+  Object.values(runaSelections).forEach(function(r) { lolRunasSelected.push({ id: r.id, name: r.name, img: 'https://ddragon.leagueoflegends.com/cdn/img/' + r.icon }); });
+  Object.values(runaSecSelections).forEach(function(r) { lolRunasSelected.push({ id: r.id, name: r.name, img: 'https://ddragon.leagueoflegends.com/cdn/img/' + r.icon }); });
+  renderChips('runas');
+  document.getElementById('runa-panel-overlay').classList.remove('open');
+  toast(lolRunasSelected.length + ' runa(s) salvas');
+}
+
+function filtrarCampeoes(q) {
+  const drop = document.getElementById('champ-drop');
+  if (!lolCampeoes.length) {
+    drop.innerHTML = '<div class="lol-loading">carregando campeões...</div>';
+    drop.style.display = 'block';
+    carregarDDragon().then(()=>filtrarCampeoes(q));
+    return;
+  }
+  const lista = q ? lolCampeoes.filter(ch=>ch.name.toLowerCase().includes(q.toLowerCase())) : lolCampeoes;
+  drop.innerHTML = lista.slice(0,60).map(ch=>`
+    <div class="lol-drop-item" onmousedown="selecionarCampeao(${JSON.stringify(ch).replace(/"/g,'&quot;')})">
+      <img src="${ch.img}" alt="${ch.name}" style="max-width:24px" onerror="this.hidden=true">
+      <span>${ch.name}</span>
+    </div>`).join('') || '<div class="lol-loading">nenhum resultado</div>';
+  drop.style.display = 'block';
+}
+
+function selecionarCampeao(ch) {
+  lolChampSelected = ch;
+  document.getElementById('lol-champ').value = ch.name;
+  document.getElementById('lol-champ-search').value = ch.name;
+  const el = document.getElementById('champ-selected');
+  el.innerHTML = `<img src="${ch.img}" alt="${ch.name}"><span>${ch.name}</span>
+    <button onclick="limparCampeao()">✕</button>`;
+  el.style.display = 'flex';
+  document.getElementById('champ-drop').style.display = 'none';
+}
+
+function limparCampeao() {
+  lolChampSelected = null;
+  document.getElementById('lol-champ').value = '';
+  document.getElementById('lol-champ-search').value = '';
+  document.getElementById('champ-selected').style.display = 'none';
+}
+
+function filtrarItens(q) {
+  var drop = document.getElementById('item-drop');
+  if (!q || q.length < 2) { drop.style.display = 'none'; return; }
+  if (!lolItens.length) {
+    drop.innerHTML = '<div class="lol-loading">carregando itens...</div>';
+    drop.style.display = 'block';
+    carregarDDragon().then(function() { filtrarItens(q); });
+    return;
+  }
+  var lista = lolItens.filter(function(it) { return it.name.toLowerCase().includes(q.toLowerCase()); });
+  if (!lista.length) { drop.innerHTML = '<div class="lol-loading">nenhum resultado</div>'; drop.style.display = 'block'; return; }
+  drop.innerHTML = lista.slice(0,40).map(function(it) {
+    return '<div class="lol-drop-item" onmousedown="adicionarItem(' + JSON.stringify(it).replace(/"/g,'&quot;') + ')">'
+      + '<img src="' + it.img + '" alt="' + esc(it.name) + '" onerror="this.hidden=true">'
+      + '<span>' + esc(it.name) + '</span></div>';
+  }).join('');
+  drop.style.display = 'block';
+}
+
+function adicionarItem(it) {
+  if (lolItensSelected.find(x=>x.id===it.id)) return;
+  lolItensSelected.push(it);
+  renderChips('itens');
+  document.getElementById('item-drop').style.display = 'none';
+  document.getElementById('lol-item-search').value = '';
+}
+
+function removerItem(id) {
+  lolItensSelected = lolItensSelected.filter(x=>x.id!==id);
+  renderChips('itens');
+}
+
+// runas agora usam painel visual (abrirRunaPanel)
+
+function renderChips(tipo) {
+  const arr = tipo === 'itens' ? lolItensSelected : lolRunasSelected;
+  const el = document.getElementById(tipo+'-selected');
+  const hiddenId = tipo === 'itens' ? 'lol-itens' : 'lol-runas';
+  el.innerHTML = arr.map(x=>`
+    <div class="lol-chip">
+      <img src="${x.img}" alt="${x.name}" style="max-width:24px" onerror="this.hidden=true">
+      ${x.name}
+      <button onclick="${tipo==='itens'?'removerItem':'removerRuna'}('${x.id}')">✕</button>
+    </div>`).join('');
+  document.getElementById(hiddenId).value = arr.map(x=>x.name).join(', ');
+}
+
+function resetLolForm() {
+  lolChampSelected = null; lolItensSelected = []; lolRunasSelected = [];
+  runaPrimaryTree = null; runaSecondaryTree = null;
+  runaSelections = {}; runaSecSelections = {};
+  document.getElementById('lol-champ').value = '';
+  document.getElementById('lol-champ-search').value = '';
+  document.getElementById('champ-selected').style.display = 'none';
+  document.getElementById('itens-selected').innerHTML = '';
+  document.getElementById('runas-selected').innerHTML = '';
+  document.getElementById('lol-itens').value = '';
+  document.getElementById('lol-runas').value = '';
+  document.getElementById('lol-item-search').value = '';
+}
+
+// ─── Imagem no pedido de desculpas ───────────────────────
+let apoImgBase64 = '';
+
+function previewApoImg(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    apoImgBase64 = e.target.result;
+    document.getElementById('apo-img-thumb').src = apoImgBase64;
+    document.getElementById('apo-img-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeApoImg() {
+  apoImgBase64 = '';
+  document.getElementById('apo-img-input').value = '';
+  document.getElementById('apo-img-preview').style.display = 'none';
+}
+
+
+// ─── Seletor de Fontes ───────────────────────────────────
+const FONT_KEY_DISPLAY = 'couple_font_display';
+const FONT_KEY_BODY = 'couple_font_body';
+
+const fontOptionsDisplay = [
+  { name: 'Cormorant', value: "'Cormorant Garamond', serif" },
+  { name: 'Playfair', value: "'Playfair Display', serif" },
+  { name: 'Cinzel', value: "'Cinzel', serif" },
+  { name: 'Merriweather', value: "'Merriweather', serif" },
+  { name: 'IM Fell', value: "'IM Fell English', serif" },
+  { name: 'Dancing', value: "'Dancing Script', cursive" },
+  { name: 'Satisfy', value: "'Satisfy', cursive" },
+];
+
+const fontOptionsBody = [
+  { name: 'DM Mono', value: "'DM Mono', monospace" },
+  { name: 'Lato', value: "'Lato', sans-serif" },
+  { name: 'Josefin Sans', value: "'Josefin Sans', sans-serif" },
+  { name: 'Merriweather', value: "'Merriweather', serif" },
+  { name: 'Cinzel', value: "'Cinzel', serif" },
+];
+
+function renderFontOpts() {
+  var savedDisplay = localStorage.getItem(FONT_KEY_DISPLAY) || fontOptionsDisplay[0].value;
+  var savedBody = localStorage.getItem(FONT_KEY_BODY) || fontOptionsBody[0].value;
+  var dEl = document.getElementById('font-display-opts');
+  var bEl = document.getElementById('font-body-opts');
+  if (!dEl || !bEl) return;
+
+  dEl.innerHTML = fontOptionsDisplay.map(function(f, i) {
+    var active = savedDisplay === f.value ? ' active' : '';
+    return '<button type="button" class="font-opt' + active + '" style="font-family:' + f.value + '" data-font="' + i + '" data-tipo="display" onclick="setFontByBtn(this)">' + f.name + '</button>';
+  }).join('');
+
+  bEl.innerHTML = fontOptionsBody.map(function(f, i) {
+    var active = savedBody === f.value ? ' active' : '';
+    return '<button type="button" class="font-opt' + active + '" style="font-family:' + f.value + '" data-font="' + i + '" data-tipo="body" onclick="setFontByBtn(this)">' + f.name + '</button>';
+  }).join('');
+}
+
+function setFontByBtn(btn) {
+  var tipo = btn.dataset.tipo;
+  var idx = parseInt(btn.dataset.font);
+  var opts = tipo === 'display' ? fontOptionsDisplay : fontOptionsBody;
+  setFont(tipo, opts[idx].value, btn);
+}
+
+function setFont(tipo, value, btn) {
+  var key = tipo === 'display' ? FONT_KEY_DISPLAY : FONT_KEY_BODY;
+  var prop = tipo === 'display' ? '--font-display' : '--font-body';
+  document.documentElement.style.setProperty(prop, value);
+  localStorage.setItem(key, value);
+  // Atualiza active
+  var container = btn.parentElement;
+  container.querySelectorAll('.font-opt').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function aplicarFontes() {
+  var savedDisplay = localStorage.getItem(FONT_KEY_DISPLAY);
+  var savedBody = localStorage.getItem(FONT_KEY_BODY);
+  if (savedDisplay) document.documentElement.style.setProperty('--font-display', savedDisplay);
+  if (savedBody) document.documentElement.style.setProperty('--font-body', savedBody);
+}
+
+// Aplica fontes salvas ao carregar
+aplicarFontes();
+
+// ─── Background personalizado ─────────────────────────────
+const BG_KEY = 'couple_app_bg_p1';
+const BG_KEY2 = 'couple_app_bg_p2';
+
+function getBgKey() {
+  return currentUser === 'player1' ? BG_KEY : BG_KEY2;
+}
+
+function aplicarBackground() {
+  try {
+    const saved = localStorage.getItem(getBgKey());
+    if (saved) {
+      document.body.style.backgroundImage = `url(${saved})`;
+      document.body.classList.add('custom-bg');
+      document.getElementById('bg-img-thumb').src = saved;
+      document.getElementById('bg-img-preview').style.display = 'block';
+    } else {
+      document.body.style.backgroundImage = '';
+      document.body.classList.remove('custom-bg');
+    }
+  } catch {}
+}
+
+function previewBgImg(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = e.target.result;
+    document.getElementById('bg-img-thumb').src = data;
+    document.getElementById('bg-img-preview').style.display = 'block';
+    document.body.style.backgroundImage = `url(${data})`;
+    document.body.classList.add('custom-bg');
+    try { localStorage.setItem(getBgKey(), data); } catch(err) {
+      toast('imagem muito grande para salvar — tente uma menor');
+      removeBgImg();
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeBgImg() {
+  document.getElementById('bg-img-input').value = '';
+  document.getElementById('bg-img-preview').style.display = 'none';
+  document.getElementById('bg-img-thumb').src = '';
+  document.body.style.backgroundImage = '';
+  document.body.classList.remove('custom-bg');
+  try { localStorage.removeItem(getBgKey()); } catch {}
+}
+
+// Estado da carta em criação
+let cartaColorSelecionada = '';
+let cartaImgBase64 = '';
+
+function selectCartaColor(el, color) {
+  document.querySelectorAll('#carta-color-picker .color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  cartaColorSelecionada = color;
+}
+
+function previewCartaImg(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    cartaImgBase64 = e.target.result;
+    document.getElementById('carta-img-thumb').src = cartaImgBase64;
+    document.getElementById('carta-img-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeCartaImg() {
+  cartaImgBase64 = '';
+  document.getElementById('carta-img-input').value = '';
+  document.getElementById('carta-img-preview').style.display = 'none';
+  document.getElementById('carta-img-thumb').src = '';
+}
+
+// ─── Modal da carta ─────────────────────────────────────
+function abrirCarta(c, d) {
+  const deNome = c.de === 'player1' ? d.config.name1 : d.config.name2;
+  const paraNome = c.para === 'ambos' ? 'nós dois' : (c.para === 'player1' ? d.config.name1 : d.config.name2);
+  document.getElementById('cm-titulo').textContent = c.titulo;
+  document.getElementById('cm-texto').textContent = c.texto;
+  document.getElementById('cm-meta').textContent = deNome + ' → ' + paraNome + '  ·  ' + fmt(c.ts);
+  const box = document.getElementById('carta-modal-box');
+  box.style.background = c.cor || 'var(--surface)';
+  const imgEl = document.getElementById('cm-img');
+  if (c.img) { imgEl.src = c.img; imgEl.style.display = 'block'; }
+  else { imgEl.style.display = 'none'; imgEl.src = ''; }
+  document.getElementById('carta-modal-overlay').classList.add('open');
+}
+
+function fecharCartaModal() {
+  document.getElementById('carta-modal-overlay').classList.remove('open');
+}
+
+function closeCartaModal(e) {
+  if (e.target === document.getElementById('carta-modal-overlay')) fecharCartaModal();
+}
+
+// Carrega nomes nos botões de login antes de entrar
+(async () => {
+  try {
+    const snapshot = await db.ref('couple_app_data/config').get();
+    if (snapshot.exists()) {
+      const config = snapshot.val();
+      if (config.name1) document.getElementById('btn-p1').textContent = config.name1;
+      if (config.name2) document.getElementById('btn-p2').textContent = config.name2;
+    }
+  } catch {}
+})();
+
+const defaultData = {
+  config: { name1: 'Jogador 1', name2: 'Jogador 2', pass1: '1234', pass2: '1234' },
+  cartas: [],
+  planos: [],
+  datas: [],
+  jogos: { lol: [], mhw: [], outros: [] },
+  desculpas: []
+};
+
+// ─── Storage (Firebase Realtime Database) ───────────────
+const STORAGE_KEY = 'couple_app_data';
+
+async function loadData() {
+  try {
+    const snapshot = await db.ref(STORAGE_KEY).get();
+    if (snapshot.exists()) {
+      const parsed = snapshot.val();
+      if (!parsed.config) parsed.config = { ...defaultData.config };
+      if (!parsed.jogos) parsed.jogos = { ...defaultData.jogos };
+      if (!parsed.cartas) parsed.cartas = [];
+      if (!parsed.planos) parsed.planos = [];
+      if (!parsed.datas) parsed.datas = [];
+      if (!parsed.desculpas) parsed.desculpas = [];
+      return parsed;
+    }
+    return JSON.parse(JSON.stringify(defaultData));
+  } catch {
+    return JSON.parse(JSON.stringify(defaultData));
+  }
+}
+
+async function saveData(d) {
+  try {
+    await db.ref(STORAGE_KEY).set(d);
+  } catch(e) { console.error('saveData error:', e); }
+}
+
+// ─── Login ──────────────────────────────────────────────
+let selectedUser = 'player1';
+
+function selectUser(u) {
+  selectedUser = u;
+  document.getElementById('btn-p1').classList.toggle('active', u === 'player1');
+  document.getElementById('btn-p2').classList.toggle('active', u === 'player2');
+}
+
+async function doLogin() {
+  const pass = document.getElementById('login-pass').value;
+  const d = await loadData();
+  const ok = selectedUser === 'player1'
+    ? pass === d.config.pass1
+    : pass === d.config.pass2;
+
+  if (!ok) {
+    document.getElementById('login-error').textContent = 'senha incorreta';
+    return;
+  }
+
+  currentUser = selectedUser;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('app').style.flexDirection = 'column';
+
+  const name = selectedUser === 'player1' ? d.config.name1 : d.config.name2;
+  document.getElementById('header-username').textContent = name || selectedUser;
+
+  // update "para" select
+  const sel = document.getElementById('carta-para');
+  const other = selectedUser === 'player1' ? 'player2' : 'player1';
+  const otherName = selectedUser === 'player1' ? d.config.name2 : d.config.name1;
+  sel.options[0].value = other;
+  sel.options[0].text = otherName || other;
+  sel.options[1].value = selectedUser;
+  sel.options[1].text = (selectedUser === 'player1' ? d.config.name1 : d.config.name2) + ' (eu)';
+
+  // set apology target default to other
+  apoTarget = other;
+  updateApoTargetUI(d);
+
+  document.getElementById('cfg-name-label').textContent =
+    currentUser === 'player1' ? 'jogador 1 — nome' : 'jogador 2 — nome';
+  document.getElementById('cfg-name').value =
+    currentUser === 'player1' ? d.config.name1 : d.config.name2;
+  document.getElementById('cfg-pass').value = '';
+  document.getElementById('cfg-pass-confirm').value = '';
+
+  aplicarBackground();
+  renderFontOpts();
+  renderAll(d);
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').textContent = '';
+}
+
+// ─── Navigation ─────────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function switchGame(g) {
+  ['lol','mhw','outros'].forEach(k => {
+    document.getElementById('game-' + k).style.display = k === g ? 'block' : 'none';
+    document.getElementById('gtab-' + k).classList.toggle('active', k === g);
+  });
+}
+
+// ─── Sincronização em tempo real ────────────────────────
+let realtimeListenerAtivo = false;
+function ativarSyncTempoReal() {
+  if (realtimeListenerAtivo) return;
+  realtimeListenerAtivo = true;
+  db.ref(STORAGE_KEY).on('value', (snapshot) => {
+    if (!currentUser) return;
+    if (snapshot.exists()) {
+      const d = snapshot.val();
+      if (!d.config) d.config = { ...defaultData.config };
+      if (!d.jogos) d.jogos = { ...defaultData.jogos };
+      if (!d.cartas) d.cartas = [];
+      if (!d.planos) d.planos = [];
+      if (!d.datas) d.datas = [];
+      if (!d.desculpas) d.desculpas = [];
+      renderCartas(d);
+      renderPlanos(d);
+      renderDatas(d);
+      renderJogos(d);
+      renderDesculpas(d);
+    }
+  });
+}
+
+// ─── Render All ─────────────────────────────────────────
+async function renderAll(d) {
+  d = d || await loadData();
+  renderCartas(d);
+  renderPlanos(d);
+  renderDatas(d);
+  renderJogos(d);
+  renderDesculpas(d);
+  ativarSyncTempoReal();
+}
+
+function fmt(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + (iso.length === 10 ? 'T00:00:00' : ''));
+  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+function timeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'agora mesmo';
+  if (m < 60) return `há ${m}min`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `há ${h}h`;
+  const dy = Math.floor(h / 24);
+  return `há ${dy} dia${dy > 1 ? 's' : ''}`;
+}
+
+// ─── CARTAS ─────────────────────────────────────────────
+async function addCarta() {
+  const titulo = document.getElementById('carta-titulo').value.trim();
+  const texto = document.getElementById('carta-texto').value.trim();
+  const para = document.getElementById('carta-para').value;
+  if (!titulo || !texto) { toast('preencha título e mensagem'); return; }
+
+  const d = await loadData();
+  d.cartas.unshift({ id: Date.now(), de: currentUser, para, titulo, texto,
+    cor: cartaColorSelecionada, img: cartaImgBase64,
+    ts: new Date().toISOString(), lida: false });
+  await saveData(d);
+  document.getElementById('carta-titulo').value = '';
+  document.getElementById('carta-texto').value = '';
+  // reset cor e imagem
+  cartaColorSelecionada = ''; cartaImgBase64 = '';
+  document.querySelectorAll('#carta-color-picker .color-dot').forEach((d,i) => d.classList.toggle('selected', i===0));
+  removeCartaImg();
+  renderCartas(d);
+  toast('carta enviada ✉');
+}
+
+async function deleteCarta(id) {
+  const d = await loadData();
+  d.cartas = d.cartas.filter(c => c.id !== id);
+  await saveData(d);
+  renderCartas(d);
+}
+
+function renderCartas(d) {
+  const el = document.getElementById('cartas-list');
+  const visible = d.cartas.filter(c => c.para === currentUser || c.de === currentUser || c.para === 'ambos');
+  if (!visible.length) { el.innerHTML = emptyState('nenhuma carta ainda — escreva a primeira'); return; }
+
+  // mark as read
+  let changed = false;
+  visible.forEach(c => { if (c.para === currentUser && !c.lida) { c.lida = true; changed = true; } });
+  if (changed) saveData(d);
+
+  // guardar d no closure para o modal
+  const dSnap = d;
+  el.innerHTML = visible.map(c => {
+    const deNome = c.de === 'player1' ? d.config.name1 : d.config.name2;
+    const paraNome = c.para === 'ambos' ? 'nós dois' : (c.para === 'player1' ? d.config.name1 : d.config.name2);
+    const mine = c.de === currentUser;
+    const bgStyle = c.cor ? `background:${c.cor};` : '';
+    const thumbHtml = c.img ? `<img src="${c.img}" style="width:100%;max-height:140px;object-fit:cover;margin-top:12px;border:1px solid var(--border)">` : '';
+    const preview = c.texto.length > 120 ? c.texto.slice(0, 120) + '…' : c.texto;
+    return `<div class="card clickable" style="${bgStyle}" onclick="abrirCartaById(${c.id})">
+      <div class="card-header">
+        <div class="card-title">${esc(c.titulo)}</div>
+        <div class="card-meta">${timeAgo(c.ts)}</div>
+      </div>
+      <div class="card-body">${esc(preview)}</div>
+      ${thumbHtml}
+      <span class="card-tag">${deNome} → ${paraNome}</span>
+      ${mine ? `<div class="card-actions" onclick="event.stopPropagation()"><button class="icon-btn del" onclick="deleteCarta(${c.id})">apagar</button></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ─── PLANOS ─────────────────────────────────────────────
+async function addPlano() {
+  const nome = document.getElementById('plano-nome').value.trim();
+  const desc = document.getElementById('plano-desc').value.trim();
+  const cat = document.getElementById('plano-cat').value;
+  if (!nome) { toast('dê um nome ao plano'); return; }
+
+  const d = await loadData();
+  d.planos.unshift({ id: Date.now(), nome, desc, cat, feito: false, de: currentUser, ts: new Date().toISOString() });
+  await saveData(d);
+  document.getElementById('plano-nome').value = '';
+  document.getElementById('plano-desc').value = '';
+  renderPlanos(d);
+  toast('plano adicionado ✦');
+}
+
+async function togglePlano(id) {
+  const d = await loadData();
+  const p = d.planos.find(x => x.id === id);
+  if (p) p.feito = !p.feito;
+  await saveData(d);
+  renderPlanos(d);
+}
+
+async function deletePlano(id) {
+  const d = await loadData();
+  d.planos = d.planos.filter(p => p.id !== id);
+  await saveData(d);
+  renderPlanos(d);
+}
+
+const catIcons = { viagem: '✈', experiencia: '🎯', objetivo: '⭐', sonho: '💭' };
+const catColors = { viagem: 'blue', experiencia: '', objetivo: 'green', sonho: '' };
+
+function renderPlanos(d) {
+  const el = document.getElementById('planos-list');
+  if (!d.planos.length) { el.innerHTML = emptyState('nenhum plano ainda — o que vocês sonham fazer?'); return; }
+  el.innerHTML = d.planos.map(p => `<div class="card" style="${p.feito ? 'opacity:0.5' : ''}">
+    <div class="card-header">
+      <div class="card-title" style="${p.feito ? 'text-decoration:line-through' : ''}">${catIcons[p.cat] || '✦'} ${esc(p.nome)}</div>
+    </div>
+    ${p.desc ? `<div class="card-body">${esc(p.desc)}</div>` : ''}
+    <span class="card-tag ${catColors[p.cat] || ''}">${p.cat}</span>
+    <div class="card-actions">
+      <button class="icon-btn" onclick="togglePlano(${p.id})">${p.feito ? 'desfazer' : 'marcar como feito'}</button>
+      <button class="icon-btn del" onclick="deletePlano(${p.id})">apagar</button>
+    </div>
+  </div>`).join('');
+}
+
+// ─── DATAS ──────────────────────────────────────────────
+async function addData() {
+  const nome = document.getElementById('data-nome').value.trim();
+  const val = document.getElementById('data-val').value;
+  const tipo = document.getElementById('data-tipo').value;
+  if (!nome || !val) { toast('preencha nome e data'); return; }
+
+  const d = await loadData();
+  d.datas.push({ id: Date.now(), nome, val, tipo });
+  await saveData(d);
+  document.getElementById('data-nome').value = '';
+  document.getElementById('data-val').value = '';
+  renderDatas(d);
+  toast('data salva ◎');
+}
+
+async function deleteData(id) {
+  const d = await loadData();
+  d.datas = d.datas.filter(x => x.id !== id);
+  await saveData(d);
+  renderDatas(d);
+}
+
+function daysUntilNext(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const orig = new Date(dateStr + 'T00:00:00');
+  let next = new Date(today.getFullYear(), orig.getMonth(), orig.getDate());
+  if (next < today) next.setFullYear(next.getFullYear() + 1);
+  return Math.round((next - today) / 86400000);
+}
+
+function renderDatas(d) {
+  const upcoming = [...d.datas].sort((a, b) => daysUntilNext(a.val) - daysUntilNext(b.val)).slice(0, 3);
+
+  document.getElementById('next-dates').innerHTML = upcoming.map(dt => {
+    const days = daysUntilNext(dt.val);
+    return `<div class="date-card">
+      <div class="date-number">${days === 0 ? '🎉' : days}</div>
+      <div class="date-label">${days === 0 ? 'hoje!' : `dia${days !== 1 ? 's' : ''} para`}</div>
+      <div class="date-name">${esc(dt.nome)}</div>
+      <div class="date-countdown">${fmt(dt.val)}</div>
+    </div>`;
+  }).join('');
+
+  const el = document.getElementById('datas-list');
+  if (!d.datas.length) { el.innerHTML = emptyState('nenhuma data especial salva ainda'); return; }
+  el.innerHTML = `<div style="color:var(--text-muted);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px">todas as datas</div>` +
+    d.datas.map(dt => {
+      const days = daysUntilNext(dt.val);
+      return `<div class="card">
+        <div class="card-header">
+          <div class="card-title">${esc(dt.nome)}</div>
+          <div class="card-meta">${days === 0 ? '🎉 hoje!' : `em ${days} dia${days !== 1 ? 's' : ''}`}</div>
+        </div>
+        <div class="card-body" style="color:var(--text-muted)">${fmt(dt.val)}</div>
+        <span class="card-tag ${dt.tipo === 'aniversario' ? 'red' : ''}">${dt.tipo}</span>
+        <div class="card-actions"><button class="icon-btn del" onclick="deleteData(${dt.id})">apagar</button></div>
+      </div>`;
+    }).join('');
+}
+
+// ─── JOGOS ──────────────────────────────────────────────
+async function addJogo(tipo) {
+  const d = await loadData();
+  let entry = { id: Date.now(), de: currentUser, ts: new Date().toISOString() };
+
+  if (tipo === 'lol') {
+    const champ = document.getElementById('lol-champ').value.trim();
+    if (!champ) { toast('selecione um campeão'); return; }
+    const champImg = lolChampSelected ? lolChampSelected.img : '';
+    const itensData = lolItensSelected.map(x=>({name:x.name,img:x.img}));
+    const runasData = lolRunasSelected.map(x=>({name:x.name,img:x.img}));
+    entry = { ...entry, champ, champImg, role: document.getElementById('lol-role').value,
+      itens: document.getElementById('lol-itens').value.trim(),
+      itensData, runasData,
+      runas: document.getElementById('lol-runas').value.trim(),
+      notas: document.getElementById('lol-notas').value.trim() };
+    resetLolForm();
+    document.getElementById('lol-notas').value = '';
+  } else if (tipo === 'mhw') {
+    const arma = document.getElementById('mhw-arma').value.trim();
+    if (!arma) { toast('coloque a arma'); return; }
+    entry = { ...entry, arma, tipoCaca: document.getElementById('mhw-tipo').value,
+      armor: document.getElementById('mhw-armor').value.trim(),
+      skills: document.getElementById('mhw-skills').value.trim(),
+      notas: document.getElementById('mhw-notas').value.trim() };
+    ['mhw-arma','mhw-armor','mhw-skills','mhw-notas'].forEach(id => document.getElementById(id).value = '');
+  } else {
+    const titulo = document.getElementById('out-titulo').value.trim();
+    if (!titulo) { toast('dê um título'); return; }
+    entry = { ...entry, jogo: document.getElementById('out-jogo').value.trim(),
+      tipoNota: document.getElementById('out-tipo').value,
+      titulo, notas: document.getElementById('out-notas').value.trim() };
+    ['out-jogo','out-titulo','out-notas'].forEach(id => document.getElementById(id).value = '');
+  }
+
+  d.jogos[tipo].unshift(entry);
+  await saveData(d);
+  renderJogos(d);
+  toast('build salva ⌗');
+}
+
+async function deleteJogo(tipo, id) {
+  const d = await loadData();
+  d.jogos[tipo] = d.jogos[tipo].filter(j => j.id !== id);
+  await saveData(d);
+  renderJogos(d);
+}
+
+function renderJogos(d) {
+  // LoL
+  const lolEl = document.getElementById('lol-list');
+  lolEl.innerHTML = !d.jogos.lol.length ? emptyState('nenhuma build de LoL ainda') :
+    d.jogos.lol.map(j => {
+      const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
+      const champImgHtml = j.champImg ? `<img src="${j.champImg}" style="width:40px;height:40px;object-fit:cover;border:1px solid var(--border);margin-right:10px">` : '';
+      const itensChips = (j.itensData||[]).map(it=>`<div class="lol-chip"><img src="${it.img}" alt="${it.name}" style="max-width:24px" onerror="this.hidden=true">${it.name}</div>`).join('');
+      const runasChips = (j.runasData||[]).map(r=>`<div class="lol-chip"><img src="${r.img}" alt="${r.name}" style="max-width:24px" onerror="this.hidden=true">${r.name}</div>`).join('');
+      return `<div class="card">
+        <div class="card-header">
+          <div class="card-title" style="display:flex;align-items:center">${champImgHtml}${esc(j.champ)} <span style="color:var(--text-muted);font-size:0.8rem;margin-left:8px">${j.role}</span></div>
+          <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
+        </div>
+        ${itensChips ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">ITENS</span><div class="lol-chips" style="margin-top:6px">${itensChips}</div></div>` : ''}
+        ${runasChips ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">RUNAS</span><div class="lol-chips" style="margin-top:6px">${runasChips}</div></div>` : ''}
+        ${j.notas ? `<div class="card-body" style="margin-top:8px">${esc(j.notas)}</div>` : ''}
+        <div class="card-actions"><button class="icon-btn del" onclick="deleteJogo('lol', ${j.id})">apagar</button></div>
+      </div>`;
+    }).join('');
+
+  // MHW
+  const mhwEl = document.getElementById('mhw-list');
+  mhwEl.innerHTML = !d.jogos.mhw.length ? emptyState('nenhuma build de MHW ainda') :
+    d.jogos.mhw.map(j => {
+      const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
+      return `<div class="card">
+        <div class="card-header">
+          <div class="card-title">${esc(j.arma)} <span style="color:var(--text-muted);font-size:0.8rem">${j.tipoCaca}</span></div>
+          <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
+        </div>
+        ${j.armor ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">ARMADURA</span><br>${esc(j.armor)}</div>` : ''}
+        ${j.skills ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">SKILLS</span><br>${esc(j.skills)}</div>` : ''}
+        ${j.notas ? `<div class="card-body" style="margin-top:8px">${esc(j.notas)}</div>` : ''}
+        <div class="card-actions"><button class="icon-btn del" onclick="deleteJogo('mhw', ${j.id})">apagar</button></div>
+      </div>`;
+    }).join('');
+
+  // Outros
+  const outEl = document.getElementById('outros-list');
+  outEl.innerHTML = !d.jogos.outros.length ? emptyState('nenhuma anotação ainda') :
+    d.jogos.outros.map(j => {
+      const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
+      return `<div class="card">
+        <div class="card-header">
+          <div class="card-title">${esc(j.jogo ? j.jogo + ' — ' : '')}${esc(j.titulo)}</div>
+          <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
+        </div>
+        ${j.notas ? `<div class="card-body">${esc(j.notas)}</div>` : ''}
+        <span class="card-tag blue">${j.tipoNota}</span>
+        <div class="card-actions"><button class="icon-btn del" onclick="deleteJogo('outros', ${j.id})">apagar</button></div>
+      </div>`;
+    }).join('');
+}
+
+// ─── DESCULPAS ───────────────────────────────────────────
+function selectApoTarget(t) {
+  apoTarget = t;
+  document.getElementById('apo-target-p1').classList.toggle('selected', t === 'player1');
+  document.getElementById('apo-target-p2').classList.toggle('selected', t === 'player2');
+}
+
+async function updateApoTargetUI(d) {
+  const other = currentUser === 'player1' ? 'player2' : 'player1';
+  apoTarget = other;
+  const p1name = d.config.name1 || 'Jogador 1';
+  const p2name = d.config.name2 || 'Jogador 2';
+  document.getElementById('apo-target-p1').textContent = p1name;
+  document.getElementById('apo-target-p2').textContent = p2name;
+  selectApoTarget(other);
+}
+
+async function addDesculpa() {
+  const msg = document.getElementById('apo-msg').value.trim();
+  if (!msg) { toast('escreva sua mensagem'); return; }
+  const promessa = document.getElementById('apo-promessa').value.trim();
+  const amor = document.getElementById('apo-amor').value.trim();
+
+  const d = await loadData();
+  d.desculpas.unshift({
+    id: Date.now(), de: currentUser, para: apoTarget,
+    msg, promessa, amor, img: apoImgBase64, ts: new Date().toISOString(), lida: false
+  });
+  await saveData(d);
+  document.getElementById('apo-msg').value = '';
+  document.getElementById('apo-promessa').value = '';
+  document.getElementById('apo-amor').value = '';
+  apoImgBase64 = ''; removeApoImg();
+  renderDesculpas(d);
+  toast('pedido enviado ♡');
+}
+
+async function deleteDesculpa(id) {
+  const d = await loadData();
+  d.desculpas = d.desculpas.filter(x => x.id !== id);
+  await saveData(d);
+  renderDesculpas(d);
+}
+
+function renderDesculpas(d) {
+  const el = document.getElementById('desculpas-list');
+  const visible = d.desculpas.filter(x => x.de === currentUser || x.para === currentUser);
+  if (!visible.length) { el.innerHTML = emptyState('nenhum pedido ainda — espero que fique assim 💛'); return; }
+
+  let changed = false;
+  visible.forEach(x => { if (x.para === currentUser && !x.lida) { x.lida = true; changed = true; } });
+  if (changed) saveData(d);
+
+  el.innerHTML = visible.map(x => {
+    const deNome = x.de === 'player1' ? d.config.name1 : d.config.name2;
+    const mine = x.de === currentUser;
+    return `<div class="apology-card">
+      <div class="apology-from">de ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
+      <div class="apology-msg">${esc(x.msg)}</div>
+      ${x.img ? `<img src="${x.img}" style="width:100%;max-height:280px;object-fit:contain;margin:12px 0;border:1px solid var(--border)">` : ''}
+      ${x.promessa ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">promessa</span><br>${esc(x.promessa)}</div>` : ''}
+      ${x.amor ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">o que eu amo em você</span><br>${esc(x.amor)}</div>` : ''}
+      ${mine ? `<div class="card-actions"><button class="icon-btn del" onclick="deleteDesculpa(${x.id})">apagar</button></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ─── CONFIG ──────────────────────────────────────────────
+async function saveConfig() {
+  const d = await loadData();
+  const name = document.getElementById('cfg-name').value.trim();
+  const pass = document.getElementById('cfg-pass').value;
+  const passConfirm = document.getElementById('cfg-pass-confirm').value;
+
+  if (pass && pass !== passConfirm) { toast('as senhas não coincidem ✕'); return; }
+
+  if (currentUser === 'player1') {
+    if (name) d.config.name1 = name;
+    if (pass) d.config.pass1 = pass;
+  } else {
+    if (name) d.config.name2 = name;
+    if (pass) d.config.pass2 = pass;
+  }
+
+  await saveData(d);
+  const displayName = currentUser === 'player1' ? d.config.name1 : d.config.name2;
+  document.getElementById('header-username').textContent = displayName;
+  document.getElementById('cfg-pass').value = '';
+  document.getElementById('cfg-pass-confirm').value = '';
+  toast('configurações salvas ⚙');
+}
+
+// ─── abrirCartaById ──────────────────────────────────────
+async function abrirCartaById(id) {
+  const d = await loadData();
+  const c = d.cartas.find(x => x.id === id);
+  if (c) abrirCarta(c, d);
+}
+
+// ─── Helpers ─────────────────────────────────────────────
+function emptyState(msg) {
+  return `<div class="empty-state"><div class="empty-icon">◌</div><div class="empty-text">${msg}</div></div>`;
+}
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+// ─── Theme ────────────────────────────────────────────
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = isLight ? '◑' : '◐';
+  try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch {}
+}
+
+// Apply saved theme on load
+try {
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.add('light');
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = '◑';
+    });
+  }
+} catch {}
+</script>
+</body>
+</html>
