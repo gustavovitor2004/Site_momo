@@ -1809,7 +1809,7 @@
     <!-- ─── SEGREDO ─── -->
     <section id="sec-segredo" class="section">
       <div class="section-title">segredo</div>
-      <div class="section-desc">só nosso — guardado aqui entre nós dois</div>
+      <div class="section-desc">só seu — ninguém mais vê isso aqui</div>
 
       <div id="segredo-display"></div>
 
@@ -1817,7 +1817,7 @@
         <div class="form-grid">
           <div class="form-group">
             <div class="field-label">escreva nosso segredo</div>
-            <textarea id="segredo-texto" rows="6" placeholder="aqui fica guardado só entre nós..."></textarea>
+            <textarea id="segredo-texto" rows="6" placeholder="só você vai ler isso..."></textarea>
           </div>
           <div class="form-actions">
             <button class="btn gold" onclick="salvarSegredo()">🔒 guardar segredo</button>
@@ -2515,7 +2515,8 @@ const defaultData = {
   datas: [],
   jogos: { lol: [], mhw: [], outros: [] },
   desculpas: [],
-  segredo: { texto: '', ts: '', de: '' }
+  segredo1: { texto: '', ts: '' },
+  segredo2: { texto: '', ts: '' }
 };
 
 // ─── Storage (Firebase Realtime Database) ───────────────
@@ -2531,7 +2532,8 @@ function toArray(val) {
 function normalizarDados(d) {
   if (!d.config) d.config = { ...defaultData.config };
   if (!d.jogos) d.jogos = { lol: [], mhw: [], outros: [] };
-  if (!d.segredo) d.segredo = { texto: '', ts: '', de: '' };
+  if (!d.segredo1) d.segredo1 = { texto: '', ts: '' };
+  if (!d.segredo2) d.segredo2 = { texto: '', ts: '' };
   d.cartas    = toArray(d.cartas);
   d.planos    = toArray(d.planos);
   d.datas     = toArray(d.datas);
@@ -3235,23 +3237,23 @@ function renderDesculpas(d) {
 async function salvarSegredo() {
   const texto = document.getElementById('segredo-texto').value.trim();
   if (!texto) { toast('escreva o segredo primeiro'); return; }
-  const segredo = { texto, ts: new Date().toISOString(), de: currentUser };
-  await db.ref(STORAGE_KEY + '/segredo').set(segredo);
-  if (cachedData) cachedData.segredo = segredo;
-  renderSegredo({ segredo, config: cachedData ? cachedData.config : {} });
+  const key = currentUser === 'player1' ? 'segredo1' : 'segredo2';
+  const segredo = { texto, ts: new Date().toISOString() };
+  await db.ref(STORAGE_KEY + '/' + key).set(segredo);
+  if (cachedData) cachedData[key] = segredo;
+  renderSegredo(cachedData || {});
   toast('segredo guardado 🔒');
 }
 
 function renderSegredo(d) {
   const el = document.getElementById('segredo-display');
   if (!el) return;
-  const s = d.segredo;
+  const key = currentUser === 'player1' ? 'segredo1' : 'segredo2';
+  const s = d[key];
   if (!s || !s.texto) {
-    el.innerHTML = emptyState('nenhum segredo guardado ainda — o que vocês querem guardar só de vocês?');
+    el.innerHTML = emptyState('nenhum segredo guardado — só você vai ver isso');
     return;
   }
-  const deNome = s.de === 'player1' ? (d.config && d.config.name1) || 'jogador 1'
-                                     : (d.config && d.config.name2) || 'jogador 2';
   el.innerHTML = `<div class="segredo-card">
     <span class="segredo-lock">🔒</span>
     <div class="segredo-deco">
@@ -3260,7 +3262,7 @@ function renderSegredo(d) {
       <div class="segredo-deco-line"></div>
     </div>
     <div class="segredo-text">${esc(s.texto)}</div>
-    <div class="segredo-meta">guardado por ${esc(deNome)} · ${fmt(s.ts)}</div>
+    <div class="segredo-meta">guardado em ${fmt(s.ts)}</div>
   </div>`;
   document.getElementById('segredo-texto').value = s.texto;
 }
