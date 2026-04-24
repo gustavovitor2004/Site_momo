@@ -1352,6 +1352,45 @@
   }
   .font-section-label:first-child { margin-top: 0; }
 
+  /* ─── LANE FILTER ───────────────────────────────────── */
+  .lane-filter {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+  .lane-filter-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-right: 4px;
+  }
+  .lane-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 5px 12px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all 0.18s ease;
+  }
+  .lane-btn:hover { border-color: var(--accent); color: var(--text); }
+  .lane-btn.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .lane-btn img { width: 16px; height: 16px; opacity: 0.7; }
+  .lane-btn.active img { opacity: 1; }
+
   /* ─── SEGREDO ────────────────────────────────────────── */
   .segredo-card {
     background: var(--surface);
@@ -1691,6 +1730,25 @@
               <button class="btn gold" onclick="addJogo('lol')">salvar build LoL</button>
             </div>
           </div>
+        </div>
+        <div class="lane-filter" id="lol-lane-filter" style="display:none">
+          <span class="lane-filter-label">filtrar lane</span>
+          <button class="lane-btn active" data-lane="all" onclick="toggleLaneFilter(this)">todas</button>
+          <button class="lane-btn" data-lane="top" onclick="toggleLaneFilter(this)">
+            <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png" onerror="this.remove()">top
+          </button>
+          <button class="lane-btn" data-lane="jungle" onclick="toggleLaneFilter(this)">
+            <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png" onerror="this.remove()">jungle
+          </button>
+          <button class="lane-btn" data-lane="mid" onclick="toggleLaneFilter(this)">
+            <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-middle.png" onerror="this.remove()">mid
+          </button>
+          <button class="lane-btn" data-lane="adc" onclick="toggleLaneFilter(this)">
+            <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png" onerror="this.remove()">adc
+          </button>
+          <button class="lane-btn" data-lane="support" onclick="toggleLaneFilter(this)">
+            <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png" onerror="this.remove()">suporte
+          </button>
         </div>
         <div id="lol-list"></div>
       </div>
@@ -3071,11 +3129,29 @@ async function deleteJogo(tipo, id) {
   renderJogos(d);
 }
 
+let lolLaneFiltro = 'all';
+
+function toggleLaneFilter(btn) {
+  lolLaneFiltro = btn.dataset.lane;
+  document.querySelectorAll('#lol-lane-filter .lane-btn').forEach(b => b.classList.toggle('active', b === btn));
+  renderJogos(cachedData);
+}
+
 function renderJogos(d) {
   // LoL
   const lolEl = document.getElementById('lol-list');
-  lolEl.innerHTML = !d.jogos.lol.length ? emptyState('nenhuma build de LoL ainda') :
-    d.jogos.lol.map(j => {
+  const filterBar = document.getElementById('lol-lane-filter');
+
+  // Mostra filtro somente se houver builds
+  if (filterBar) filterBar.style.display = d.jogos.lol.length ? 'flex' : 'none';
+
+  const lolFiltrado = lolLaneFiltro === 'all'
+    ? d.jogos.lol
+    : d.jogos.lol.filter(j => j.role && j.role.toLowerCase() === lolLaneFiltro);
+
+  lolEl.innerHTML = !lolFiltrado.length
+    ? (d.jogos.lol.length ? emptyState('nenhuma build nessa lane ainda') : emptyState('nenhuma build de LoL ainda'))
+    : lolFiltrado.map(j => {
       const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
       const champImgHtml = j.champImg ? `<img src="${j.champImg}" style="width:40px;height:40px;object-fit:cover;border:1px solid var(--border);margin-right:10px">` : '';
       const itensChips = (j.itensData||[]).map(it=>`<div class="lol-chip"><img src="${it.img}" alt="${it.name}" style="max-width:24px" onerror="this.hidden=true">${it.name}</div>`).join('');
