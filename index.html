@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nosso espaço</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Lato:wght@300;400&family=Cinzel:wght@400;600&family=Dancing+Script:wght@400;600&family=Merriweather:ital,wght@0,300;1,300&family=Josefin+Sans:wght@300;400&family=IM+Fell+English:ital@0;1&family=Satisfy&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&family=Lato:wght@300;400&family=Cinzel:wght@400;600&family=Dancing+Script:wght@400;600&family=Merriweather:ital,wght@0,300;1,300&family=Josefin+Sans:wght@300;400&family=IM+Fell+English:ital@0;1&family=Satisfy&family=Spectral:ital,wght@0,300;0,400;1,300&family=Nunito:wght@300;400&family=Raleway:wght@300;400&family=Crimson+Pro:ital,wght@0,300;1,300&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Gwendolyn:wght@400;700&family=Italiana&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0a;
@@ -57,6 +57,7 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
 
   body {
     background: var(--bg);
@@ -74,7 +75,7 @@
   }
 
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
+    from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
@@ -89,8 +90,33 @@
   }
 
   @keyframes sectionIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(32px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes overlayIn {
+    from { opacity: 0; backdrop-filter: blur(0px); }
+    to   { opacity: 1; backdrop-filter: blur(6px); }
+  }
+
+  @keyframes pulseGold {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(200,184,122,0); }
+    50%       { box-shadow: 0 0 0 6px rgba(200,184,122,0.18); }
+  }
+
+  @keyframes focusGlow {
+    from { box-shadow: 0 0 0 0 rgba(200,184,122,0); }
+    to   { box-shadow: 0 0 0 3px rgba(200,184,122,0.18); }
   }
 
   /* ─── LOGIN ─────────────────────────────────────────── */
@@ -316,11 +342,13 @@
     padding: 10px 14px;
     width: 100%;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
   input:focus, textarea:focus, select:focus {
     border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,184,122,0.12);
+    animation: focusGlow 0.25s ease forwards;
   }
 
   .btn {
@@ -334,10 +362,11 @@
     text-transform: uppercase;
     cursor: pointer;
     width: 100%;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s ease, transform 0.18s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.2s ease;
   }
 
-  .btn:hover { opacity: 0.85; }
+  .btn:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.2); }
+  .btn:active { transform: translateY(0) scale(0.98); }
   .btn.secondary {
     background: transparent;
     color: var(--text-muted);
@@ -718,6 +747,13 @@
     padding: 28px;
     margin-bottom: 16px;
     border-left: 3px solid var(--accent);
+    transition: transform 0.25s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.25s ease, border-color 0.2s ease;
+  }
+
+  .apology-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.16);
+    border-color: rgba(200,184,122,0.4);
   }
 
   .apology-from {
@@ -899,7 +935,13 @@
     padding: 24px;
     backdrop-filter: blur(4px);
   }
-  .carta-modal-overlay.open { display: flex; }
+  .carta-modal-overlay.open {
+    display: flex;
+    animation: overlayIn 0.3s ease both;
+  }
+  .carta-modal-overlay.open .carta-modal {
+    animation: modalSlideIn 0.38s cubic-bezier(0.34,1.3,0.64,1) both;
+  }
 
   .carta-modal {
     background: var(--surface);
@@ -909,6 +951,26 @@
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
+  }
+
+  /* ─── DESCULPA MODAL ──────────────────────────────── */
+  #desculpa-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(4px);
+  }
+  #desculpa-modal-overlay.open {
+    display: flex;
+    animation: overlayIn 0.3s ease both;
+  }
+  #desculpa-modal-overlay.open .carta-modal {
+    animation: modalSlideIn 0.38s cubic-bezier(0.34,1.3,0.64,1) both;
   }
 
   .carta-modal-header {
@@ -1226,18 +1288,73 @@
   .runa-keystone .runa-option img { width: 52px; height: 52px; }
 
   /* ─── FONT SELECTOR ─────────────────────────────────── */
-  .font-opt {
-    background: var(--surface2);
-    border: 2px solid var(--border);
-    color: var(--text-muted);
+  .font-picker-wrap {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .font-picker-wrap::-webkit-scrollbar { display: none; }
+
+  .font-card {
+    background: var(--surface);
+    border: none;
+    border-right: 1px solid var(--border);
     cursor: pointer;
-    padding: 8px 14px;
-    font-size: 13px;
-    transition: all 0.2s;
+    padding: 10px 14px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+    transition: background 0.2s ease, transform 0.22s cubic-bezier(0.34,1.4,0.64,1);
+    position: relative;
+    min-width: 72px;
+  }
+  .font-card:last-child { border-right: none; }
+
+  .font-card-sample {
+    font-size: 1.55rem;
+    line-height: 1;
+    color: var(--text);
+    transition: color 0.2s ease;
+  }
+
+  .font-card-label {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    transition: color 0.2s ease;
     white-space: nowrap;
   }
-  .font-opt:hover { border-color: var(--accent); color: var(--text); }
-  .font-opt.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  .font-card:hover {
+    background: var(--accent-dim);
+    transform: translateY(-2px);
+  }
+  .font-card:hover .font-card-label { color: var(--accent); }
+  .font-card:hover .font-card-sample { color: var(--accent); }
+
+  .font-card.active {
+    background: var(--accent-dim);
+    box-shadow: inset 0 -3px 0 var(--accent);
+  }
+  .font-card.active .font-card-label { color: var(--accent); }
+  .font-card.active .font-card-sample { color: var(--accent); }
+
+  .font-section-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+  .font-section-label:first-child { margin-top: 0; }
 
   @media (max-width: 600px) {
     .form-row { grid-template-columns: 1fr; }
@@ -1640,13 +1757,14 @@
     <!-- ─── CONFIG ─── -->
     <section id="sec-config" class="section">
       <div class="section-title">configurações</div>
-      <div class="section-desc">personalize seu perfil e aparência</div>
+      <div class="section-desc">tudo salva automaticamente ao alterar</div>
 
       <div class="form-panel">
         <div class="form-grid">
-          <div class="field-label" style="font-size:12px; color: var(--text); margin-bottom:-4px">foto de perfil</div>
+
+          <div class="field-label" style="font-size:12px;color:var(--text);margin-bottom:-4px">foto de perfil</div>
           <div class="form-group">
-            <div class="field-label">foto de perfil (aparece no header e nas cartas)</div>
+            <div class="field-label">aparece no header e nas cartas</div>
             <label class="img-upload-label">
               ＋ escolher foto
               <input type="file" id="avatar-input" accept="image/*" onchange="previewAvatar(this)">
@@ -1656,52 +1774,35 @@
               <button class="img-remove" onclick="removeAvatar()" style="top:-4px;right:-4px">✕</button>
             </div>
           </div>
-          <div class="field-label" style="font-size:12px; color: var(--text); margin-bottom:-4px">nome de exibição</div>
+
+          <div class="field-label" style="font-size:12px;color:var(--text);margin-bottom:-4px">nome de exibição</div>
           <div class="form-group">
             <div class="field-label" id="cfg-name-label">seu nome ou apelido</div>
-            <input type="text" id="cfg-name" placeholder="seu nome ou apelido">
+            <input type="text" id="cfg-name" placeholder="seu nome ou apelido" onchange="saveConfig()">
           </div>
-          <div class="field-label" style="font-size:12px; color: var(--text); margin-top:16px; margin-bottom:-4px">fonte do site</div>
-          <div class="form-group">
-            <div class="field-label">fonte de exibição (títulos)</div>
-            <div id="font-display-opts" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px"></div>
+
+          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:4px">fonte do site <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.1em">— passe o mouse para pré-visualizar, clique para salvar</span></div>
+          <div class="form-group" style="gap:8px">
+            <div class="font-section-label">títulos e destaques</div>
+            <div class="font-picker-wrap" id="font-display-opts"></div>
+            <div class="font-section-label">texto do corpo</div>
+            <div class="font-picker-wrap" id="font-body-opts"></div>
           </div>
+
+          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:-4px">background personalizado</div>
           <div class="form-group">
-            <div class="field-label">fonte do texto (corpo)</div>
-            <div id="font-body-opts" style="display:flex;flex-wrap:wrap;gap:8px"></div>
-          </div>
-          <div class="field-label" style="font-size:12px; color: var(--text); margin-top:16px; margin-bottom:-4px">background personalizado</div>
-          <div class="form-group">
-            <div class="field-label">imagem de fundo do site (dentro do app)</div>
+            <div class="field-label">imagem de fundo do site</div>
             <label class="img-upload-label">
-              ＋ escolher imagem de fundo
+              ＋ escolher imagem
               <input type="file" id="bg-img-input" accept="image/*" onchange="previewBgImg(this)">
             </label>
             <div id="bg-img-preview" style="display:none;margin-top:8px;position:relative">
               <img id="bg-img-thumb" src="" style="width:100%;max-height:120px;object-fit:cover;border:1px solid var(--border)">
               <button class="img-remove" onclick="removeBgImg()">✕</button>
             </div>
-            <div style="margin-top:6px;font-size:10px;color:var(--text-muted);letter-spacing:0.08em">
-              sincronizado entre dispositivos — só aparece para você
-            </div>
+            <div style="margin-top:6px;font-size:10px;color:var(--text-muted);letter-spacing:0.08em">sincronizado entre dispositivos — só aparece para você</div>
           </div>
-          <div class="form-group">
-            <div class="field-label">imagem de fundo da tela de login</div>
-            <label class="img-upload-label">
-              ＋ escolher imagem de fundo do login
-              <input type="file" id="bg-login-input" accept="image/*" onchange="previewBgLogin(this)">
-            </label>
-            <div id="bg-login-preview" style="display:none;margin-top:8px;position:relative">
-              <img id="bg-login-thumb" src="" style="width:100%;max-height:120px;object-fit:cover;border:1px solid var(--border)">
-              <button class="img-remove" onclick="removeBgLogin()">✕</button>
-            </div>
-            <div style="margin-top:6px;font-size:10px;color:var(--text-muted);letter-spacing:0.08em">
-              aparece na tela de login — sincronizado entre dispositivos
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn gold" onclick="saveConfig()">salvar configurações</button>
-          </div>
+
         </div>
       </div>
     </section>
@@ -1734,6 +1835,29 @@
       <!-- Selecionadas -->
       <div id="runa-selected-preview" style="margin-bottom:16px"></div>
       <button class="btn gold" onclick="confirmarRunas()">confirmar runas</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DESCULPA MODAL ═══════════════ -->
+<div id="desculpa-modal-overlay" onclick="fecharDesculpaModal(event)">
+  <div class="carta-modal" id="desculpa-modal-box" style="max-width:560px">
+    <div class="carta-modal-header">
+      <div class="carta-modal-title" id="dm-de" style="font-size:1rem;font-style:normal;letter-spacing:0.1em"></div>
+      <button class="carta-modal-close" onclick="document.getElementById('desculpa-modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="carta-modal-body">
+      <div id="dm-msg" style="font-family:var(--font-display);font-style:italic;font-size:1.25rem;line-height:1.8;margin-bottom:16px"></div>
+      <img id="dm-img" src="" style="display:none;width:100%;max-height:260px;object-fit:contain;margin:12px 0;border:1px solid var(--border)">
+      <div id="dm-promessa" style="display:none;margin-top:12px">
+        <div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">promessa</div>
+        <div id="dm-promessa-text" style="font-size:13px;line-height:1.7"></div>
+      </div>
+      <div id="dm-amor" style="display:none;margin-top:12px">
+        <div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">o que eu amo em você</div>
+        <div id="dm-amor-text" style="font-size:13px;line-height:1.7"></div>
+      </div>
+      <div id="dm-meta" style="font-size:10px;color:var(--text-muted);letter-spacing:0.1em;margin-top:20px"></div>
     </div>
   </div>
 </div>
@@ -2114,21 +2238,33 @@ function removeApoImg() {
 // ─── Seletor de Fontes ───────────────────────────────────
 
 const fontOptionsDisplay = [
-  { name: 'Cormorant', value: "'Cormorant Garamond', serif" },
-  { name: 'Playfair', value: "'Playfair Display', serif" },
-  { name: 'Cinzel', value: "'Cinzel', serif" },
-  { name: 'Merriweather', value: "'Merriweather', serif" },
-  { name: 'IM Fell', value: "'IM Fell English', serif" },
-  { name: 'Dancing', value: "'Dancing Script', cursive" },
-  { name: 'Satisfy', value: "'Satisfy', cursive" },
+  { name: 'Cormorant', value: "'Cormorant Garamond', serif",    sample: 'Aa' },
+  { name: 'Playfair',  value: "'Playfair Display', serif",      sample: 'Aa' },
+  { name: 'Cinzel',    value: "'Cinzel', serif",                sample: 'Aa' },
+  { name: 'Merriweather', value: "'Merriweather', serif",       sample: 'Aa' },
+  { name: 'IM Fell',   value: "'IM Fell English', serif",       sample: 'Aa' },
+  { name: 'Spectral',  value: "'Spectral', serif",              sample: 'Aa' },
+  { name: 'Crimson',   value: "'Crimson Pro', serif",           sample: 'Aa' },
+  { name: 'Baskerville', value: "'Libre Baskerville', serif",   sample: 'Aa' },
+  { name: 'Dancing',   value: "'Dancing Script', cursive",      sample: 'Aa' },
+  { name: 'Satisfy',   value: "'Satisfy', cursive",             sample: 'Aa' },
+  { name: 'Gwendolyn', value: "'Gwendolyn', cursive",           sample: 'Aa' },
+  { name: 'Italiana',  value: "'Italiana', serif",              sample: 'Aa' },
 ];
 
 const fontOptionsBody = [
-  { name: 'DM Mono', value: "'DM Mono', monospace" },
-  { name: 'Lato', value: "'Lato', sans-serif" },
-  { name: 'Josefin Sans', value: "'Josefin Sans', sans-serif" },
-  { name: 'Merriweather', value: "'Merriweather', serif" },
-  { name: 'Cinzel', value: "'Cinzel', serif" },
+  { name: 'DM Mono',   value: "'DM Mono', monospace",          sample: 'Aa' },
+  { name: 'Lato',      value: "'Lato', sans-serif",            sample: 'Aa' },
+  { name: 'Josefin',   value: "'Josefin Sans', sans-serif",    sample: 'Aa' },
+  { name: 'Raleway',   value: "'Raleway', sans-serif",         sample: 'Aa' },
+  { name: 'Nunito',    value: "'Nunito', sans-serif",          sample: 'Aa' },
+  { name: 'Merriweather', value: "'Merriweather', serif",      sample: 'Aa' },
+  { name: 'Spectral',  value: "'Spectral', serif",             sample: 'Aa' },
+  { name: 'Cinzel',    value: "'Cinzel', serif",               sample: 'Aa' },
+  { name: 'Crimson',   value: "'Crimson Pro', serif",          sample: 'Aa' },
+  { name: 'Cormorant', value: "'Cormorant Garamond', serif",   sample: 'Aa' },
+  { name: 'Playfair',  value: "'Playfair Display', serif",     sample: 'Aa' },
+  { name: 'Baskerville', value: "'Libre Baskerville', serif",  sample: 'Aa' },
 ];
 
 function renderFontOpts(d) {
@@ -2139,29 +2275,46 @@ function renderFontOpts(d) {
   var bEl = document.getElementById('font-body-opts');
   if (!dEl || !bEl) return;
 
-  dEl.innerHTML = fontOptionsDisplay.map(function(f, i) {
-    var active = savedDisplay === f.value ? ' active' : '';
-    return '<button type="button" class="font-opt' + active + '" style="font-family:' + f.value + '" data-font="' + i + '" data-tipo="display" onclick="setFontByBtn(this)">' + f.name + '</button>';
-  }).join('');
+  const makeCard = (f, i, tipo, savedVal) => {
+    const active = savedVal === f.value ? ' active' : '';
+    return `<button type="button" class="font-card${active}" data-font="${i}" data-tipo="${tipo}" data-value="${f.value}"
+      onclick="setFontByBtn(this)"
+      onmouseenter="previewFont('${tipo}','${f.value.replace(/'/g,'\\\'')}')"
+      onmouseleave="restoreFont('${tipo}')">
+      <span class="font-card-sample" style="font-family:${f.value}">${f.sample}</span>
+      <span class="font-card-label">${f.name}</span>
+    </button>`;
+  };
 
-  bEl.innerHTML = fontOptionsBody.map(function(f, i) {
-    var active = savedBody === f.value ? ' active' : '';
-    return '<button type="button" class="font-opt' + active + '" style="font-family:' + f.value + '" data-font="' + i + '" data-tipo="body" onclick="setFontByBtn(this)">' + f.name + '</button>';
-  }).join('');
+  dEl.innerHTML = fontOptionsDisplay.map((f,i) => makeCard(f,i,'display',savedDisplay)).join('');
+  bEl.innerHTML = fontOptionsBody.map((f,i) => makeCard(f,i,'body',savedBody)).join('');
+}
+
+function previewFont(tipo, value) {
+  var prop = tipo === 'display' ? '--font-display' : '--font-body';
+  document.documentElement.style.setProperty(prop, value);
+}
+
+function restoreFont(tipo) {
+  var cfg = cachedData && cachedData.config ? cachedData.config : {};
+  var saved = tipo === 'display'
+    ? (currentUser === 'player1' ? cfg.fontDisplay1 : cfg.fontDisplay2)
+    : (currentUser === 'player1' ? cfg.fontBody1    : cfg.fontBody2);
+  var prop = tipo === 'display' ? '--font-display' : '--font-body';
+  var def  = tipo === 'display' ? fontOptionsDisplay[0].value : fontOptionsBody[0].value;
+  document.documentElement.style.setProperty(prop, saved || def);
 }
 
 function setFontByBtn(btn) {
   var tipo = btn.dataset.tipo;
-  var idx = parseInt(btn.dataset.font);
-  var opts = tipo === 'display' ? fontOptionsDisplay : fontOptionsBody;
-  setFont(tipo, opts[idx].value, btn);
+  setFont(tipo, btn.dataset.value, btn);
 }
 
 function setFont(tipo, value, btn) {
   var prop = tipo === 'display' ? '--font-display' : '--font-body';
   document.documentElement.style.setProperty(prop, value);
   var container = btn.parentElement;
-  container.querySelectorAll('.font-opt').forEach(function(b) { b.classList.remove('active'); });
+  container.querySelectorAll('.font-card').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
   var configKey = tipo === 'display'
     ? (currentUser === 'player1' ? 'fontDisplay1' : 'fontDisplay2')
@@ -2223,53 +2376,6 @@ function removeBgImg() {
 }
 
 // ─── Background tela de login ────────────────────────
-function aplicarBgLogin(cfg) {
-  if (!cfg) return;
-  // cada jogador tem seu próprio bg de login, mas aplicamos o do usuário logado
-  // No initLoginScreen (pré-login) não sabemos quem vai entrar — usamos bg1 como padrão
-  // Quando temos currentUser, usamos o do jogador
-  const src = currentUser
-    ? (currentUser === 'player1' ? cfg.bgLogin1 : cfg.bgLogin2)
-    : (cfg.bgLogin1 || cfg.bgLogin2);
-  const ls = document.getElementById('login-screen');
-  if (src) {
-    ls.style.backgroundImage = `url(${src})`;
-    ls.style.backgroundSize = 'cover';
-    ls.style.backgroundPosition = 'center';
-  } else {
-    ls.style.backgroundImage = '';
-  }
-}
-
-function previewBgLogin(input) {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async e => {
-    let data = e.target.result;
-    if (data.length > 300000) data = await comprimirBase64(data, 1280, 0.6);
-    document.getElementById('bg-login-thumb').src = data;
-    document.getElementById('bg-login-preview').style.display = 'block';
-    // aplica imediatamente na tela de login (em background)
-    const ls = document.getElementById('login-screen');
-    ls.style.backgroundImage = `url(${data})`;
-    ls.style.backgroundSize = 'cover';
-    ls.style.backgroundPosition = 'center';
-    const configKey = currentUser === 'player1' ? 'bgLogin1' : 'bgLogin2';
-    if (cachedData && cachedData.config) cachedData.config[configKey] = data;
-    db.ref(STORAGE_KEY + '/config').update({ [configKey]: data });
-  };
-  reader.readAsDataURL(file);
-}
-
-function removeBgLogin() {
-  document.getElementById('bg-login-input').value = '';
-  document.getElementById('bg-login-preview').style.display = 'none';
-  document.getElementById('bg-login-thumb').src = '';
-  document.getElementById('login-screen').style.backgroundImage = '';
-  const configKey = currentUser === 'player1' ? 'bgLogin1' : 'bgLogin2';
-  if (cachedData && cachedData.config) cachedData.config[configKey] = '';
-  db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
-}
 
 // Estado da carta em criação
 let cartaColorSelecionada = '';
@@ -2331,7 +2437,7 @@ const defaultData = {
     avatar1: '', avatar2: '',
     fontDisplay1: '', fontDisplay2: '', fontBody1: '', fontBody2: '',
     bg1: '', bg2: '',
-    bgLogin1: '', bgLogin2: '' },
+},
   cartas: [],
   planos: [],
   datas: [],
@@ -2458,7 +2564,6 @@ async function initLoginScreen() {
     };
     setAvatar('login-avatar-p1', 'login-init-p1', cfg.avatar1);
     setAvatar('login-avatar-p2', 'login-init-p2', cfg.avatar2);
-    aplicarBgLogin(cfg);
   } catch {}
   document.getElementById('login-loading').style.display = 'none';
 }
@@ -2518,13 +2623,6 @@ async function doLogin(player) {
     document.getElementById('avatar-preview').style.display = 'none';
   }
   // preenche preview do bg de login no config
-  const blSrc = currentUser === 'player1' ? d.config.bgLogin1 : d.config.bgLogin2;
-  if (blSrc) {
-    document.getElementById('bg-login-thumb').src = blSrc;
-    document.getElementById('bg-login-preview').style.display = 'block';
-  } else {
-    document.getElementById('bg-login-preview').style.display = 'none';
-  }
   ativarSyncTempoReal();
   renderAll();
 }
@@ -2584,7 +2682,6 @@ function ativarSyncTempoReal() {
       cachedData = d;
       aplicarFontes(d);
       aplicarBackground(d);
-      aplicarBgLogin(d.config);
       atualizarHeaderAvatar(d);
       renderFontOpts(d);
       atualizarBadges(d);
@@ -2631,19 +2728,20 @@ async function addCarta() {
   const para = document.getElementById('carta-para').value;
   if (!titulo || !texto) { toast('preencha título e mensagem'); return; }
 
-  const d = await loadData();
-  d.cartas.unshift({ id: Date.now(), de: currentUser, para, titulo, texto,
+  const novaCarta = { id: Date.now(), de: currentUser, para, titulo, texto,
     cor: cartaColorSelecionada, img: cartaImgBase64,
-    ts: new Date().toISOString(), lida: false });
+    ts: new Date().toISOString(), lida: false };
+  const d = await loadData();
+  d.cartas.unshift(novaCarta);
   await saveData(d);
   document.getElementById('carta-titulo').value = '';
   document.getElementById('carta-texto').value = '';
-  // reset cor e imagem
   cartaColorSelecionada = ''; cartaImgBase64 = '';
   document.querySelectorAll('#carta-color-picker .color-dot').forEach((d,i) => d.classList.toggle('selected', i===0));
   removeCartaImg();
   renderCartas(d);
-  toast('carta enviada ✉');
+  // abre automaticamente a carta enviada
+  setTimeout(() => abrirCarta(novaCarta, d), 180);
 }
 
 async function deleteCarta(id) {
@@ -2671,7 +2769,7 @@ function renderCartas(d) {
   const pagina = visible.slice(0, cartasPage);
   const restantes = visible.length - cartasPage;
 
-  el.innerHTML = pagina.map(c => {
+  el.innerHTML = pagina.map((c, idx) => {
     const deNome = c.de === 'player1' ? d.config.name1 : d.config.name2;
     const paraNome = c.para === 'ambos' ? 'nós dois' : (c.para === 'player1' ? d.config.name1 : d.config.name2);
     const mine = c.de === currentUser;
@@ -2680,7 +2778,8 @@ function renderCartas(d) {
     const preview = c.texto.length > 120 ? c.texto.slice(0, 120) + '…' : c.texto;
     const avatarSrc = c.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
     const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
-    return `<div class="card clickable" style="${bgStyle}" onclick="abrirCartaById(${c.id})">
+    const delay = idx * 55;
+    return `<div class="card clickable" style="${bgStyle}animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both" onclick="abrirCartaById(${c.id})">
       <div class="card-header">
         <div class="card-title">${esc(c.titulo)}</div>
         <div class="card-meta">${timeAgo(c.ts)}</div>
@@ -2936,18 +3035,40 @@ async function addDesculpa() {
   const promessa = document.getElementById('apo-promessa').value.trim();
   const amor = document.getElementById('apo-amor').value.trim();
 
-  const d = await loadData();
-  d.desculpas.unshift({
+  const novaDesculpa = {
     id: Date.now(), de: currentUser, para: apoTarget,
     msg, promessa, amor, img: apoImgBase64, ts: new Date().toISOString(), lida: false
-  });
+  };
+  const d = await loadData();
+  d.desculpas.unshift(novaDesculpa);
   await saveData(d);
   document.getElementById('apo-msg').value = '';
   document.getElementById('apo-promessa').value = '';
   document.getElementById('apo-amor').value = '';
   apoImgBase64 = ''; removeApoImg();
   renderDesculpas(d);
-  toast('pedido enviado ♡');
+  // abre automaticamente o pedido enviado
+  setTimeout(() => abrirDesculpaModal(novaDesculpa, d), 180);
+}
+
+function abrirDesculpaModal(x, d) {
+  const deNome = x.de === 'player1' ? d.config.name1 : d.config.name2;
+  document.getElementById('dm-de').textContent = '♡ de ' + deNome;
+  document.getElementById('dm-msg').textContent = x.msg;
+  const imgEl = document.getElementById('dm-img');
+  if (x.img) { imgEl.src = x.img; imgEl.style.display = 'block'; }
+  else { imgEl.style.display = 'none'; imgEl.src = ''; }
+  const promEl = document.getElementById('dm-promessa');
+  const amorEl = document.getElementById('dm-amor');
+  if (x.promessa) { document.getElementById('dm-promessa-text').textContent = x.promessa; promEl.style.display = 'block'; } else { promEl.style.display = 'none'; }
+  if (x.amor)     { document.getElementById('dm-amor-text').textContent = x.amor;         amorEl.style.display = 'block'; } else { amorEl.style.display = 'none'; }
+  document.getElementById('dm-meta').textContent = fmt(x.ts);
+  document.getElementById('desculpa-modal-overlay').classList.add('open');
+}
+
+function fecharDesculpaModal(e) {
+  if (!e || e.target === document.getElementById('desculpa-modal-overlay'))
+    document.getElementById('desculpa-modal-overlay').classList.remove('open');
 }
 
 async function deleteDesculpa(id) {
@@ -2969,12 +3090,13 @@ function renderDesculpas(d) {
     if (changed) saveData(d);
   }
 
-  el.innerHTML = visible.map(x => {
+  el.innerHTML = visible.map((x, idx) => {
     const deNome = x.de === 'player1' ? d.config.name1 : d.config.name2;
     const mine = x.de === currentUser;
     const avatarSrc = x.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
     const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
-    return `<div class="apology-card">
+    const delay = idx * 55;
+    return `<div class="apology-card" style="animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both">
       <div class="apology-from" style="display:flex;align-items:center;gap:0">${avatarHtml}de ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
       <div class="apology-msg">${esc(x.msg)}</div>
       ${x.img ? `<img src="${x.img}" style="width:100%;max-height:280px;object-fit:contain;margin:12px 0;border:1px solid var(--border)">` : ''}
