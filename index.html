@@ -541,6 +541,21 @@
     vertical-align: middle;
   }
 
+  .nav-badge {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 9px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
+    margin-left: 5px;
+    vertical-align: middle;
+    font-family: var(--font-body);
+  }
+
   /* ─── EMPTY STATE ────────────────────────────────────── */
   .empty-state {
     text-align: center;
@@ -1045,12 +1060,12 @@
   </header>
 
   <nav>
-    <button class="nav-item active" onclick="showSection('cartas')">✉ cartas</button>
-    <button class="nav-item" onclick="showSection('planos')">✦ planos</button>
-    <button class="nav-item" onclick="showSection('datas')">◎ datas</button>
-    <button class="nav-item" onclick="showSection('jogos')">⌗ jogos</button>
-    <button class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
-    <button class="nav-item" onclick="showSection('config')">⚙ config</button>
+    <button id="nav-cartas" class="nav-item active" onclick="showSection('cartas')">✉ cartas</button>
+    <button id="nav-planos" class="nav-item" onclick="showSection('planos')">✦ planos</button>
+    <button id="nav-datas" class="nav-item" onclick="showSection('datas')">◎ datas</button>
+    <button id="nav-jogos" class="nav-item" onclick="showSection('jogos')">⌗ jogos</button>
+    <button id="nav-desculpas" class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
+    <button id="nav-config" class="nav-item" onclick="showSection('config')">⚙ config</button>
   </nav>
 
   <main>
@@ -2024,23 +2039,56 @@ const defaultData = {
 // ─── Storage (Firebase Realtime Database) ───────────────
 const STORAGE_KEY = 'couple_app_data';
 
+// Firebase pode retornar objetos em vez de arrays — converte sempre
+function toArray(val) {
+  if (!val) return [];
+  if (Array.isArray(val)) return val;
+  return Object.keys(val).sort((a, b) => parseInt(a) - parseInt(b)).map(k => val[k]);
+}
+
+function normalizarDados(d) {
+  if (!d.config) d.config = { ...defaultData.config };
+  if (!d.jogos) d.jogos = { lol: [], mhw: [], outros: [] };
+  d.cartas    = toArray(d.cartas);
+  d.planos    = toArray(d.planos);
+  d.datas     = toArray(d.datas);
+  d.desculpas = toArray(d.desculpas);
+  d.jogos.lol    = toArray(d.jogos.lol);
+  d.jogos.mhw    = toArray(d.jogos.mhw);
+  d.jogos.outros = toArray(d.jogos.outros);
+  return d;
+}
+
 async function loadData() {
   try {
     const snapshot = await db.ref(STORAGE_KEY).get();
-    if (snapshot.exists()) {
-      const parsed = snapshot.val();
-      if (!parsed.config) parsed.config = { ...defaultData.config };
-      if (!parsed.jogos) parsed.jogos = { ...defaultData.jogos };
-      if (!parsed.cartas) parsed.cartas = [];
-      if (!parsed.planos) parsed.planos = [];
-      if (!parsed.datas) parsed.datas = [];
-      if (!parsed.desculpas) parsed.desculpas = [];
-      return parsed;
-    }
+    if (snapshot.exists()) return normalizarDados(snapshot.val());
     return JSON.parse(JSON.stringify(defaultData));
   } catch {
     return JSON.parse(JSON.stringify(defaultData));
   }
+}
+
+function atualizarBadges(d) {
+  if (!currentUser) return;
+  const novasCartas    = toArray(d.cartas).filter(x => x.para === currentUser && !x.lida).length;
+  const novasDesculpas = toArray(d.desculpas).filter(x => x.para === currentUser && !x.lida).length;
+
+  const setBadge = (navId, count) => {
+    const btn = document.getElementById(navId);
+    if (!btn) return;
+    const old = btn.querySelector('.nav-badge');
+    if (old) old.remove();
+    if (count > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'nav-badge';
+      badge.textContent = count > 9 ? '9+' : count;
+      btn.appendChild(badge);
+    }
+  };
+
+  setBadge('nav-cartas', novasCartas);
+  setBadge('nav-desculpas', novasDesculpas);
 }
 
 function comprimirBase64(base64, maxWidth, quality) {
@@ -2157,6 +2205,9 @@ function showSection(id) {
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('sec-' + id).classList.add('active');
   event.target.classList.add('active');
+  // Remove badge da aba ao abrir
+  const badge = event.target.querySelector('.nav-badge');
+  if (badge) badge.remove();
 }
 
 function switchGame(g) {
@@ -2175,13 +2226,8 @@ function ativarSyncTempoReal() {
   db.ref(STORAGE_KEY).on('value', (snapshot) => {
     if (!currentUser) return;
     if (snapshot.exists()) {
-      const d = snapshot.val();
-      if (!d.config) d.config = { ...defaultData.config };
-      if (!d.jogos) d.jogos = { ...defaultData.jogos };
-      if (!d.cartas) d.cartas = [];
-      if (!d.planos) d.planos = [];
-      if (!d.datas) d.datas = [];
-      if (!d.desculpas) d.desculpas = [];
+      const d = normalizarDados(snapshot.val());
+      atualizarBadges(d);
       renderCartas(d);
       renderPlanos(d);
       renderDatas(d);
