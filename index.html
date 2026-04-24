@@ -2136,7 +2136,9 @@ async function doLogin() {
 
   aplicarBackground();
   renderFontOpts();
-  renderAll(d);
+  // Ativa sync primeiro, depois renderiza com dados frescos do Firebase
+  ativarSyncTempoReal();
+  renderAll();
 }
 
 function logout() {
@@ -2188,13 +2190,12 @@ function ativarSyncTempoReal() {
 
 // ─── Render All ─────────────────────────────────────────
 async function renderAll(d) {
-  d = d || await loadData();
+  d = await loadData(); // sempre busca dados frescos do Firebase
   renderCartas(d);
   renderPlanos(d);
   renderDatas(d);
   renderJogos(d);
   renderDesculpas(d);
-  ativarSyncTempoReal();
 }
 
 function fmt(iso) {
