@@ -1290,18 +1290,15 @@
   /* ─── FONT SELECTOR ─────────────────────────────────── */
   .font-picker-wrap {
     display: flex;
+    flex-wrap: wrap;
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
-    overflow-x: auto;
-    scrollbar-width: none;
   }
-  .font-picker-wrap::-webkit-scrollbar { display: none; }
 
   .font-card {
     background: var(--surface);
     border: none;
-    border-right: 1px solid var(--border);
     cursor: pointer;
     padding: 10px 14px 8px;
     display: flex;
@@ -1313,7 +1310,6 @@
     position: relative;
     min-width: 72px;
   }
-  .font-card:last-child { border-right: none; }
 
   .font-card-sample {
     font-size: 1.55rem;
@@ -2787,7 +2783,10 @@ function renderCartas(d) {
       <div class="card-body">${esc(preview)}</div>
       ${thumbHtml}
       <span class="card-tag" style="display:inline-flex;align-items:center">${avatarHtml}${deNome} → ${paraNome}</span>
-      ${mine ? `<div class="card-actions" onclick="event.stopPropagation()"><button class="icon-btn del" onclick="deleteCarta(${c.id})">apagar</button></div>` : ''}
+      ${mine ? `<div class="card-actions" onclick="event.stopPropagation()">
+        <button class="icon-btn" onclick="editarItem('carta',${c.id})">editar</button>
+        <button class="icon-btn del" onclick="deleteCarta(${c.id})">apagar</button>
+      </div>` : ''}
     </div>`;
   }).join('');
 
@@ -2843,6 +2842,7 @@ function renderPlanos(d) {
     <span class="card-tag ${catColors[p.cat] || ''}">${p.cat}</span>
     <div class="card-actions">
       <button class="icon-btn" onclick="togglePlano(${p.id})">${p.feito ? 'desfazer' : 'marcar como feito'}</button>
+      <button class="icon-btn" onclick="editarItem('plano',${p.id})">editar</button>
       <button class="icon-btn del" onclick="deletePlano(${p.id})">apagar</button>
     </div>
   </div>`).join('');
@@ -2904,7 +2904,10 @@ function renderDatas(d) {
         </div>
         <div class="card-body" style="color:var(--text-muted)">${fmt(dt.val)}</div>
         <span class="card-tag ${dt.tipo === 'aniversario' ? 'red' : ''}">${dt.tipo}</span>
-        <div class="card-actions"><button class="icon-btn del" onclick="deleteData(${dt.id})">apagar</button></div>
+        <div class="card-actions">
+          <button class="icon-btn" onclick="editarItem('data',${dt.id})">editar</button>
+          <button class="icon-btn del" onclick="deleteData(${dt.id})">apagar</button>
+        </div>
       </div>`;
     }).join('');
 }
@@ -2974,7 +2977,10 @@ function renderJogos(d) {
         ${itensChips ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">ITENS</span><div class="lol-chips" style="margin-top:6px">${itensChips}</div></div>` : ''}
         ${runasChips ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">RUNAS</span><div class="lol-chips" style="margin-top:6px">${runasChips}</div></div>` : ''}
         ${j.notas ? `<div class="card-body" style="margin-top:8px">${esc(j.notas)}</div>` : ''}
-        <div class="card-actions"><button class="icon-btn del" onclick="deleteJogo('lol', ${j.id})">apagar</button></div>
+        <div class="card-actions">
+          <button class="icon-btn" onclick="editarItem('jogo-lol',${j.id})">editar</button>
+          <button class="icon-btn del" onclick="deleteJogo('lol', ${j.id})">apagar</button>
+        </div>
       </div>`;
     }).join('');
 
@@ -2991,7 +2997,10 @@ function renderJogos(d) {
         ${j.armor ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">ARMADURA</span><br>${esc(j.armor)}</div>` : ''}
         ${j.skills ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">SKILLS</span><br>${esc(j.skills)}</div>` : ''}
         ${j.notas ? `<div class="card-body" style="margin-top:8px">${esc(j.notas)}</div>` : ''}
-        <div class="card-actions"><button class="icon-btn del" onclick="deleteJogo('mhw', ${j.id})">apagar</button></div>
+        <div class="card-actions">
+          <button class="icon-btn" onclick="editarItem('jogo-mhw',${j.id})">editar</button>
+          <button class="icon-btn del" onclick="deleteJogo('mhw', ${j.id})">apagar</button>
+        </div>
       </div>`;
     }).join('');
 
@@ -3007,7 +3016,10 @@ function renderJogos(d) {
         </div>
         ${j.notas ? `<div class="card-body">${esc(j.notas)}</div>` : ''}
         <span class="card-tag blue">${j.tipoNota}</span>
-        <div class="card-actions"><button class="icon-btn del" onclick="deleteJogo('outros', ${j.id})">apagar</button></div>
+        <div class="card-actions">
+          <button class="icon-btn" onclick="editarItem('jogo-outros',${j.id})">editar</button>
+          <button class="icon-btn del" onclick="deleteJogo('outros', ${j.id})">apagar</button>
+        </div>
       </div>`;
     }).join('');
 }
@@ -3078,6 +3090,12 @@ async function deleteDesculpa(id) {
   renderDesculpas(d);
 }
 
+async function abrirDesculpaById(id) {
+  const d = cachedData || await loadData();
+  const x = d.desculpas.find(x => x.id === id);
+  if (x) abrirDesculpaModal(x, d);
+}
+
 function renderDesculpas(d) {
   const el = document.getElementById('desculpas-list');
   const visible = d.desculpas.filter(x => x.de === currentUser || x.para === currentUser);
@@ -3096,13 +3114,16 @@ function renderDesculpas(d) {
     const avatarSrc = x.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
     const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
     const delay = idx * 55;
-    return `<div class="apology-card" style="animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both">
+    return `<div class="apology-card" style="animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both;cursor:pointer" onclick="abrirDesculpaById(${x.id})">
       <div class="apology-from" style="display:flex;align-items:center;gap:0">${avatarHtml}de ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
       <div class="apology-msg">${esc(x.msg)}</div>
       ${x.img ? `<img src="${x.img}" style="width:100%;max-height:280px;object-fit:contain;margin:12px 0;border:1px solid var(--border)">` : ''}
       ${x.promessa ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">promessa</span><br>${esc(x.promessa)}</div>` : ''}
       ${x.amor ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">o que eu amo em você</span><br>${esc(x.amor)}</div>` : ''}
-      ${mine ? `<div class="card-actions"><button class="icon-btn del" onclick="deleteDesculpa(${x.id})">apagar</button></div>` : ''}
+      ${mine ? `<div class="card-actions" onclick="event.stopPropagation()">
+        <button class="icon-btn" onclick="editarItem('desculpa',${x.id})">editar</button>
+        <button class="icon-btn del" onclick="deleteDesculpa(${x.id})">apagar</button>
+      </div>` : ''}
     </div>`;
   }).join('');
 }
@@ -3185,6 +3206,163 @@ function closeModal(e) {
   if (e.target === document.getElementById('modal-overlay')) {
     document.getElementById('modal-overlay').classList.remove('open');
   }
+}
+
+// ─── Editar item ─────────────────────────────────────────
+async function editarItem(tipo, id) {
+  const d = cachedData || await loadData();
+  let item, html, title;
+  const closeBtn = `<button class="btn secondary" onclick="document.getElementById('modal-overlay').classList.remove('open')" style="margin-top:0">cancelar</button>`;
+
+  if (tipo === 'carta') {
+    item = d.cartas.find(x => x.id === id);
+    if (!item || item.de !== currentUser) return;
+    title = 'editar carta';
+    html = `<div class="form-grid">
+      <div class="form-group"><div class="field-label">título</div>
+        <input type="text" id="ef-titulo" value="${esc(item.titulo)}"></div>
+      <div class="form-group"><div class="field-label">mensagem</div>
+        <textarea id="ef-texto" rows="6">${esc(item.texto)}</textarea></div>
+      <div class="form-actions">
+        <button class="btn gold" onclick="salvarEdicao('carta',${id})">salvar</button>${closeBtn}</div>
+    </div>`;
+
+  } else if (tipo === 'plano') {
+    item = d.planos.find(x => x.id === id);
+    if (!item) return;
+    title = 'editar plano';
+    html = `<div class="form-grid">
+      <div class="form-group"><div class="field-label">nome</div>
+        <input type="text" id="ef-nome" value="${esc(item.nome)}"></div>
+      <div class="form-group"><div class="field-label">descrição</div>
+        <textarea id="ef-desc" rows="3">${esc(item.desc||'')}</textarea></div>
+      <div class="form-group"><div class="field-label">categoria</div>
+        <select id="ef-cat">${['viagem','experiencia','objetivo','sonho'].map(c=>`<option value="${c}"${item.cat===c?' selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="form-actions">
+        <button class="btn gold" onclick="salvarEdicao('plano',${id})">salvar</button>${closeBtn}</div>
+    </div>`;
+
+  } else if (tipo === 'data') {
+    item = d.datas.find(x => x.id === id);
+    if (!item) return;
+    title = 'editar data';
+    html = `<div class="form-grid">
+      <div class="form-group"><div class="field-label">nome</div>
+        <input type="text" id="ef-nome" value="${esc(item.nome)}"></div>
+      <div class="form-group"><div class="field-label">data</div>
+        <input type="date" id="ef-val" value="${item.val}"></div>
+      <div class="form-group"><div class="field-label">tipo</div>
+        <select id="ef-tipo">${['aniversario','niver','especial'].map(t=>`<option value="${t}"${item.tipo===t?' selected':''}>${t}</option>`).join('')}</select></div>
+      <div class="form-actions">
+        <button class="btn gold" onclick="salvarEdicao('data',${id})">salvar</button>${closeBtn}</div>
+    </div>`;
+
+  } else if (tipo === 'desculpa') {
+    item = d.desculpas.find(x => x.id === id);
+    if (!item || item.de !== currentUser) return;
+    title = 'editar pedido de desculpas';
+    html = `<div class="form-grid">
+      <div class="form-group"><div class="field-label">mensagem principal</div>
+        <textarea id="ef-msg" rows="4">${esc(item.msg)}</textarea></div>
+      <div class="form-group"><div class="field-label">promessa</div>
+        <textarea id="ef-promessa" rows="3">${esc(item.promessa||'')}</textarea></div>
+      <div class="form-group"><div class="field-label">o que amo em você</div>
+        <textarea id="ef-amor" rows="2">${esc(item.amor||'')}</textarea></div>
+      <div class="form-actions">
+        <button class="btn gold" onclick="salvarEdicao('desculpa',${id})">salvar</button>${closeBtn}</div>
+    </div>`;
+
+  } else if (tipo === 'jogo-lol') {
+    item = d.jogos.lol.find(x => x.id === id);
+    if (!item) return;
+    title = 'editar build LoL';
+    html = `<div class="form-grid">
+      <div class="form-group"><div class="field-label">notas / estratégia</div>
+        <textarea id="ef-notas" rows="6">${esc(item.notas||'')}</textarea></div>
+      <div class="form-actions">
+        <button class="btn gold" onclick="salvarEdicao('jogo-lol',${id})">salvar</button>${closeBtn}</div>
+    </div>`;
+
+  } else if (tipo === 'jogo-mhw') {
+    item = d.jogos.mhw.find(x => x.id === id);
+    if (!item) return;
+    title = 'editar build MHW';
+    html = `<div class="form-grid">
+      <div class="form-group"><div class="field-label">arma / set</div>
+        <input type="text" id="ef-arma" value="${esc(item.arma||'')}"></div>
+      <div class="form-group"><div class="field-label">armadura</div>
+        <input type="text" id="ef-armor" value="${esc(item.armor||'')}"></div>
+      <div class="form-group"><div class="field-label">skills</div>
+        <input type="text" id="ef-skills" value="${esc(item.skills||'')}"></div>
+      <div class="form-group"><div class="field-label">notas</div>
+        <textarea id="ef-notas" rows="4">${esc(item.notas||'')}</textarea></div>
+      <div class="form-actions">
+        <button class="btn gold" onclick="salvarEdicao('jogo-mhw',${id})">salvar</button>${closeBtn}</div>
+    </div>`;
+
+  } else if (tipo === 'jogo-outros') {
+    item = d.jogos.outros.find(x => x.id === id);
+    if (!item) return;
+    title = 'editar anotação';
+    html = `<div class="form-grid">
+      <div class="form-group"><div class="field-label">nome do jogo</div>
+        <input type="text" id="ef-jogo" value="${esc(item.jogo||'')}"></div>
+      <div class="form-group"><div class="field-label">título</div>
+        <input type="text" id="ef-titulo" value="${esc(item.titulo||'')}"></div>
+      <div class="form-group"><div class="field-label">conteúdo</div>
+        <textarea id="ef-notas" rows="5">${esc(item.notas||'')}</textarea></div>
+      <div class="form-actions">
+        <button class="btn gold" onclick="salvarEdicao('jogo-outros',${id})">salvar</button>${closeBtn}</div>
+    </div>`;
+  }
+
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+async function salvarEdicao(tipo, id) {
+  const d = JSON.parse(JSON.stringify(cachedData || await loadData()));
+  const g = (eid) => { const el = document.getElementById(eid); return el ? el.value.trim() : ''; };
+
+  if (tipo === 'carta') {
+    const item = d.cartas.find(x => x.id === id); if (!item) return;
+    item.titulo = g('ef-titulo') || item.titulo;
+    item.texto  = document.getElementById('ef-texto')?.value || item.texto;
+  } else if (tipo === 'plano') {
+    const item = d.planos.find(x => x.id === id); if (!item) return;
+    item.nome = g('ef-nome') || item.nome;
+    item.desc = document.getElementById('ef-desc')?.value.trim() || '';
+    item.cat  = g('ef-cat') || item.cat;
+  } else if (tipo === 'data') {
+    const item = d.datas.find(x => x.id === id); if (!item) return;
+    item.nome = g('ef-nome') || item.nome;
+    item.val  = g('ef-val')  || item.val;
+    item.tipo = g('ef-tipo') || item.tipo;
+  } else if (tipo === 'desculpa') {
+    const item = d.desculpas.find(x => x.id === id); if (!item) return;
+    item.msg      = document.getElementById('ef-msg')?.value.trim()      || item.msg;
+    item.promessa = document.getElementById('ef-promessa')?.value.trim() || '';
+    item.amor     = document.getElementById('ef-amor')?.value.trim()     || '';
+  } else if (tipo === 'jogo-lol') {
+    const item = d.jogos.lol.find(x => x.id === id); if (!item) return;
+    item.notas = document.getElementById('ef-notas')?.value.trim() || '';
+  } else if (tipo === 'jogo-mhw') {
+    const item = d.jogos.mhw.find(x => x.id === id); if (!item) return;
+    item.arma   = g('ef-arma')   || item.arma;
+    item.armor  = g('ef-armor')  || '';
+    item.skills = g('ef-skills') || '';
+    item.notas  = document.getElementById('ef-notas')?.value.trim() || '';
+  } else if (tipo === 'jogo-outros') {
+    const item = d.jogos.outros.find(x => x.id === id); if (!item) return;
+    item.jogo   = g('ef-jogo')   || '';
+    item.titulo = g('ef-titulo') || item.titulo;
+    item.notas  = document.getElementById('ef-notas')?.value.trim() || '';
+  }
+
+  await saveData(d);
+  document.getElementById('modal-overlay').classList.remove('open');
+  toast('salvo ✦');
 }
 
 // ─── Theme ────────────────────────────────────────────
