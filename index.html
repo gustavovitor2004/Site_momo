@@ -1528,12 +1528,15 @@ async function carregarDDragon() {
 
     // Itens
     const ri = await fetch(`${DDBase}/data/pt_BR/item.json`).then(r=>r.json());
-    lolItens = Object.entries(ri.data)
+    const itensMap = new Map();
+    Object.entries(ri.data)
       .filter(([id,it]) => it.gold && it.gold.purchasable && it.gold.total >= 400 && !it.hideFromAll)
-      .map(([id,it]) => ({
-        id, name: it.name,
-        img: `${DDBase}/img/item/${it.image.full}`
-      })).sort((a,b)=>a.name.localeCompare(b.name));
+      .forEach(([id,it]) => {
+        if (!itensMap.has(it.name)) {
+          itensMap.set(it.name, { id, name: it.name, img: `${DDBase}/img/item/${it.image.full}` });
+        }
+      });
+    lolItens = Array.from(itensMap.values()).sort((a,b)=>a.name.localeCompare(b.name));
 
     // Runas carregadas sob demanda em abrirRunaPanel()
   } catch(e) { console.warn('DDragon load error:', e); }
