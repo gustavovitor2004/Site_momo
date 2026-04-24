@@ -108,25 +108,60 @@
   .login-header {
     text-align: center;
     animation: fadeUp 0.7s ease both;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .login-deco-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    justify-content: center;
+    margin: 4px 0;
+  }
+
+  .login-deco-line {
+    height: 1px;
+    width: 72px;
+    background: linear-gradient(90deg, transparent, rgba(200,184,122,0.55), transparent);
+  }
+
+  .login-deco-gem {
+    color: var(--accent);
+    font-size: 7px;
+    letter-spacing: 5px;
+    opacity: 0.75;
   }
 
   .login-title {
     font-family: var(--font-display);
     font-weight: 300;
     font-style: italic;
-    font-size: clamp(2.8rem, 7vw, 4.5rem);
+    font-size: clamp(3rem, 8vw, 5rem);
     color: var(--text);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     animation: floatTitle 5s ease-in-out infinite;
     display: block;
+    text-shadow: 0 0 80px rgba(200,184,122,0.22), 0 0 20px rgba(200,184,122,0.10);
+    line-height: 1;
   }
 
   .login-subtitle {
     color: var(--text-muted);
-    letter-spacing: 0.25em;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
     font-size: 9px;
-    margin-top: 6px;
+    margin-top: 10px;
+  }
+
+  .login-subtitle-gems {
+    color: var(--accent);
+    opacity: 0.6;
+    font-size: 7px;
+    letter-spacing: 0.1em;
   }
 
   .login-orb {
@@ -348,9 +383,23 @@
   .header-logo {
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     color: var(--text);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
+    text-shadow: 0 0 30px rgba(200,184,122,0.18);
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-logo-gem {
+    color: var(--accent);
+    font-style: normal;
+    font-size: 0.45rem;
+    opacity: 0.75;
+    letter-spacing: 3px;
+    line-height: 1;
   }
 
   .header-user {
@@ -1205,8 +1254,18 @@
   <div class="login-orb"></div>
 
   <div class="login-header">
+    <div class="login-deco-row">
+      <div class="login-deco-line"></div>
+      <span class="login-deco-gem">✦ ✦ ✦</span>
+      <div class="login-deco-line"></div>
+    </div>
     <span class="login-title">nosso espaço</span>
-    <div class="login-subtitle">um lugar só nosso</div>
+    <div class="login-deco-row" style="margin-top:2px">
+      <div class="login-deco-line"></div>
+      <span class="login-deco-gem">◆</span>
+      <div class="login-deco-line"></div>
+    </div>
+    <div class="login-subtitle"><span class="login-subtitle-gems">✦</span> um lugar só nosso <span class="login-subtitle-gems">✦</span></div>
   </div>
 
   <div class="login-players">
@@ -1235,7 +1294,11 @@
 <!-- ═══════════════ APP ═══════════════ -->
 <div id="app">
   <header>
-    <div class="header-logo">nosso espaço</div>
+    <div class="header-logo">
+      <span class="header-logo-gem">✦✦✦</span>
+      nosso espaço
+      <span class="header-logo-gem">✦✦✦</span>
+    </div>
     <div class="header-user">
       <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="alternar tema">◐</button>
       <img id="header-avatar" src="" style="display:none">
@@ -1577,7 +1640,7 @@
     <!-- ─── CONFIG ─── -->
     <section id="sec-config" class="section">
       <div class="section-title">configurações</div>
-      <div class="section-desc">altere seu nome e sua senha</div>
+      <div class="section-desc">personalize seu perfil e aparência</div>
 
       <div class="form-panel">
         <div class="form-grid">
@@ -1598,15 +1661,6 @@
             <div class="field-label" id="cfg-name-label">seu nome ou apelido</div>
             <input type="text" id="cfg-name" placeholder="seu nome ou apelido">
           </div>
-          <div class="field-label" style="font-size:12px; color: var(--text); margin-top:8px; margin-bottom:-4px">senha</div>
-          <div class="form-group">
-            <div class="field-label">nova senha</div>
-            <input type="password" id="cfg-pass" placeholder="••••••••">
-          </div>
-          <div class="form-group">
-            <div class="field-label">confirmar nova senha</div>
-            <input type="password" id="cfg-pass-confirm" placeholder="••••••••">
-          </div>
           <div class="field-label" style="font-size:12px; color: var(--text); margin-top:16px; margin-bottom:-4px">fonte do site</div>
           <div class="form-group">
             <div class="field-label">fonte de exibição (títulos)</div>
@@ -1618,7 +1672,7 @@
           </div>
           <div class="field-label" style="font-size:12px; color: var(--text); margin-top:16px; margin-bottom:-4px">background personalizado</div>
           <div class="form-group">
-            <div class="field-label">imagem de fundo do site</div>
+            <div class="field-label">imagem de fundo do site (dentro do app)</div>
             <label class="img-upload-label">
               ＋ escolher imagem de fundo
               <input type="file" id="bg-img-input" accept="image/*" onchange="previewBgImg(this)">
@@ -1629,6 +1683,20 @@
             </div>
             <div style="margin-top:6px;font-size:10px;color:var(--text-muted);letter-spacing:0.08em">
               sincronizado entre dispositivos — só aparece para você
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="field-label">imagem de fundo da tela de login</div>
+            <label class="img-upload-label">
+              ＋ escolher imagem de fundo do login
+              <input type="file" id="bg-login-input" accept="image/*" onchange="previewBgLogin(this)">
+            </label>
+            <div id="bg-login-preview" style="display:none;margin-top:8px;position:relative">
+              <img id="bg-login-thumb" src="" style="width:100%;max-height:120px;object-fit:cover;border:1px solid var(--border)">
+              <button class="img-remove" onclick="removeBgLogin()">✕</button>
+            </div>
+            <div style="margin-top:6px;font-size:10px;color:var(--text-muted);letter-spacing:0.08em">
+              aparece na tela de login — sincronizado entre dispositivos
             </div>
           </div>
           <div class="form-actions">
@@ -2154,6 +2222,55 @@ function removeBgImg() {
   db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
 }
 
+// ─── Background tela de login ────────────────────────
+function aplicarBgLogin(cfg) {
+  if (!cfg) return;
+  // cada jogador tem seu próprio bg de login, mas aplicamos o do usuário logado
+  // No initLoginScreen (pré-login) não sabemos quem vai entrar — usamos bg1 como padrão
+  // Quando temos currentUser, usamos o do jogador
+  const src = currentUser
+    ? (currentUser === 'player1' ? cfg.bgLogin1 : cfg.bgLogin2)
+    : (cfg.bgLogin1 || cfg.bgLogin2);
+  const ls = document.getElementById('login-screen');
+  if (src) {
+    ls.style.backgroundImage = `url(${src})`;
+    ls.style.backgroundSize = 'cover';
+    ls.style.backgroundPosition = 'center';
+  } else {
+    ls.style.backgroundImage = '';
+  }
+}
+
+function previewBgLogin(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    let data = e.target.result;
+    if (data.length > 300000) data = await comprimirBase64(data, 1280, 0.6);
+    document.getElementById('bg-login-thumb').src = data;
+    document.getElementById('bg-login-preview').style.display = 'block';
+    // aplica imediatamente na tela de login (em background)
+    const ls = document.getElementById('login-screen');
+    ls.style.backgroundImage = `url(${data})`;
+    ls.style.backgroundSize = 'cover';
+    ls.style.backgroundPosition = 'center';
+    const configKey = currentUser === 'player1' ? 'bgLogin1' : 'bgLogin2';
+    if (cachedData && cachedData.config) cachedData.config[configKey] = data;
+    db.ref(STORAGE_KEY + '/config').update({ [configKey]: data });
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeBgLogin() {
+  document.getElementById('bg-login-input').value = '';
+  document.getElementById('bg-login-preview').style.display = 'none';
+  document.getElementById('bg-login-thumb').src = '';
+  document.getElementById('login-screen').style.backgroundImage = '';
+  const configKey = currentUser === 'player1' ? 'bgLogin1' : 'bgLogin2';
+  if (cachedData && cachedData.config) cachedData.config[configKey] = '';
+  db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
+}
+
 // Estado da carta em criação
 let cartaColorSelecionada = '';
 let cartaImgBase64 = '';
@@ -2213,7 +2330,8 @@ const defaultData = {
   config: { name1: 'Jogador 1', name2: 'Jogador 2', pass1: '1234', pass2: '1234',
     avatar1: '', avatar2: '',
     fontDisplay1: '', fontDisplay2: '', fontBody1: '', fontBody2: '',
-    bg1: '', bg2: '' },
+    bg1: '', bg2: '',
+    bgLogin1: '', bgLogin2: '' },
   cartas: [],
   planos: [],
   datas: [],
@@ -2340,6 +2458,7 @@ async function initLoginScreen() {
     };
     setAvatar('login-avatar-p1', 'login-init-p1', cfg.avatar1);
     setAvatar('login-avatar-p2', 'login-init-p2', cfg.avatar2);
+    aplicarBgLogin(cfg);
   } catch {}
   document.getElementById('login-loading').style.display = 'none';
 }
@@ -2386,8 +2505,6 @@ async function doLogin(player) {
     currentUser === 'player1' ? 'jogador 1 — nome' : 'jogador 2 — nome';
   document.getElementById('cfg-name').value =
     currentUser === 'player1' ? d.config.name1 : d.config.name2;
-  document.getElementById('cfg-pass').value = '';
-  document.getElementById('cfg-pass-confirm').value = '';
 
   aplicarFontes(d);
   aplicarBackground(d);
@@ -2399,6 +2516,14 @@ async function doLogin(player) {
     document.getElementById('avatar-preview').style.display = 'block';
   } else {
     document.getElementById('avatar-preview').style.display = 'none';
+  }
+  // preenche preview do bg de login no config
+  const blSrc = currentUser === 'player1' ? d.config.bgLogin1 : d.config.bgLogin2;
+  if (blSrc) {
+    document.getElementById('bg-login-thumb').src = blSrc;
+    document.getElementById('bg-login-preview').style.display = 'block';
+  } else {
+    document.getElementById('bg-login-preview').style.display = 'none';
   }
   ativarSyncTempoReal();
   renderAll();
@@ -2459,6 +2584,7 @@ function ativarSyncTempoReal() {
       cachedData = d;
       aplicarFontes(d);
       aplicarBackground(d);
+      aplicarBgLogin(d.config);
       atualizarHeaderAvatar(d);
       renderFontOpts(d);
       atualizarBadges(d);
@@ -2862,20 +2988,10 @@ function renderDesculpas(d) {
 // ─── CONFIG ──────────────────────────────────────────────
 async function saveConfig() {
   const name = document.getElementById('cfg-name').value.trim();
-  const pass = document.getElementById('cfg-pass').value;
-  const passConfirm = document.getElementById('cfg-pass-confirm').value;
 
-  if (pass && pass !== passConfirm) { toast('as senhas não coincidem ✕'); return; }
-
-  // Atualização cirúrgica — não toca em fontes, bg, avatar (evita race condition)
   const updates = {};
-  if (currentUser === 'player1') {
-    if (name) updates.name1 = name;
-    if (pass) updates.pass1 = pass;
-  } else {
-    if (name) updates.name2 = name;
-    if (pass) updates.pass2 = pass;
-  }
+  if (currentUser === 'player1') { if (name) updates.name1 = name; }
+  else                           { if (name) updates.name2 = name; }
 
   if (Object.keys(updates).length > 0) {
     await db.ref(STORAGE_KEY + '/config').update(updates);
@@ -2884,8 +3000,6 @@ async function saveConfig() {
 
   const displayName = name || (cachedData?.config?.[currentUser === 'player1' ? 'name1' : 'name2']) || currentUser;
   document.getElementById('header-username').textContent = displayName;
-  document.getElementById('cfg-pass').value = '';
-  document.getElementById('cfg-pass-confirm').value = '';
   toast('configurações salvas ⚙');
 }
 
