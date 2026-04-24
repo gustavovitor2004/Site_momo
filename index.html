@@ -531,6 +531,25 @@
     line-height: 1.7;
   }
 
+  .avatar-sm {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    vertical-align: middle;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+
+  #header-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+  }
+
   .unread-dot {
     display: inline-block;
     width: 6px;
@@ -1054,6 +1073,7 @@
     <div class="header-logo">nosso espaço</div>
     <div class="header-user">
       <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="alternar tema">◐</button>
+      <img id="header-avatar" src="" style="display:none">
       <span class="user-badge" id="header-username">—</span>
       <button class="logout-btn" onclick="logout()">sair</button>
     </div>
@@ -1396,6 +1416,18 @@
 
       <div class="form-panel">
         <div class="form-grid">
+          <div class="field-label" style="font-size:12px; color: var(--text); margin-bottom:-4px">foto de perfil</div>
+          <div class="form-group">
+            <div class="field-label">foto de perfil (aparece no header e nas cartas)</div>
+            <label class="img-upload-label">
+              ＋ escolher foto
+              <input type="file" id="avatar-input" accept="image/*" onchange="previewAvatar(this)">
+            </label>
+            <div id="avatar-preview" style="display:none;margin-top:8px;position:relative;width:fit-content">
+              <img id="avatar-thumb" src="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid var(--border)">
+              <button class="img-remove" onclick="removeAvatar()" style="top:-4px;right:-4px">✕</button>
+            </div>
+          </div>
           <div class="field-label" style="font-size:12px; color: var(--text); margin-bottom:-4px">nome de exibição</div>
           <div class="form-group">
             <div class="field-label" id="cfg-name-label">seu nome ou apelido</div>
@@ -1421,7 +1453,7 @@
           </div>
           <div class="field-label" style="font-size:12px; color: var(--text); margin-top:16px; margin-bottom:-4px">background personalizado</div>
           <div class="form-group">
-            <div class="field-label">imagem de fundo do site (só para você)</div>
+            <div class="field-label">imagem de fundo do site</div>
             <label class="img-upload-label">
               ＋ escolher imagem de fundo
               <input type="file" id="bg-img-input" accept="image/*" onchange="previewBgImg(this)">
@@ -1431,7 +1463,7 @@
               <button class="img-remove" onclick="removeBgImg()">✕</button>
             </div>
             <div style="margin-top:6px;font-size:10px;color:var(--text-muted);letter-spacing:0.08em">
-              a imagem fica salva no seu navegador e aparece em todas as abas
+              sincronizado entre dispositivos — só aparece para você
             </div>
           </div>
           <div class="form-actions">
@@ -1847,8 +1879,6 @@ function removeApoImg() {
 
 
 // ─── Seletor de Fontes ───────────────────────────────────
-const FONT_KEY_DISPLAY = 'couple_font_display';
-const FONT_KEY_BODY = 'couple_font_body';
 
 const fontOptionsDisplay = [
   { name: 'Cormorant', value: "'Cormorant Garamond', serif" },
@@ -1869,8 +1899,9 @@ const fontOptionsBody = [
 ];
 
 function renderFontOpts() {
-  var savedDisplay = localStorage.getItem(FONT_KEY_DISPLAY) || fontOptionsDisplay[0].value;
-  var savedBody = localStorage.getItem(FONT_KEY_BODY) || fontOptionsBody[0].value;
+  var cfg = (cachedData && cachedData.config) ? cachedData.config : {};
+  var savedDisplay = (currentUser === 'player1' ? cfg.fontDisplay1 : cfg.fontDisplay2) || fontOptionsDisplay[0].value;
+  var savedBody    = (currentUser === 'player1' ? cfg.fontBody1    : cfg.fontBody2)    || fontOptionsBody[0].value;
   var dEl = document.getElementById('font-display-opts');
   var bEl = document.getElementById('font-body-opts');
   if (!dEl || !bEl) return;
@@ -1894,62 +1925,55 @@ function setFontByBtn(btn) {
 }
 
 function setFont(tipo, value, btn) {
-  var key = tipo === 'display' ? FONT_KEY_DISPLAY : FONT_KEY_BODY;
   var prop = tipo === 'display' ? '--font-display' : '--font-body';
   document.documentElement.style.setProperty(prop, value);
-  localStorage.setItem(key, value);
-  // Atualiza active
   var container = btn.parentElement;
   container.querySelectorAll('.font-opt').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
+  // Salva no Firebase
+  var configKey = tipo === 'display'
+    ? (currentUser === 'player1' ? 'fontDisplay1' : 'fontDisplay2')
+    : (currentUser === 'player1' ? 'fontBody1'    : 'fontBody2');
+  db.ref(STORAGE_KEY + '/config').update({ [configKey]: value });
 }
 
-function aplicarFontes() {
-  var savedDisplay = localStorage.getItem(FONT_KEY_DISPLAY);
-  var savedBody = localStorage.getItem(FONT_KEY_BODY);
-  if (savedDisplay) document.documentElement.style.setProperty('--font-display', savedDisplay);
-  if (savedBody) document.documentElement.style.setProperty('--font-body', savedBody);
+function aplicarFontes(d) {
+  if (!d || !d.config) return;
+  var fd = currentUser === 'player1' ? d.config.fontDisplay1 : d.config.fontDisplay2;
+  var fb = currentUser === 'player1' ? d.config.fontBody1    : d.config.fontBody2;
+  if (fd) document.documentElement.style.setProperty('--font-display', fd);
+  if (fb) document.documentElement.style.setProperty('--font-body', fb);
 }
-
-// Aplica fontes salvas ao carregar
-aplicarFontes();
 
 // ─── Background personalizado ─────────────────────────────
-const BG_KEY = 'couple_app_bg_p1';
-const BG_KEY2 = 'couple_app_bg_p2';
-
-function getBgKey() {
-  return currentUser === 'player1' ? BG_KEY : BG_KEY2;
-}
-
-function aplicarBackground() {
-  try {
-    const saved = localStorage.getItem(getBgKey());
-    if (saved) {
-      document.body.style.backgroundImage = `url(${saved})`;
-      document.body.classList.add('custom-bg');
-      document.getElementById('bg-img-thumb').src = saved;
-      document.getElementById('bg-img-preview').style.display = 'block';
-    } else {
-      document.body.style.backgroundImage = '';
-      document.body.classList.remove('custom-bg');
-    }
-  } catch {}
+function aplicarBackground(d) {
+  if (!d || !d.config) return;
+  const saved = currentUser === 'player1' ? d.config.bg1 : d.config.bg2;
+  if (saved) {
+    document.body.style.backgroundImage = `url(${saved})`;
+    document.body.classList.add('custom-bg');
+    document.getElementById('bg-img-thumb').src = saved;
+    document.getElementById('bg-img-preview').style.display = 'block';
+  } else {
+    document.body.style.backgroundImage = '';
+    document.body.classList.remove('custom-bg');
+    document.getElementById('bg-img-preview').style.display = 'none';
+    document.getElementById('bg-img-thumb').src = '';
+  }
 }
 
 function previewBgImg(input) {
   const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
-  reader.onload = e => {
-    const data = e.target.result;
+  reader.onload = async e => {
+    let data = e.target.result;
+    if (data.length > 300000) data = await comprimirBase64(data, 1280, 0.6);
     document.getElementById('bg-img-thumb').src = data;
     document.getElementById('bg-img-preview').style.display = 'block';
     document.body.style.backgroundImage = `url(${data})`;
     document.body.classList.add('custom-bg');
-    try { localStorage.setItem(getBgKey(), data); } catch(err) {
-      toast('imagem muito grande para salvar — tente uma menor');
-      removeBgImg();
-    }
+    const configKey = currentUser === 'player1' ? 'bg1' : 'bg2';
+    db.ref(STORAGE_KEY + '/config').update({ [configKey]: data });
   };
   reader.readAsDataURL(file);
 }
@@ -1960,7 +1984,8 @@ function removeBgImg() {
   document.getElementById('bg-img-thumb').src = '';
   document.body.style.backgroundImage = '';
   document.body.classList.remove('custom-bg');
-  try { localStorage.removeItem(getBgKey()); } catch {}
+  const configKey = currentUser === 'player1' ? 'bg1' : 'bg2';
+  db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
 }
 
 // Estado da carta em criação
@@ -2028,7 +2053,10 @@ function closeCartaModal(e) {
 })();
 
 const defaultData = {
-  config: { name1: 'Jogador 1', name2: 'Jogador 2', pass1: '1234', pass2: '1234' },
+  config: { name1: 'Jogador 1', name2: 'Jogador 2', pass1: '1234', pass2: '1234',
+    avatar1: '', avatar2: '',
+    fontDisplay1: '', fontDisplay2: '', fontBody1: '', fontBody2: '',
+    bg1: '', bg2: '' },
   cartas: [],
   planos: [],
   datas: [],
@@ -2182,8 +2210,18 @@ async function doLogin() {
   document.getElementById('cfg-pass').value = '';
   document.getElementById('cfg-pass-confirm').value = '';
 
-  aplicarBackground();
+  aplicarFontes(d);
+  aplicarBackground(d);
   renderFontOpts();
+  atualizarHeaderAvatar(d);
+  // preenche preview do avatar no config
+  const av = currentUser === 'player1' ? d.config.avatar1 : d.config.avatar2;
+  if (av) {
+    document.getElementById('avatar-thumb').src = av;
+    document.getElementById('avatar-preview').style.display = 'block';
+  } else {
+    document.getElementById('avatar-preview').style.display = 'none';
+  }
   // Ativa sync primeiro, depois renderiza com dados frescos do Firebase
   ativarSyncTempoReal();
   renderAll();
@@ -2192,11 +2230,17 @@ async function doLogin() {
 function logout() {
   currentUser = null;
   realtimeListenerAtivo = false;
+  cachedData = null;
+  cartasPage = 5;
   db.ref(STORAGE_KEY).off();
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-pass').value = '';
   document.getElementById('login-error').textContent = '';
+  const hav = document.getElementById('header-avatar');
+  hav.src = ''; hav.style.display = 'none';
+  document.body.style.backgroundImage = '';
+  document.body.classList.remove('custom-bg');
 }
 
 // ─── Navigation ─────────────────────────────────────────
@@ -2205,9 +2249,13 @@ function showSection(id) {
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('sec-' + id).classList.add('active');
   event.target.classList.add('active');
-  // Remove badge da aba ao abrir
   const badge = event.target.querySelector('.nav-badge');
   if (badge) badge.remove();
+  // Marca como lido ao abrir a aba
+  if (cachedData && (id === 'cartas' || id === 'desculpas')) {
+    if (id === 'cartas') renderCartas(cachedData);
+    if (id === 'desculpas') renderDesculpas(cachedData);
+  }
 }
 
 function switchGame(g) {
@@ -2219,6 +2267,7 @@ function switchGame(g) {
 
 // ─── Sincronização em tempo real ────────────────────────
 let realtimeListenerAtivo = false;
+let cachedData = null;
 
 function ativarSyncTempoReal() {
   db.ref(STORAGE_KEY).off();
@@ -2227,6 +2276,10 @@ function ativarSyncTempoReal() {
     if (!currentUser) return;
     if (snapshot.exists()) {
       const d = normalizarDados(snapshot.val());
+      cachedData = d;
+      aplicarFontes(d);
+      aplicarBackground(d);
+      atualizarHeaderAvatar(d);
       atualizarBadges(d);
       renderCartas(d);
       renderPlanos(d);
@@ -2293,25 +2346,33 @@ async function deleteCarta(id) {
   renderCartas(d);
 }
 
+let cartasPage = 5;
+
 function renderCartas(d) {
   const el = document.getElementById('cartas-list');
   const visible = d.cartas.filter(c => c.para === currentUser || c.de === currentUser || c.para === 'ambos');
   if (!visible.length) { el.innerHTML = emptyState('nenhuma carta ainda — escreva a primeira'); return; }
 
-  // mark as read
+  // mark as read only when the section is visible
   let changed = false;
-  visible.forEach(c => { if (c.para === currentUser && !c.lida) { c.lida = true; changed = true; } });
-  if (changed) saveData(d);
+  const cartasAtiva = document.getElementById('sec-cartas')?.classList.contains('active');
+  if (cartasAtiva) {
+    visible.forEach(c => { if (c.para === currentUser && !c.lida) { c.lida = true; changed = true; } });
+    if (changed) saveData(d);
+  }
 
-  // guardar d no closure para o modal
-  const dSnap = d;
-  el.innerHTML = visible.map(c => {
+  const pagina = visible.slice(0, cartasPage);
+  const restantes = visible.length - cartasPage;
+
+  el.innerHTML = pagina.map(c => {
     const deNome = c.de === 'player1' ? d.config.name1 : d.config.name2;
     const paraNome = c.para === 'ambos' ? 'nós dois' : (c.para === 'player1' ? d.config.name1 : d.config.name2);
     const mine = c.de === currentUser;
     const bgStyle = c.cor ? `background:${c.cor};` : '';
     const thumbHtml = c.img ? `<img src="${c.img}" style="width:100%;max-height:140px;object-fit:cover;margin-top:12px;border:1px solid var(--border)">` : '';
     const preview = c.texto.length > 120 ? c.texto.slice(0, 120) + '…' : c.texto;
+    const avatarSrc = c.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
+    const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
     return `<div class="card clickable" style="${bgStyle}" onclick="abrirCartaById(${c.id})">
       <div class="card-header">
         <div class="card-title">${esc(c.titulo)}</div>
@@ -2319,10 +2380,16 @@ function renderCartas(d) {
       </div>
       <div class="card-body">${esc(preview)}</div>
       ${thumbHtml}
-      <span class="card-tag">${deNome} → ${paraNome}</span>
+      <span class="card-tag" style="display:inline-flex;align-items:center">${avatarHtml}${deNome} → ${paraNome}</span>
       ${mine ? `<div class="card-actions" onclick="event.stopPropagation()"><button class="icon-btn del" onclick="deleteCarta(${c.id})">apagar</button></div>` : ''}
     </div>`;
   }).join('');
+
+  if (restantes > 0) {
+    el.innerHTML += `<div style="text-align:center;margin-top:8px">
+      <button class="btn" style="font-size:11px;padding:8px 20px" onclick="cartasPage+=5;renderCartas(cachedData)">mostrar mais ${Math.min(restantes,5)} cartas (${restantes} restantes)</button>
+    </div>`;
+  }
 }
 
 // ─── PLANOS ─────────────────────────────────────────────
@@ -2589,14 +2656,19 @@ function renderDesculpas(d) {
   if (!visible.length) { el.innerHTML = emptyState('nenhum pedido ainda — espero que fique assim 💛'); return; }
 
   let changed = false;
-  visible.forEach(x => { if (x.para === currentUser && !x.lida) { x.lida = true; changed = true; } });
-  if (changed) saveData(d);
+  const desculpasAtiva = document.getElementById('sec-desculpas')?.classList.contains('active');
+  if (desculpasAtiva) {
+    visible.forEach(x => { if (x.para === currentUser && !x.lida) { x.lida = true; changed = true; } });
+    if (changed) saveData(d);
+  }
 
   el.innerHTML = visible.map(x => {
     const deNome = x.de === 'player1' ? d.config.name1 : d.config.name2;
     const mine = x.de === currentUser;
+    const avatarSrc = x.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
+    const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
     return `<div class="apology-card">
-      <div class="apology-from">de ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
+      <div class="apology-from" style="display:flex;align-items:center;gap:0">${avatarHtml}de ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
       <div class="apology-msg">${esc(x.msg)}</div>
       ${x.img ? `<img src="${x.img}" style="width:100%;max-height:280px;object-fit:contain;margin:12px 0;border:1px solid var(--border)">` : ''}
       ${x.promessa ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">promessa</span><br>${esc(x.promessa)}</div>` : ''}
@@ -2629,6 +2701,38 @@ async function saveConfig() {
   document.getElementById('cfg-pass').value = '';
   document.getElementById('cfg-pass-confirm').value = '';
   toast('configurações salvas ⚙');
+}
+
+function atualizarHeaderAvatar(d) {
+  if (!d || !d.config) return;
+  const src = currentUser === 'player1' ? d.config.avatar1 : d.config.avatar2;
+  const el = document.getElementById('header-avatar');
+  if (src) { el.src = src; el.style.display = 'block'; }
+  else { el.src = ''; el.style.display = 'none'; }
+}
+
+function previewAvatar(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    let data = e.target.result;
+    data = await comprimirBase64(data, 200, 0.85);
+    document.getElementById('avatar-thumb').src = data;
+    document.getElementById('avatar-preview').style.display = 'block';
+    const configKey = currentUser === 'player1' ? 'avatar1' : 'avatar2';
+    db.ref(STORAGE_KEY + '/config').update({ [configKey]: data });
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeAvatar() {
+  document.getElementById('avatar-input').value = '';
+  document.getElementById('avatar-preview').style.display = 'none';
+  document.getElementById('avatar-thumb').src = '';
+  const el = document.getElementById('header-avatar');
+  el.src = ''; el.style.display = 'none';
+  const configKey = currentUser === 'player1' ? 'avatar1' : 'avatar2';
+  db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
 }
 
 // ─── abrirCartaById ──────────────────────────────────────
