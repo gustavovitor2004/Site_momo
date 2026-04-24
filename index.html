@@ -2168,17 +2168,13 @@ function switchGame(g) {
 
 // ─── Sincronização em tempo real ────────────────────────
 let realtimeListenerAtivo = false;
-let dentroDoListener = false;
 
 function ativarSyncTempoReal() {
-  if (realtimeListenerAtivo) {
-    db.ref(STORAGE_KEY).off();
-  }
+  db.ref(STORAGE_KEY).off();
   realtimeListenerAtivo = true;
   db.ref(STORAGE_KEY).on('value', (snapshot) => {
     if (!currentUser) return;
     if (snapshot.exists()) {
-      dentroDoListener = true;
       const d = snapshot.val();
       if (!d.config) d.config = { ...defaultData.config };
       if (!d.jogos) d.jogos = { ...defaultData.jogos };
@@ -2191,7 +2187,6 @@ function ativarSyncTempoReal() {
       renderDatas(d);
       renderJogos(d);
       renderDesculpas(d);
-      dentroDoListener = false;
     }
   });
 }
@@ -2549,7 +2544,7 @@ function renderDesculpas(d) {
 
   let changed = false;
   visible.forEach(x => { if (x.para === currentUser && !x.lida) { x.lida = true; changed = true; } });
-  if (changed && !dentroDoListener) saveData(d);
+  if (changed) saveData(d);
 
   el.innerHTML = visible.map(x => {
     const deNome = x.de === 'player1' ? d.config.name1 : d.config.name2;
