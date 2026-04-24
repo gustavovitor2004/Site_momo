@@ -1352,6 +1352,68 @@
   }
   .font-section-label:first-child { margin-top: 0; }
 
+  /* ─── SEGREDO ────────────────────────────────────────── */
+  .segredo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 44px 36px 36px;
+    margin-bottom: 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .segredo-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,184,122,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .segredo-lock {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    opacity: 0.35;
+    display: block;
+    letter-spacing: 0.2em;
+  }
+  .segredo-deco {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .segredo-deco-line {
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, rgba(200,184,122,0.4), transparent);
+  }
+  .segredo-deco-gem {
+    color: var(--accent);
+    font-size: 7px;
+    letter-spacing: 4px;
+    opacity: 0.6;
+  }
+  .segredo-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 2;
+    color: var(--text);
+    white-space: pre-wrap;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .segredo-meta {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
   @media (max-width: 600px) {
     .form-row { grid-template-columns: 1fr; }
     main { padding: 20px 16px; }
@@ -1426,6 +1488,7 @@
     <button id="nav-datas" class="nav-item" onclick="showSection('datas')">◎ datas</button>
     <button id="nav-jogos" class="nav-item" onclick="showSection('jogos')">⌗ jogos</button>
     <button id="nav-desculpas" class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
+    <button id="nav-segredo" class="nav-item" onclick="showSection('segredo')">🔒 segredo</button>
     <button id="nav-config" class="nav-item" onclick="showSection('config')">⚙ config</button>
   </nav>
 
@@ -1712,13 +1775,6 @@
       <div class="form-panel">
         <div class="form-grid">
           <div class="form-group">
-            <div class="field-label">enviar para</div>
-            <div class="apology-target">
-              <button class="target-btn selected" id="apo-target-p1" onclick="selectApoTarget('player1')">jogador 1</button>
-              <button class="target-btn" id="apo-target-p2" onclick="selectApoTarget('player2')">jogador 2</button>
-            </div>
-          </div>
-          <div class="form-group">
             <div class="field-label">mensagem principal</div>
             <textarea id="apo-msg" rows="4" placeholder="o que você quer dizer do fundo do coração..."></textarea>
           </div>
@@ -1748,6 +1804,26 @@
       </div>
 
       <div id="desculpas-list"></div>
+    </section>
+
+    <!-- ─── SEGREDO ─── -->
+    <section id="sec-segredo" class="section">
+      <div class="section-title">segredo</div>
+      <div class="section-desc">só nosso — guardado aqui entre nós dois</div>
+
+      <div id="segredo-display"></div>
+
+      <div class="form-panel">
+        <div class="form-grid">
+          <div class="form-group">
+            <div class="field-label">escreva nosso segredo</div>
+            <textarea id="segredo-texto" rows="6" placeholder="aqui fica guardado só entre nós..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="btn gold" onclick="salvarSegredo()">🔒 guardar segredo</button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ─── CONFIG ─── -->
@@ -2438,7 +2514,8 @@ const defaultData = {
   planos: [],
   datas: [],
   jogos: { lol: [], mhw: [], outros: [] },
-  desculpas: []
+  desculpas: [],
+  segredo: { texto: '', ts: '', de: '' }
 };
 
 // ─── Storage (Firebase Realtime Database) ───────────────
@@ -2454,6 +2531,7 @@ function toArray(val) {
 function normalizarDados(d) {
   if (!d.config) d.config = { ...defaultData.config };
   if (!d.jogos) d.jogos = { lol: [], mhw: [], outros: [] };
+  if (!d.segredo) d.segredo = { texto: '', ts: '', de: '' };
   d.cartas    = toArray(d.cartas);
   d.planos    = toArray(d.planos);
   d.datas     = toArray(d.datas);
@@ -2541,7 +2619,36 @@ async function saveData(d) {
 // ─── Login ──────────────────────────────────────────────
 let selectedUser = 'player1';
 
+function setAvatarLogin(imgId, initId, src) {
+  const imgEl  = document.getElementById(imgId);
+  const initEl = document.getElementById(initId);
+  if (src) {
+    imgEl.src = src;
+    imgEl.style.display = 'block';
+    initEl.style.display = 'none';
+  } else {
+    imgEl.style.display = 'none';
+    initEl.style.display = 'flex';
+  }
+}
+
 async function initLoginScreen() {
+  // Mostra cache local instantaneamente (sem esperar Firebase)
+  try {
+    const cached = JSON.parse(localStorage.getItem('login_cache') || '{}');
+    if (cached.name1) {
+      document.getElementById('login-name-p1').textContent = cached.name1;
+      document.getElementById('login-init-p1').textContent = cached.name1.charAt(0).toUpperCase();
+    }
+    if (cached.name2) {
+      document.getElementById('login-name-p2').textContent = cached.name2;
+      document.getElementById('login-init-p2').textContent = cached.name2.charAt(0).toUpperCase();
+    }
+    if (cached.avatar1) setAvatarLogin('login-avatar-p1', 'login-init-p1', cached.avatar1);
+    if (cached.avatar2) setAvatarLogin('login-avatar-p2', 'login-init-p2', cached.avatar2);
+  } catch {}
+
+  // Atualiza do Firebase e salva cache para o próximo carregamento
   try {
     const snapshot = await db.ref(STORAGE_KEY + '/config').get();
     const cfg = snapshot.exists() ? snapshot.val() : {};
@@ -2551,15 +2658,15 @@ async function initLoginScreen() {
     document.getElementById('login-name-p2').textContent = n2;
     document.getElementById('login-init-p1').textContent = n1.charAt(0).toUpperCase();
     document.getElementById('login-init-p2').textContent = n2.charAt(0).toUpperCase();
-    const setAvatar = (imgId, initId, src) => {
-      if (src) {
-        document.getElementById(imgId).src = src;
-        document.getElementById(imgId).style.display = 'block';
-        document.getElementById(initId).style.display = 'none';
-      }
-    };
-    setAvatar('login-avatar-p1', 'login-init-p1', cfg.avatar1);
-    setAvatar('login-avatar-p2', 'login-init-p2', cfg.avatar2);
+    setAvatarLogin('login-avatar-p1', 'login-init-p1', cfg.avatar1 || '');
+    setAvatarLogin('login-avatar-p2', 'login-init-p2', cfg.avatar2 || '');
+    // Salva no cache para carregar instantâneo na próxima vez
+    try {
+      localStorage.setItem('login_cache', JSON.stringify({
+        name1: n1, name2: n2,
+        avatar1: cfg.avatar1 || '', avatar2: cfg.avatar2 || ''
+      }));
+    } catch {}
   } catch {}
   document.getElementById('login-loading').style.display = 'none';
 }
@@ -2686,6 +2793,7 @@ function ativarSyncTempoReal() {
       renderDatas(d);
       renderJogos(d);
       renderDesculpas(d);
+      renderSegredo(d);
     }
   });
 }
@@ -2698,6 +2806,7 @@ async function renderAll(d) {
   renderDatas(d);
   renderJogos(d);
   renderDesculpas(d);
+  renderSegredo(d);
 }
 
 function fmt(iso) {
@@ -3032,13 +3141,7 @@ function selectApoTarget(t) {
 }
 
 async function updateApoTargetUI(d) {
-  const other = currentUser === 'player1' ? 'player2' : 'player1';
-  apoTarget = other;
-  const p1name = d.config.name1 || 'Jogador 1';
-  const p2name = d.config.name2 || 'Jogador 2';
-  document.getElementById('apo-target-p1').textContent = p1name;
-  document.getElementById('apo-target-p2').textContent = p2name;
-  selectApoTarget(other);
+  apoTarget = currentUser === 'player1' ? 'player2' : 'player1';
 }
 
 async function addDesculpa() {
@@ -3126,6 +3229,40 @@ function renderDesculpas(d) {
       </div>` : ''}
     </div>`;
   }).join('');
+}
+
+// ─── SEGREDO ─────────────────────────────────────────────
+async function salvarSegredo() {
+  const texto = document.getElementById('segredo-texto').value.trim();
+  if (!texto) { toast('escreva o segredo primeiro'); return; }
+  const segredo = { texto, ts: new Date().toISOString(), de: currentUser };
+  await db.ref(STORAGE_KEY + '/segredo').set(segredo);
+  if (cachedData) cachedData.segredo = segredo;
+  renderSegredo({ segredo, config: cachedData ? cachedData.config : {} });
+  toast('segredo guardado 🔒');
+}
+
+function renderSegredo(d) {
+  const el = document.getElementById('segredo-display');
+  if (!el) return;
+  const s = d.segredo;
+  if (!s || !s.texto) {
+    el.innerHTML = emptyState('nenhum segredo guardado ainda — o que vocês querem guardar só de vocês?');
+    return;
+  }
+  const deNome = s.de === 'player1' ? (d.config && d.config.name1) || 'jogador 1'
+                                     : (d.config && d.config.name2) || 'jogador 2';
+  el.innerHTML = `<div class="segredo-card">
+    <span class="segredo-lock">🔒</span>
+    <div class="segredo-deco">
+      <div class="segredo-deco-line"></div>
+      <span class="segredo-deco-gem">◆ ◆ ◆</span>
+      <div class="segredo-deco-line"></div>
+    </div>
+    <div class="segredo-text">${esc(s.texto)}</div>
+    <div class="segredo-meta">guardado por ${esc(deNome)} · ${fmt(s.ts)}</div>
+  </div>`;
+  document.getElementById('segredo-texto').value = s.texto;
 }
 
 // ─── CONFIG ──────────────────────────────────────────────
