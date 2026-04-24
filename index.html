@@ -1352,6 +1352,99 @@
   }
   .font-section-label:first-child { margin-top: 0; }
 
+  /* ─── CHAMPION DETAIL ───────────────────────────────── */
+  #champ-detail-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    overflow-y: auto;
+    background: var(--bg);
+    transition: background 0.3s ease;
+  }
+  #champ-detail-overlay.open { display: block; animation: fadeIn 0.22s ease both; }
+
+  .champ-detail-inner { max-width: 900px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 60px; }
+
+  .champ-detail-header {
+    display: flex; align-items: center; gap: 14px; padding: 16px 24px;
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
+    background: inherit; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  }
+  .champ-detail-name { font-family: var(--font-display); font-style: italic; font-size: 1.6rem; flex: 1; }
+  .detail-close-btn {
+    background: none; border: 1px solid var(--border); color: var(--text-muted);
+    cursor: pointer; font-size: 15px; width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .detail-close-btn:hover { border-color: var(--red); color: var(--red); }
+
+  .champ-detail-tabs {
+    display: flex; gap: 1px; background: var(--border);
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .champ-detail-tab {
+    background: var(--surface); border: none; color: var(--text-muted); padding: 10px 18px;
+    cursor: pointer; font-family: var(--font-body); font-size: 10px; letter-spacing: 0.13em;
+    text-transform: uppercase; transition: all 0.18s; white-space: nowrap; flex-shrink: 0;
+  }
+  .champ-detail-tab:hover { color: var(--text); background: rgba(200,184,122,0.05); }
+  .champ-detail-tab.active { background: var(--accent-dim); color: var(--accent); }
+
+  .detail-toolbar {
+    display: flex; align-items: center; gap: 5px; padding: 7px 14px;
+    background: var(--surface2); border-bottom: 1px solid var(--border); flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+  .detail-toolbar select {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    font-family: var(--font-body); font-size: 11px; padding: 3px 7px; width: auto; cursor: pointer; outline: none;
+  }
+  .dtb { /* detail toolbar btn */
+    background: var(--surface); border: 1px solid var(--border); color: var(--text-muted);
+    padding: 3px 9px; cursor: pointer; font-family: var(--font-body);
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.15s; white-space: nowrap;
+  }
+  .dtb:hover { border-color: var(--accent); color: var(--accent); }
+  .dtb.gold { background: var(--accent); color: #0a0a0a; border-color: var(--accent); }
+  .dtb-sep { width: 1px; height: 14px; background: var(--border); margin: 0 3px; flex-shrink: 0; }
+
+  .detail-editor {
+    flex: 1; padding: 22px 28px; min-height: 300px; outline: none;
+    font-size: 14px; line-height: 1.95; color: var(--text); background: transparent;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .detail-editor:empty::before { content: attr(data-ph); color: var(--text-muted); pointer-events: none; font-style: italic; }
+
+  .dd-panel { display: none; flex-direction: column; flex: 1; }
+  .dd-panel.active { display: flex; }
+
+  .video-input-row { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: flex-end; }
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; padding: 20px 24px; }
+  .video-card { background: var(--surface); border: 1px solid var(--border); overflow: hidden; transition: transform 0.2s, border-color 0.2s; }
+  .video-card:hover { transform: translateY(-2px); border-color: rgba(200,184,122,0.4); }
+  .video-card-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: var(--surface2); }
+  .video-card-info { padding: 9px 11px; }
+  .video-title-input { background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--text); font-family: inherit; font-size: 11px; width: 100%; padding: 2px 0; outline: none; margin-bottom: 7px; }
+  .video-title-input:focus { border-bottom-color: var(--accent); }
+
+  /* Status badges on build cards */
+  .champ-status-row { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
+  .status-btn {
+    background: none; border: 1px solid var(--border); color: var(--text-muted);
+    cursor: pointer; padding: 4px 10px; font-family: var(--font-body);
+    font-size: 10px; letter-spacing: 0.08em; transition: all 0.18s; white-space: nowrap;
+  }
+  .status-btn:hover { border-color: var(--text-muted); }
+  .status-btn.fav.on  { border-color: #c8a040; color: #c8a040; background: rgba(200,160,64,0.09); }
+  .status-btn.pin.on  { border-color: #7a9cc8; color: #7a9cc8; background: rgba(122,156,200,0.09); }
+
+  .fixado-banner {
+    background: rgba(122,156,200,0.10); border: 1px solid rgba(122,156,200,0.28);
+    color: #7a9cc8; padding: 11px 16px; font-size: 11px; letter-spacing: 0.08em;
+    margin-bottom: 14px; display: none; align-items: flex-start; gap: 8px; line-height: 1.6;
+  }
+
   /* ─── LANE FILTER ───────────────────────────────────── */
   .lane-filter {
     display: flex;
@@ -1731,6 +1824,7 @@
             </div>
           </div>
         </div>
+        <div class="fixado-banner" id="lol-fixados-banner"></div>
         <div class="lane-filter" id="lol-lane-filter" style="display:none">
           <span class="lane-filter-label">filtrar lane</span>
           <button class="lane-btn active" data-lane="all" onclick="toggleLaneFilter(this)">todas</button>
@@ -1938,6 +2032,94 @@
     </section>
 
   </main>
+</div>
+
+<!-- ═══════════════ CHAMPION DETAIL ═══════════════ -->
+<div id="champ-detail-overlay">
+  <div class="champ-detail-inner" id="champ-detail-inner">
+
+    <!-- Header -->
+    <div class="champ-detail-header" id="champ-detail-header">
+      <img id="cdd-champ-img" src="" style="width:50px;height:50px;object-fit:cover;border:1px solid var(--border);border-radius:2px;flex-shrink:0">
+      <div class="champ-detail-name" id="cdd-champ-name"></div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:10px;color:var(--text-muted);letter-spacing:0.1em;white-space:nowrap">
+          ◧ fundo
+          <input type="color" id="dd-bg-color" value="#0a0a0a" oninput="setDetalheBg(this.value)"
+            style="width:26px;height:26px;border:1px solid var(--border);background:none;cursor:pointer;padding:2px">
+        </label>
+        <button class="dtb gold" onclick="salvarDetalheChamp()">salvar ✦</button>
+        <button class="detail-close-btn" onclick="closeDetalhe()">✕</button>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="champ-detail-tabs">
+      <button class="champ-detail-tab active" data-tab="guia"    onclick="switchDetalheTab('guia')">📖 guia</button>
+      <button class="champ-detail-tab"         data-tab="runas"   onclick="switchDetalheTab('runas')">🔮 runas</button>
+      <button class="champ-detail-tab"         data-tab="mindset" onclick="switchDetalheTab('mindset')">🧠 mindset</button>
+      <button class="champ-detail-tab"         data-tab="videos"  onclick="switchDetalheTab('videos')">▶ vídeos</button>
+    </div>
+
+    <!-- Toolbar (shared, always visible) -->
+    <div class="detail-toolbar" id="dd-toolbar">
+      <span style="font-size:9px;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase">fonte</span>
+      <select id="dd-font-sel">
+        <option value="'DM Mono', monospace">DM Mono</option>
+        <option value="'Cormorant Garamond', serif">Cormorant</option>
+        <option value="'Playfair Display', serif">Playfair</option>
+        <option value="'Merriweather', serif">Merriweather</option>
+        <option value="'Cinzel', serif">Cinzel</option>
+        <option value="'Dancing Script', cursive">Dancing</option>
+        <option value="'Lato', sans-serif">Lato</option>
+        <option value="'Raleway', sans-serif">Raleway</option>
+        <option value="'Crimson Pro', serif">Crimson</option>
+        <option value="'Spectral', serif">Spectral</option>
+        <option value="'Josefin Sans', sans-serif">Josefin</option>
+        <option value="'Satisfy', cursive">Satisfy</option>
+      </select>
+      <button class="dtb" onclick="aplicarFonteDetalhe(false)" title="aplica ao texto selecionado">à seleção</button>
+      <button class="dtb" onclick="aplicarFonteDetalhe(true)"  title="aplica ao texto todo do painel">texto todo</button>
+      <div class="dtb-sep"></div>
+      <button class="dtb" style="font-weight:bold" onclick="document.execCommand('bold')">B</button>
+      <button class="dtb" style="font-style:italic" onclick="document.execCommand('italic')">I</button>
+      <button class="dtb" style="text-decoration:underline" onclick="document.execCommand('underline')">U</button>
+      <button class="dtb" onclick="document.execCommand('insertUnorderedList')">• lista</button>
+    </div>
+
+    <!-- Guia -->
+    <div class="dd-panel active" id="dd-panel-guia">
+      <div id="dd-guia-text" class="detail-editor" contenteditable="true"
+        data-ph="escreva o guia completo — laning phase, macrojogo, dicas de matchup..."></div>
+    </div>
+
+    <!-- Runas explicadas -->
+    <div class="dd-panel" id="dd-panel-runas">
+      <div id="dd-runas-text" class="detail-editor" contenteditable="true"
+        data-ph="explique as runas: por que cada escolha, quando trocar, variações por matchup..."></div>
+    </div>
+
+    <!-- Mindset -->
+    <div class="dd-panel" id="dd-panel-mindset">
+      <div id="dd-mindset-text" class="detail-editor" contenteditable="true"
+        data-ph="mentalidade para jogar este campeão — postura, agressividade, limites, como pensar na lane..."></div>
+    </div>
+
+    <!-- Vídeos -->
+    <div class="dd-panel" id="dd-panel-videos">
+      <div class="video-input-row">
+        <div class="form-group" style="flex:1;gap:4px">
+          <div class="field-label">link do YouTube</div>
+          <input type="text" id="dd-yt-url" placeholder="cole o link aqui...">
+        </div>
+        <button class="btn gold" style="width:auto;padding:10px 18px;flex-shrink:0" onclick="adicionarVideoYT()">＋</button>
+      </div>
+      <div class="video-grid" id="dd-video-grid">
+        <div style="color:var(--text-muted);font-size:12px;letter-spacing:0.08em">nenhum vídeo adicionado ainda</div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- ═══════════════ RUNA PANEL ═══════════════ -->
@@ -3137,17 +3319,37 @@ function toggleLaneFilter(btn) {
   renderJogos(cachedData);
 }
 
+function verificarFixados(d) {
+  const banner = document.getElementById('lol-fixados-banner');
+  if (!banner) return;
+  const fixados = d.jogos.lol.filter(j => j.fixado);
+  if (fixados.length) {
+    const nomes = fixados.map(j => esc(j.champ)).join(', ');
+    banner.innerHTML = `<span style="font-size:1.1rem;flex-shrink:0">📌</span>
+      <span>você tem <strong>${fixados.length}</strong> campeão(ões) pra estudar: <strong>${nomes}</strong> — abra o guia para revisar</span>`;
+    banner.style.display = 'flex';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
 function renderJogos(d) {
   // LoL
   const lolEl = document.getElementById('lol-list');
   const filterBar = document.getElementById('lol-lane-filter');
-
-  // Mostra filtro somente se houver builds
   if (filterBar) filterBar.style.display = d.jogos.lol.length ? 'flex' : 'none';
+  verificarFixados(d);
 
-  const lolFiltrado = lolLaneFiltro === 'all'
+  const lolFiltrado = (lolLaneFiltro === 'all'
     ? d.jogos.lol
-    : d.jogos.lol.filter(j => j.role && j.role.toLowerCase() === lolLaneFiltro);
+    : d.jogos.lol.filter(j => j.role && j.role.toLowerCase() === lolLaneFiltro)
+  ).slice().sort((a,b) => {
+    if (a.fixado && !b.fixado) return -1;
+    if (!a.fixado && b.fixado) return 1;
+    if (a.favorito && !b.favorito) return -1;
+    if (!a.favorito && b.favorito) return 1;
+    return 0;
+  });
 
   lolEl.innerHTML = !lolFiltrado.length
     ? (d.jogos.lol.length ? emptyState('nenhuma build nessa lane ainda') : emptyState('nenhuma build de LoL ainda'))
@@ -3156,14 +3358,31 @@ function renderJogos(d) {
       const champImgHtml = j.champImg ? `<img src="${j.champImg}" style="width:40px;height:40px;object-fit:cover;border:1px solid var(--border);margin-right:10px">` : '';
       const itensChips = (j.itensData||[]).map(it=>`<div class="lol-chip"><img src="${it.img}" alt="${it.name}" style="max-width:24px" onerror="this.hidden=true">${it.name}</div>`).join('');
       const runasChips = (j.runasData||[]).map(r=>`<div class="lol-chip"><img src="${r.img}" alt="${r.name}" style="max-width:24px" onerror="this.hidden=true">${r.name}</div>`).join('');
-      return `<div class="card">
+      // guia preview
+      const hasGuia = j.detalhes && (j.detalhes.guia || j.detalhes.runas || j.detalhes.mindset || toArray(j.detalhes.videos).length);
+      let guiaPreview = '';
+      if (j.detalhes && j.detalhes.guia) {
+        const tmp = document.createElement('div'); tmp.innerHTML = j.detalhes.guia;
+        const txt = tmp.textContent.trim(); if (txt) guiaPreview = txt.slice(0,90) + (txt.length > 90 ? '…' : '');
+      }
+      const borderLeft = j.fixado ? 'border-left:3px solid #7a9cc8;' : j.favorito ? 'border-left:3px solid #c8a040;' : '';
+      return `<div class="card" style="${borderLeft}">
         <div class="card-header">
-          <div class="card-title" style="display:flex;align-items:center">${champImgHtml}${esc(j.champ)} <span style="color:var(--text-muted);font-size:0.8rem;margin-left:8px">${j.role}</span></div>
+          <div class="card-title" style="display:flex;align-items:center">
+            ${j.fixado ? '<span style="color:#7a9cc8;margin-right:6px;font-size:0.9rem">📌</span>' : j.favorito ? '<span style="color:#c8a040;margin-right:6px;font-size:0.9rem">⭐</span>' : ''}
+            ${champImgHtml}${esc(j.champ)} <span style="color:var(--text-muted);font-size:0.8rem;margin-left:8px">${j.role}</span>
+          </div>
           <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
         </div>
         ${itensChips ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">ITENS</span><div class="lol-chips" style="margin-top:6px">${itensChips}</div></div>` : ''}
         ${runasChips ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">RUNAS</span><div class="lol-chips" style="margin-top:6px">${runasChips}</div></div>` : ''}
         ${j.notas ? `<div class="card-body" style="margin-top:8px">${esc(j.notas)}</div>` : ''}
+        ${guiaPreview ? `<div style="margin-top:10px;padding:10px 14px;background:var(--surface2);border-left:2px solid var(--accent);font-style:italic;font-size:12px;color:var(--text-muted)">"${esc(guiaPreview)}"</div>` : ''}
+        <div class="champ-status-row">
+          <button class="status-btn fav ${j.favorito?'on':''}" onclick="toggleFavorito(${j.id},event)">⭐ favorito</button>
+          <button class="status-btn pin ${j.fixado?'on':''}" onclick="toggleFixado(${j.id},event)">📌 pra aprender</button>
+          <button class="icon-btn" style="margin-left:auto" onclick="abrirDetalheChamp(${j.id})">${hasGuia ? '📖 ver guia' : '＋ criar guia'}</button>
+        </div>
         <div class="card-actions">
           <button class="icon-btn" onclick="editarItem('jogo-lol',${j.id})">editar</button>
           <button class="icon-btn del" onclick="deleteJogo('lol', ${j.id})">apagar</button>
@@ -3421,6 +3640,190 @@ function closeModal(e) {
   if (e.target === document.getElementById('modal-overlay')) {
     document.getElementById('modal-overlay').classList.remove('open');
   }
+}
+
+// ─── Champion Detail ─────────────────────────────────────
+let currentDetalheId = null;
+let currentDetalheTab = 'guia';
+let currentDetalheVideos = [];
+
+function abrirDetalheChamp(id) {
+  if (!cachedData) return;
+  const j = cachedData.jogos.lol.find(x => x.id === id);
+  if (!j) return;
+  currentDetalheId = id;
+  currentDetalheTab = 'guia';
+  currentDetalheVideos = toArray((j.detalhes && j.detalhes.videos) ? j.detalhes.videos : []);
+
+  const det = j.detalhes || {};
+  document.getElementById('cdd-champ-name').textContent = j.champ + (j.role ? '  ·  ' + j.role : '');
+  const img = document.getElementById('cdd-champ-img');
+  if (j.champImg) { img.src = j.champImg; img.style.display = 'block'; } else { img.style.display = 'none'; }
+
+  // Fundo
+  const overlay = document.getElementById('champ-detail-overlay');
+  if (det.bg) { overlay.style.background = det.bg; document.getElementById('dd-bg-color').value = det.bg.startsWith('#') ? det.bg : '#0a0a0a'; }
+  else { overlay.style.background = ''; document.getElementById('dd-bg-color').value = '#0a0a0a'; }
+
+  // Conteúdo
+  const guiaEl    = document.getElementById('dd-guia-text');
+  const runasEl   = document.getElementById('dd-runas-text');
+  const mindsetEl = document.getElementById('dd-mindset-text');
+  guiaEl.innerHTML    = det.guia    || '';
+  runasEl.innerHTML   = det.runas   || '';
+  mindsetEl.innerHTML = det.mindset || '';
+  if (det.fontGuia)    { guiaEl.style.fontFamily    = det.fontGuia;    setSelectVal('dd-font-sel', det.fontGuia); }
+  if (det.fontRunas)   { runasEl.style.fontFamily   = det.fontRunas; }
+  if (det.fontMindset) { mindsetEl.style.fontFamily = det.fontMindset; }
+
+  switchDetalheTab('guia');
+  renderVideoGrid();
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function setSelectVal(id, val) {
+  const sel = document.getElementById(id);
+  for (let i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].value === val) { sel.selectedIndex = i; break; }
+  }
+}
+
+function closeDetalhe() {
+  document.getElementById('champ-detail-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentDetalheId = null;
+}
+
+function switchDetalheTab(tab) {
+  currentDetalheTab = tab;
+  document.querySelectorAll('.champ-detail-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.dd-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('dd-panel-' + tab).classList.add('active');
+  // Toolbar visível apenas nas abas de texto
+  document.getElementById('dd-toolbar').style.display = tab === 'videos' ? 'none' : 'flex';
+}
+
+function setDetalheBg(color) {
+  document.getElementById('champ-detail-overlay').style.background = color;
+}
+
+function aplicarFonteDetalhe(all) {
+  const font = document.getElementById('dd-font-sel').value;
+  if (currentDetalheTab === 'videos') return;
+  const editorId = 'dd-' + currentDetalheTab + '-text';
+  const editor = document.getElementById(editorId);
+  if (!editor) return;
+  if (all) {
+    editor.style.fontFamily = font;
+  } else {
+    editor.focus();
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount && !sel.getRangeAt(0).collapsed) {
+      const range = sel.getRangeAt(0);
+      const span = document.createElement('span');
+      span.style.fontFamily = font;
+      try { range.surroundContents(span); }
+      catch(e) {
+        document.execCommand('styleWithCSS', false, true);
+        document.execCommand('fontName', false, font.split(',')[0].replace(/'/g,'').trim());
+      }
+    } else {
+      toast('selecione um trecho de texto primeiro');
+    }
+  }
+}
+
+function getYTId(url) {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function adicionarVideoYT() {
+  const url = document.getElementById('dd-yt-url').value.trim();
+  if (!url) return;
+  const ytId = getYTId(url);
+  if (!ytId) { toast('link do YouTube inválido'); return; }
+  if (currentDetalheVideos.find(v => v.ytId === ytId)) { toast('vídeo já adicionado'); return; }
+  currentDetalheVideos.push({ ytId, url, titulo: '' });
+  document.getElementById('dd-yt-url').value = '';
+  renderVideoGrid();
+}
+
+function removerVideoDetalhe(ytId) {
+  currentDetalheVideos = currentDetalheVideos.filter(v => v.ytId !== ytId);
+  renderVideoGrid();
+}
+
+function editarTituloVideo(ytId, val) {
+  const v = currentDetalheVideos.find(x => x.ytId === ytId);
+  if (v) v.titulo = val;
+}
+
+function renderVideoGrid() {
+  const el = document.getElementById('dd-video-grid');
+  if (!el) return;
+  if (!currentDetalheVideos.length) {
+    el.innerHTML = '<div style="color:var(--text-muted);font-size:12px;letter-spacing:0.08em">nenhum vídeo adicionado ainda</div>';
+    return;
+  }
+  el.innerHTML = currentDetalheVideos.map(v => `
+    <div class="video-card">
+      <a href="${v.url}" target="_blank" rel="noopener" style="display:block;position:relative">
+        <img class="video-card-thumb" src="https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg" alt="thumb" onerror="this.style.background='var(--surface2)'">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.25);opacity:0;transition:opacity 0.2s" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0">
+          <span style="font-size:2rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6))">▶</span>
+        </div>
+      </a>
+      <div class="video-card-info">
+        <input type="text" class="video-title-input" value="${esc(v.titulo)}" placeholder="título (opcional)"
+          oninput="editarTituloVideo('${v.ytId}', this.value)">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <a href="${v.url}" target="_blank" rel="noopener" style="font-size:10px;color:var(--accent);text-decoration:none;letter-spacing:0.08em">▶ assistir</a>
+          <button onclick="removerVideoDetalhe('${v.ytId}')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:11px;letter-spacing:0.06em;transition:color 0.15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-muted)'">✕ remover</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+async function salvarDetalheChamp() {
+  if (!currentDetalheId) return;
+  const d = JSON.parse(JSON.stringify(cachedData || await loadData()));
+  const entry = d.jogos.lol.find(j => j.id === currentDetalheId);
+  if (!entry) return;
+  const bgVal = document.getElementById('dd-bg-color').value;
+  entry.detalhes = {
+    guia:        document.getElementById('dd-guia-text').innerHTML,
+    runas:       document.getElementById('dd-runas-text').innerHTML,
+    mindset:     document.getElementById('dd-mindset-text').innerHTML,
+    videos:      currentDetalheVideos,
+    bg:          bgVal !== '#0a0a0a' ? bgVal : '',
+    fontGuia:    document.getElementById('dd-guia-text').style.fontFamily    || '',
+    fontRunas:   document.getElementById('dd-runas-text').style.fontFamily   || '',
+    fontMindset: document.getElementById('dd-mindset-text').style.fontFamily || '',
+  };
+  await saveData(d);
+  toast('guia salvo ✦');
+}
+
+async function toggleFavorito(id, e) {
+  if (e) e.stopPropagation();
+  const d = JSON.parse(JSON.stringify(cachedData || await loadData()));
+  const entry = d.jogos.lol.find(j => j.id === id);
+  if (!entry) return;
+  entry.favorito = !entry.favorito;
+  if (entry.favorito) entry.fixado = false; // favorito e fixado são exclusivos
+  await saveData(d);
+}
+
+async function toggleFixado(id, e) {
+  if (e) e.stopPropagation();
+  const d = JSON.parse(JSON.stringify(cachedData || await loadData()));
+  const entry = d.jogos.lol.find(j => j.id === id);
+  if (!entry) return;
+  entry.fixado = !entry.fixado;
+  if (entry.fixado) entry.favorito = false;
+  await saveData(d);
 }
 
 // ─── Editar item ─────────────────────────────────────────
