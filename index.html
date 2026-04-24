@@ -2043,10 +2043,46 @@ async function loadData() {
   }
 }
 
+function comprimirBase64(base64, maxWidth, quality) {
+  return new Promise(resolve => {
+    if (!base64 || !base64.startsWith('data:image')) { resolve(base64); return; }
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(base64);
+    img.src = base64;
+  });
+}
+
 async function saveData(d) {
   try {
+    // Comprime imagens das desculpas antes de salvar
+    if (d.desculpas) {
+      for (let x of d.desculpas) {
+        if (x.img && x.img.length > 200000) {
+          x.img = await comprimirBase64(x.img, 800, 0.7);
+        }
+      }
+    }
+    // Comprime imagens das cartas
+    if (d.cartas) {
+      for (let x of d.cartas) {
+        if (x.img && x.img.length > 200000) {
+          x.img = await comprimirBase64(x.img, 800, 0.7);
+        }
+      }
+    }
     await db.ref(STORAGE_KEY).set(d);
-  } catch(e) { console.error('saveData error:', e); }
+  } catch(e) {
+    console.error('saveData error:', e);
+    toast('erro ao salvar — tente uma imagem menor');
+  }
 }
 
 // ─── Login ──────────────────────────────────────────────
