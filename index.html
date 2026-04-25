@@ -899,6 +899,60 @@
     border-bottom-color: var(--accent);
   }
 
+  /* ─── NAV DROPDOWN (mesmo padrão do profile pill) ─────── */
+  .nav-item.has-drop { overflow: visible; }
+
+  .nav-drop {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    /* ponte invisível para evitar gap de hover */
+    padding-top: 8px;
+    background: transparent;
+    min-width: 210px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 200;
+  }
+  .nav-drop-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 36px rgba(0,0,0,0.42), 0 0 0 1px rgba(200,184,122,0.06);
+  }
+  .nav-item.has-drop:hover .nav-drop {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+  .nav-drop-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    background: none;
+    width: 100%;
+    text-align: left;
+    transition: color 0.15s, background 0.15s, padding-left 0.15s;
+  }
+  .nav-drop-item:last-child { border-bottom: none; }
+  .nav-drop-item:hover { color: var(--text); background: var(--surface2); padding-left: 20px; }
+  .nav-drop-item.accent:hover { color: var(--accent); }
+  .nav-drop-sep {
+    height: 1px;
+    background: rgba(200,184,122,0.12);
+    margin: 0;
+  }
+
   /* ─── MAIN ───────────────────────────────────────────── */
   main {
     padding: 32px 24px;
@@ -2418,12 +2472,30 @@
   </header>
 
   <nav>
-    <button id="nav-cartas" class="nav-item active" onclick="showSection('cartas')">✉ cartas</button>
-    <button id="nav-planos" class="nav-item" onclick="showSection('planos')">✦ planos</button>
-    <button id="nav-datas" class="nav-item" onclick="showSection('datas')">◎ datas</button>
-    <button id="nav-jogos" class="nav-item" onclick="showSection('jogos')">⌗ jogos</button>
+    <button id="nav-cartas"   class="nav-item active" onclick="showSection('cartas')">✉ cartas</button>
+    <button id="nav-planos"   class="nav-item"        onclick="showSection('planos')">✦ planos</button>
+    <button id="nav-datas"    class="nav-item"        onclick="showSection('datas')">◎ datas</button>
+    <button id="nav-jogos"    class="nav-item has-drop" onclick="showSection('jogos')">⌗ jogos ▾
+      <div class="nav-drop">
+        <div class="nav-drop-inner">
+          <button class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('lol')">
+            <span style="font-size:12px">⚔</span> League of Legends
+          </button>
+          <button class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('mhw')">
+            <span style="font-size:12px">🐉</span> Monster Hunter
+          </button>
+          <button class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('outros')">
+            <span style="font-size:12px">🎮</span> outros jogos
+          </button>
+          <div class="nav-drop-sep"></div>
+          <button class="nav-drop-item accent" onclick="event.stopPropagation();showSectionGame('monitor')">
+            <span style="font-size:12px">⚡</span> monitor
+          </button>
+        </div>
+      </div>
+    </button>
     <button id="nav-desculpas" class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
-    <button id="nav-segredo" class="nav-item" onclick="showSection('segredo')">🔒 segredo</button>
+    <button id="nav-segredo"   class="nav-item" onclick="showSection('segredo')">🔒 segredo</button>
   </nav>
 
   <main>
@@ -4165,6 +4237,11 @@ function switchGame(g) {
     document.getElementById('gtab-' + k).classList.toggle('active', k === g);
   });
   if (g === 'monitor') renderMonitor(cachedData);
+}
+
+function showSectionGame(game) {
+  showSection('jogos');
+  setTimeout(() => switchGame(game), 50);
 }
 
 // ─── Sincronização em tempo real ────────────────────────
