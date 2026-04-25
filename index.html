@@ -1320,6 +1320,86 @@
     opacity: 1;
   }
 
+  /* ─── CARTA ENVELOPE CARD ───────────────────────────── */
+  @keyframes letterOpen {
+    0%   { opacity:0; transform: perspective(800px) rotateX(-22deg) translateY(32px) scale(0.90); }
+    65%  { opacity:1; transform: perspective(800px) rotateX(2deg) translateY(-4px) scale(1.01); }
+    100% { opacity:1; transform: perspective(800px) rotateX(0deg) translateY(0) scale(1); }
+  }
+
+  .carta-envelope {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--accent);
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-top-color 0.22s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .carta-envelope:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.4);
+  }
+  .carta-env-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px 0;
+  }
+  .carta-env-icon { font-size: 1rem; color: var(--accent); opacity: 0.65; }
+  .carta-env-time {
+    font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .carta-env-unread-dot {
+    width: 6px; height: 6px; background: var(--accent);
+    border-radius: 50%; display: inline-block; flex-shrink: 0;
+  }
+  .carta-env-body {
+    padding: 12px 22px 16px;
+    text-align: center;
+  }
+  .carta-env-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3vw, 1.85rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 12px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+  }
+  .carta-env-route {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .carta-env-divider {
+    width: 36%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 8px auto;
+  }
+  .carta-env-hint {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.55;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .carta-envelope:hover .carta-env-hint { opacity: 1; color: var(--accent); }
+
   /* ─── CARTA MODAL ────────────────────────────────────── */
   .carta-modal-overlay {
     display: none;
@@ -1338,6 +1418,10 @@
   }
   .carta-modal-overlay.open .carta-modal {
     animation: modalSlideIn 0.38s cubic-bezier(0.34,1.3,0.64,1) both;
+  }
+  /* carta-letter usa animação de envelope abrindo */
+  .carta-modal-overlay.carta-letter .carta-modal {
+    animation: letterOpen 0.55s cubic-bezier(0.22,1,0.36,1) both !important;
   }
 
   .carta-modal {
@@ -1693,6 +1777,7 @@
   body.custom-bg header,
   body.custom-bg .form-panel,
   body.custom-bg .card,
+  body.custom-bg .carta-envelope,
   body.custom-bg .apology-card,
   body.custom-bg .date-card,
   body.custom-bg .carta-modal,
@@ -1703,7 +1788,8 @@
 
   :root.light body.custom-bg header,
   :root.light body.custom-bg .form-panel,
-  :root.light body.custom-bg .card {
+  :root.light body.custom-bg .card,
+  :root.light body.custom-bg .carta-envelope {
     background: rgba(255,255,255,0.65) !important;
   }
 
@@ -1763,13 +1849,63 @@
   .runa-keystone .runa-option { width: 88px; }
   .runa-keystone .runa-option img { width: 52px; height: 52px; }
 
+  /* ─── FONT DRAWER ────────────────────────────────────── */
+  .font-drawer {
+    border: 1px solid var(--border);
+    margin-bottom: 5px;
+    overflow: hidden;
+  }
+  .font-drawer-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    background: var(--surface2);
+    transition: background 0.18s;
+    user-select: none;
+  }
+  .font-drawer-trigger:hover { background: var(--accent-dim); }
+  .font-drawer-label {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .font-drawer-current {
+    flex: 1;
+    text-align: right;
+    font-size: 1rem;
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .font-drawer-arrow {
+    font-size: 10px;
+    color: var(--text-muted);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .font-drawer.open .font-drawer-arrow { transform: rotate(180deg); }
+  .font-drawer-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .font-drawer.open .font-drawer-panel {
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
   /* ─── FONT SELECTOR ─────────────────────────────────── */
   .font-picker-wrap {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 1px;
     background: var(--border);
-    border: 1px solid var(--border);
+    border-top: 1px solid var(--border);
   }
 
   .font-card {
@@ -2516,12 +2652,26 @@
             <input type="text" id="cfg-name" placeholder="seu nome ou apelido" onchange="saveConfig()">
           </div>
 
-          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:4px">fonte do site</div>
-          <div class="form-group" style="gap:8px">
-            <div class="font-section-label">títulos e destaques</div>
-            <div class="font-picker-wrap" id="font-display-opts"></div>
-            <div class="font-section-label">texto do corpo</div>
-            <div class="font-picker-wrap" id="font-body-opts"></div>
+          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:7px">fonte do site</div>
+          <div class="font-drawer" id="font-drawer-display">
+            <div class="font-drawer-trigger" onclick="toggleFontDrawer('display')">
+              <span class="font-drawer-label">títulos e destaques</span>
+              <span class="font-drawer-current" id="font-drawer-cur-display">—</span>
+              <span class="font-drawer-arrow">▾</span>
+            </div>
+            <div class="font-drawer-panel">
+              <div class="font-picker-wrap" id="font-display-opts"></div>
+            </div>
+          </div>
+          <div class="font-drawer" id="font-drawer-body">
+            <div class="font-drawer-trigger" onclick="toggleFontDrawer('body')">
+              <span class="font-drawer-label">texto do corpo</span>
+              <span class="font-drawer-current" id="font-drawer-cur-body">—</span>
+              <span class="font-drawer-arrow">▾</span>
+            </div>
+            <div class="font-drawer-panel">
+              <div class="font-picker-wrap" id="font-body-opts"></div>
+            </div>
           </div>
 
           <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:-4px">background personalizado</div>
@@ -3109,6 +3259,13 @@ function renderFontOpts(d) {
 
   dEl.innerHTML = fontOptionsDisplay.map((f,i) => makeCard(f,i,'display',savedDisplay)).join('');
   bEl.innerHTML = fontOptionsBody.map((f,i) => makeCard(f,i,'body',savedBody)).join('');
+  // update drawer labels
+  const cdEl = document.getElementById('font-drawer-cur-display');
+  const cbEl = document.getElementById('font-drawer-cur-body');
+  const dispMatch = fontOptionsDisplay.find(f => f.value === savedDisplay);
+  const bodyMatch = fontOptionsBody.find(f => f.value === savedBody);
+  if (cdEl && dispMatch) cdEl.textContent = dispMatch.name;
+  if (cbEl && bodyMatch) cbEl.textContent = bodyMatch.name;
 }
 
 function previewFont(tipo, value) {
@@ -3143,6 +3300,16 @@ function setFont(tipo, value, btn) {
   // Atualiza cachedData imediatamente (evita race condition com saveConfig)
   if (cachedData && cachedData.config) cachedData.config[configKey] = value;
   db.ref(STORAGE_KEY + '/config').update({ [configKey]: value });
+  // update drawer label
+  const curEl = document.getElementById('font-drawer-cur-' + tipo);
+  const fontList = tipo === 'display' ? fontOptionsDisplay : fontOptionsBody;
+  const match = fontList.find(f => f.value === value);
+  if (curEl && match) curEl.textContent = match.name;
+}
+
+function toggleFontDrawer(tipo) {
+  const drawer = document.getElementById('font-drawer-' + tipo);
+  if (drawer) drawer.classList.toggle('open');
 }
 
 function aplicarFontes(d) {
@@ -3239,11 +3406,13 @@ function abrirCarta(c, d) {
   const imgEl = document.getElementById('cm-img');
   if (c.img) { imgEl.src = c.img; imgEl.style.display = 'block'; }
   else { imgEl.style.display = 'none'; imgEl.src = ''; }
-  document.getElementById('carta-modal-overlay').classList.add('open');
+  const overlay = document.getElementById('carta-modal-overlay');
+  overlay.classList.add('open', 'carta-letter');
 }
 
 function fecharCartaModal() {
-  document.getElementById('carta-modal-overlay').classList.remove('open');
+  const overlay = document.getElementById('carta-modal-overlay');
+  overlay.classList.remove('open', 'carta-letter');
 }
 
 function closeCartaModal(e) {
@@ -3761,21 +3930,23 @@ function renderCartas(d) {
     const deNome = c.de === 'player1' ? d.config.name1 : d.config.name2;
     const paraNome = c.para === 'ambos' ? 'nós dois' : (c.para === 'player1' ? d.config.name1 : d.config.name2);
     const mine = c.de === currentUser;
-    const bgStyle = c.cor ? `background:${c.cor};` : '';
-    const thumbHtml = c.img ? `<img src="${c.img}" style="width:100%;max-height:140px;object-fit:cover;margin-top:12px;border:1px solid var(--border)">` : '';
-    const preview = c.texto.length > 120 ? c.texto.slice(0, 120) + '…' : c.texto;
+    const borderTopStyle = c.cor ? `border-top-color:${c.cor};` : '';
+    const unreadDot = (!c.lida && c.para === currentUser) ? '<span class="carta-env-unread-dot"></span>' : '';
     const avatarSrc = c.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
     const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
     const delay = idx * 55;
-    return `<div class="card clickable" style="${bgStyle}animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both" onclick="abrirCartaById(${c.id})">
-      <div class="card-header">
-        <div class="card-title">${esc(c.titulo)}</div>
-        <div class="card-meta">${timeAgo(c.ts)}</div>
+    return `<div class="carta-envelope" style="${borderTopStyle}animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both" onclick="abrirCartaById(${c.id})">
+      <div class="carta-env-head">
+        <span class="carta-env-icon">✉</span>
+        <span class="carta-env-time">${unreadDot}${timeAgo(c.ts)}</span>
       </div>
-      <div class="card-body">${esc(preview)}</div>
-      ${thumbHtml}
-      <span class="card-tag" style="display:inline-flex;align-items:center">${avatarHtml}${deNome} → ${paraNome}</span>
-      ${mine ? `<div class="card-actions" onclick="event.stopPropagation()">
+      <div class="carta-env-body">
+        <div class="carta-env-title">${esc(c.titulo)}</div>
+        <div class="carta-env-route">${avatarHtml}${deNome} <span style="color:var(--accent)">→</span> ${paraNome}</div>
+        <div class="carta-env-divider"></div>
+        <div class="carta-env-hint">✦ clique para abrir</div>
+      </div>
+      ${mine ? `<div class="card-actions" style="padding:0 14px 12px" onclick="event.stopPropagation()">
         <button class="icon-btn" onclick="editarItem('carta',${c.id})">editar</button>
         <button class="icon-btn del" onclick="deleteCarta(${c.id})">apagar</button>
       </div>` : ''}
@@ -3963,7 +4134,7 @@ function toggleLaneFilter(btn) {
 function verificarFixados(d) {
   const banner = document.getElementById('lol-fixados-banner');
   if (!banner) return;
-  const fixados = d.jogos.lol.filter(j => j.fixado);
+  const fixados = d.jogos.lol.filter(j => j['fix_'+currentUser]);
   if (fixados.length) {
     const nomes = fixados.map(j => esc(j.champ)).join(', ');
     banner.innerHTML = `<span style="font-size:1.1rem;flex-shrink:0">📌</span>
@@ -3985,10 +4156,12 @@ function renderJogos(d) {
     ? d.jogos.lol
     : d.jogos.lol.filter(j => j.role && j.role.toLowerCase() === lolLaneFiltro)
   ).slice().sort((a,b) => {
-    if (a.fixado && !b.fixado) return -1;
-    if (!a.fixado && b.fixado) return 1;
-    if (a.favorito && !b.favorito) return -1;
-    if (!a.favorito && b.favorito) return 1;
+    const aFix = a['fix_'+currentUser], bFix = b['fix_'+currentUser];
+    const aFav = a['fav_'+currentUser], bFav = b['fav_'+currentUser];
+    if (aFix && !bFix) return -1;
+    if (!aFix && bFix) return 1;
+    if (aFav && !bFav) return -1;
+    if (!aFav && bFav) return 1;
     return 0;
   });
 
@@ -4006,11 +4179,13 @@ function renderJogos(d) {
         const tmp = document.createElement('div'); tmp.innerHTML = j.detalhes.guia;
         const txt = tmp.textContent.trim(); if (txt) guiaPreview = txt.slice(0,90) + (txt.length > 90 ? '…' : '');
       }
-      const borderLeft = j.fixado ? 'border-left:3px solid #7a9cc8;' : j.favorito ? 'border-left:3px solid #c8a040;' : '';
+      const isFav = !!j['fav_'+currentUser];
+      const isFix = !!j['fix_'+currentUser];
+      const borderLeft = isFix ? 'border-left:3px solid #7a9cc8;' : isFav ? 'border-left:3px solid #c8a040;' : '';
       return `<div class="card" style="${borderLeft}">
         <div class="card-header">
           <div class="card-title" style="display:flex;align-items:center">
-            ${j.fixado ? '<span style="color:#7a9cc8;margin-right:6px;font-size:0.9rem">📌</span>' : j.favorito ? '<span style="color:#c8a040;margin-right:6px;font-size:0.9rem">⭐</span>' : ''}
+            ${isFix ? '<span style="color:#7a9cc8;margin-right:6px;font-size:0.9rem">📌</span>' : isFav ? '<span style="color:#c8a040;margin-right:6px;font-size:0.9rem">⭐</span>' : ''}
             ${champImgHtml}${esc(j.champ)} <span style="color:var(--text-muted);font-size:0.8rem;margin-left:8px">${j.role}</span>
           </div>
           <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
@@ -4020,8 +4195,8 @@ function renderJogos(d) {
         ${j.notas ? `<div class="card-body" style="margin-top:8px">${esc(j.notas)}</div>` : ''}
         ${guiaPreview ? `<div style="margin-top:10px;padding:10px 14px;background:var(--surface2);border-left:2px solid var(--accent);font-style:italic;font-size:12px;color:var(--text-muted)">"${esc(guiaPreview)}"</div>` : ''}
         <div class="champ-status-row">
-          <button class="status-btn fav ${j.favorito?'on':''}" onclick="toggleFavorito(${j.id},event)">⭐ favorito</button>
-          <button class="status-btn pin ${j.fixado?'on':''}" onclick="toggleFixado(${j.id},event)">📌 pra aprender</button>
+          <button class="status-btn fav ${isFav?'on':''}" onclick="toggleFavorito(${j.id},event)">⭐ favorito</button>
+          <button class="status-btn pin ${isFix?'on':''}" onclick="toggleFixado(${j.id},event)">📌 pra aprender</button>
           <button class="icon-btn" style="margin-left:auto" onclick="abrirDetalheChamp(${j.id})">${hasGuia ? '📖 ver guia' : '＋ criar guia'}</button>
         </div>
         <div class="card-actions">
@@ -4472,8 +4647,10 @@ async function toggleFavorito(id, e) {
   const d = JSON.parse(JSON.stringify(cachedData || await loadData()));
   const entry = d.jogos.lol.find(j => j.id === id);
   if (!entry) return;
-  entry.favorito = !entry.favorito;
-  if (entry.favorito) entry.fixado = false; // favorito e fixado são exclusivos
+  const favKey = 'fav_' + currentUser;
+  const fixKey = 'fix_' + currentUser;
+  entry[favKey] = !entry[favKey];
+  if (entry[favKey]) entry[fixKey] = false; // favorito e fixado são exclusivos
   await saveData(d);
 }
 
@@ -4482,8 +4659,10 @@ async function toggleFixado(id, e) {
   const d = JSON.parse(JSON.stringify(cachedData || await loadData()));
   const entry = d.jogos.lol.find(j => j.id === id);
   if (!entry) return;
-  entry.fixado = !entry.fixado;
-  if (entry.fixado) entry.favorito = false;
+  const favKey = 'fav_' + currentUser;
+  const fixKey = 'fix_' + currentUser;
+  entry[fixKey] = !entry[fixKey];
+  if (entry[fixKey]) entry[favKey] = false;
   await saveData(d);
 }
 
