@@ -1299,6 +1299,105 @@
     color: var(--accent);
   }
 
+  /* ─── MONITOR SECTION ────────────────────────────────── */
+  #game-monitor { animation: sectionIn 0.35s ease both; }
+  .monitor-nav {
+    display: flex; gap: 1px;
+    background: rgba(200,184,122,0.18);
+    border: 1px solid rgba(200,184,122,0.22);
+    margin-bottom: 20px;
+  }
+  .monitor-tab {
+    flex: 1; background: var(--surface); border: none;
+    color: var(--text-muted); padding: 10px 6px;
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s; font-family: var(--font-body);
+    white-space: nowrap;
+  }
+  .monitor-tab:hover { background: var(--surface2); color: var(--text); }
+  .monitor-tab.active { background: rgba(200,184,122,0.09); color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+  .mon-music-box {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-top: 2px solid var(--accent); padding: 12px 16px; margin-bottom: 16px;
+  }
+  .mon-music-note { font-size: 1.2rem; color: var(--accent); opacity: 0.6; flex-shrink: 0; }
+  .mon-music-info { flex: 1; min-width: 0; }
+  .mon-music-title { font-family: var(--font-display); font-style: italic; font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mon-music-artist { font-size: 9px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+  .mon-music-btns { display: flex; gap: 6px; flex-shrink: 0; }
+  .mon-music-btn { background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 5px 10px; cursor: pointer; font-size: 11px; transition: all 0.18s; font-family: var(--font-body); }
+  .mon-music-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .mon-hero-area {
+    display: flex; align-items: center; justify-content: center;
+    gap: 52px; padding: 32px 20px;
+    background: var(--surface); border: 1px solid var(--border);
+    margin-bottom: 16px; position: relative; overflow: hidden;
+  }
+  .mon-hero-area::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 35% 50%, rgba(200,184,122,0.07) 0%, transparent 60%); pointer-events: none; }
+  .mon-champ-wrap { text-align: center; }
+  .mon-champ-circle {
+    width: 120px; height: 120px; border-radius: 50%;
+    border: 3px solid var(--accent); overflow: hidden;
+    box-shadow: 0 0 40px rgba(200,184,122,0.22), 0 0 0 7px rgba(200,184,122,0.06);
+    position: relative; margin: 0 auto;
+  }
+  .mon-champ-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mon-champ-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: var(--border); background: var(--surface2); }
+  .mon-champ-name { font-family: var(--font-display); font-style: italic; font-size: 1.2rem; color: var(--accent); margin-top: 8px; }
+  .mon-champ-btn { display: inline-block; margin-top: 6px; background: none; border: 1px solid var(--border); color: var(--text-muted); font-size: 9px; padding: 3px 10px; cursor: pointer; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.18s; }
+  .mon-champ-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .mon-goal-frac { text-align: center; }
+  .mon-goal-done { font-size: 4.5rem; font-weight: 300; color: var(--text); font-family: var(--font-display); line-height: 1; }
+  .mon-goal-bar-line { width: 72px; height: 1px; background: var(--accent); margin: 8px auto; opacity: 0.5; }
+  .mon-goal-total { font-size: 2.5rem; font-weight: 300; color: var(--text-muted); font-family: var(--font-display); line-height: 1; }
+  .mon-goal-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 8px; }
+
+  .mon-goal-opts { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 14px; }
+  .mon-goal-opt { width: 44px; height: 44px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.18s; }
+  .mon-goal-opt:hover { border-color: var(--accent); color: var(--accent); }
+  .mon-goal-opt.sel { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+  .mon-locked-row { display: flex; align-items: center; gap: 20px; padding: 8px 0; }
+  .mon-locked-icon { font-size: 1rem; flex-shrink: 0; }
+  .mon-locked-num { font-size: 2rem; font-family: var(--font-display); color: var(--accent); line-height: 1; }
+  .mon-locked-lbl { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-top: 2px; }
+  .mon-prog-wrap { flex: 1; }
+  .mon-prog-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+  .mon-prog-fill { height: 100%; background: var(--accent); transition: width 0.6s ease; }
+  .mon-prog-pct { font-size: 9px; color: var(--text-muted); text-align: right; }
+
+  .mon-partida-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--border); padding: 14px 18px; margin-bottom: 10px; }
+  .mon-partida-card.vitoria { border-left-color: var(--green); }
+  .mon-partida-card.derrota  { border-left-color: var(--red); }
+  .mon-kda-row { display: flex; gap: 24px; margin: 10px 0; flex-wrap: wrap; }
+  .mon-stat { text-align: center; }
+  .mon-stat-val { font-size: 1.4rem; font-weight: 300; color: var(--text); font-family: var(--font-display); line-height: 1; }
+  .mon-stat-lbl { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+  .mon-ia-box { padding: 12px 16px; background: rgba(200,184,122,0.05); border-left: 2px solid var(--accent); margin-top: 10px; font-style: italic; font-size: 12px; line-height: 1.8; color: var(--text-muted); }
+
+  .mon-sin-gauge { text-align: center; padding: 36px 20px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 16px; position: relative; overflow: hidden; }
+  .mon-sin-gauge::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 20%, rgba(200,184,122,0.09) 0%, transparent 60%); pointer-events: none; }
+  .mon-sin-num { font-size: 6rem; font-weight: 300; font-family: var(--font-display); color: var(--accent); line-height: 1; text-shadow: 0 0 60px rgba(200,184,122,0.35); }
+  .mon-sin-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .mon-sin-row:last-child { border-bottom: none; }
+  .mon-sin-weights { display: flex; gap: 20px; }
+  .mon-sin-w { font-size: 10px; color: var(--text-muted); }
+  .mon-sin-w b { color: var(--text); }
+
+  .mon-evento { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 8px; }
+  .mon-evento-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .mon-evento-msg { font-size: 12px; color: var(--text); line-height: 1.5; }
+  .mon-evento-meta { font-size: 9px; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.06em; }
+
+  /* set-champ overlay */
+  .mon-set-champ-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:300; align-items:center; justify-content:center; padding:24px; backdrop-filter:blur(4px); }
+  .mon-set-champ-overlay.open { display:flex; animation:overlayIn 0.3s ease both; }
+  .mon-set-champ-box { background:var(--surface); border:1px solid var(--border); padding:24px; width:100%; max-width:400px; animation:modalSlideIn 0.35s cubic-bezier(0.34,1.3,0.64,1) both; }
+
   .toast {
     position: fixed;
     bottom: 24px;
@@ -2485,6 +2584,7 @@
         <button class="game-tab active" onclick="switchGame('lol')" id="gtab-lol">League of Legends</button>
         <button class="game-tab" onclick="switchGame('mhw')" id="gtab-mhw">Monster Hunter</button>
         <button class="game-tab" onclick="switchGame('outros')" id="gtab-outros">outros</button>
+        <button class="game-tab" onclick="switchGame('monitor')" id="gtab-monitor" style="border-left:1px solid rgba(200,184,122,0.3);color:rgba(200,184,122,0.7)">⚡ monitor</button>
       </div>
 
       <div id="game-lol">
@@ -2637,7 +2737,160 @@
         </div>
         <div id="outros-list"></div>
       </div>
+
+      <!-- ─── MONITOR ─── -->
+      <div id="game-monitor" style="display:none">
+        <div class="monitor-nav">
+          <button class="monitor-tab active" id="mtab-home"        onclick="switchMonitor('home')">🏠 hoje</button>
+          <button class="monitor-tab"         id="mtab-analise"     onclick="switchMonitor('analise')">⚔ análise</button>
+          <button class="monitor-tab"         id="mtab-sinergia"    onclick="switchMonitor('sinergia')">⚡ sinergia</button>
+          <button class="monitor-tab"         id="mtab-celebracoes" onclick="switchMonitor('celebracoes')">★ conquistas</button>
+        </div>
+
+        <!-- HOME -->
+        <div id="mpanel-home" class="mpanel">
+          <div class="mon-music-box">
+            <span class="mon-music-note">♫</span>
+            <div class="mon-music-info">
+              <div class="mon-music-title" id="mon-track-title">—</div>
+              <div class="mon-music-artist" id="mon-track-artist">—</div>
+            </div>
+            <div class="mon-music-btns">
+              <button class="mon-music-btn" onclick="monMusicPrev()">‹</button>
+              <button class="mon-music-btn" onclick="monMusicPlay()">▶ ouvir</button>
+              <button class="mon-music-btn" onclick="monMusicNext()">›</button>
+            </div>
+          </div>
+          <div class="mon-hero-area">
+            <div class="mon-champ-wrap">
+              <div class="mon-champ-circle">
+                <img id="mon-champ-img" src="" style="display:none">
+                <div class="mon-champ-ph" id="mon-champ-ph">♪</div>
+              </div>
+              <div class="mon-champ-name" id="mon-champ-nm"></div>
+              <button class="mon-champ-btn" onclick="abrirSetChamp()">✦ definir main</button>
+            </div>
+            <div class="mon-goal-frac">
+              <div class="mon-goal-done" id="mon-done-cnt">0</div>
+              <div class="mon-goal-bar-line"></div>
+              <div class="mon-goal-total" id="mon-goal-tot">?</div>
+              <div class="mon-goal-label">partidas hoje</div>
+            </div>
+          </div>
+          <div class="form-panel" id="mon-meta-form">
+            <div class="form-grid">
+              <div class="field-label">meta de partidas hoje — escolha e trave</div>
+              <div class="mon-goal-opts" id="mon-goal-opts"></div>
+              <div class="form-actions">
+                <button class="btn gold" onclick="travarMeta()">🔒 travar meta</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-panel" id="mon-meta-locked" style="display:none">
+            <div class="mon-locked-row">
+              <span class="mon-locked-icon">🔒</span>
+              <div>
+                <div class="mon-locked-num" id="mon-locked-num">—</div>
+                <div class="mon-locked-lbl">partidas — meta travada</div>
+              </div>
+              <div class="mon-prog-wrap">
+                <div class="mon-prog-bar"><div class="mon-prog-fill" id="mon-prog-fill" style="width:0%"></div></div>
+                <div class="mon-prog-pct" id="mon-prog-pct">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANÁLISE -->
+        <div id="mpanel-analise" class="mpanel" style="display:none">
+          <div class="form-panel">
+            <div class="form-grid">
+              <div class="field-label" style="font-size:12px;color:var(--text)">registrar partida</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <div class="field-label">resultado</div>
+                  <select id="mon-res"><option value="1">vitória ✓</option><option value="0">derrota ✗</option></select>
+                </div>
+                <div class="form-group">
+                  <div class="field-label">campeão jogado</div>
+                  <input type="text" id="mon-champ-jogado" placeholder="ex: Sona">
+                </div>
+              </div>
+              <div class="form-row" style="grid-template-columns:repeat(4,1fr)">
+                <div class="form-group">
+                  <div class="field-label">abates K</div>
+                  <input type="number" id="mon-kills" min="0" max="60" value="0">
+                </div>
+                <div class="form-group">
+                  <div class="field-label">mortes D</div>
+                  <input type="number" id="mon-mortes" min="0" max="60" value="0">
+                </div>
+                <div class="form-group">
+                  <div class="field-label">assist A</div>
+                  <input type="number" id="mon-assists" min="0" max="60" value="0">
+                </div>
+                <div class="form-group">
+                  <div class="field-label">visão</div>
+                  <input type="number" id="mon-visao" min="0" max="300" value="0">
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn gold" onclick="adicionarPartida()">+ registrar partida</button>
+              </div>
+            </div>
+          </div>
+          <div id="mon-partidas-list"></div>
+        </div>
+
+        <!-- SINERGIA -->
+        <div id="mpanel-sinergia" class="mpanel" style="display:none">
+          <div class="mon-sin-gauge">
+            <div style="font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px">AMA — análise mútua adaptativa</div>
+            <div class="mon-sin-num" id="mon-sin-num">—</div>
+            <div style="font-size:9px;letter-spacing:0.15em;color:var(--text-muted);margin-top:8px">pontos de 100</div>
+            <div id="mon-sin-status" style="font-size:12px;color:var(--text-muted);margin-top:14px;font-style:italic"></div>
+          </div>
+          <div class="form-panel" style="margin-bottom:16px">
+            <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px">critérios de avaliação</div>
+            <div id="mon-sin-criterios"></div>
+          </div>
+          <div class="form-panel">
+            <div class="form-actions">
+              <button class="btn gold" onclick="calcularSinergiaAgora()">⚡ calcular sinergia agora</button>
+            </div>
+          </div>
+          <div id="mon-sin-log"></div>
+        </div>
+
+        <!-- CONQUISTAS -->
+        <div id="mpanel-celebracoes" class="mpanel" style="display:none">
+          <div id="mon-eventos-list"></div>
+        </div>
+      </div>
     </section>
+
+    <!-- ─── SET CHAMP OVERLAY ─── -->
+    <div class="mon-set-champ-overlay" id="mon-set-champ-overlay" onclick="fecharSetChamp(event)">
+      <div class="mon-set-champ-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="field-label" style="font-size:12px;color:var(--text)">seu campeão principal</div>
+          <button class="carta-modal-close" onclick="document.getElementById('mon-set-champ-overlay').classList.remove('open')">✕</button>
+        </div>
+        <div class="lol-search-wrap" id="mon-champ-wrap">
+          <input type="text" id="mon-champ-search" placeholder="buscar campeão..." autocomplete="off"
+            oninput="filtrarCampeoesMon(this.value)" onfocus="abrirDropLol('mon-champ')" onblur="setTimeout(()=>fecharDropLol('mon-champ'),200)">
+          <input type="hidden" id="mon-champ-sel-val">
+          <div class="lol-dropdown" id="mon-champ-drop" style="display:none"></div>
+        </div>
+        <div id="mon-champ-sel-preview" style="display:none;margin-top:10px;display:flex;align-items:center;gap:10px">
+          <img id="mon-champ-sel-img" src="" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">
+          <span id="mon-champ-sel-name" style="font-family:var(--font-display);font-size:1.1rem"></span>
+        </div>
+        <div class="form-actions" style="margin-top:16px">
+          <button class="btn gold" onclick="salvarMainChamp()">confirmar</button>
+        </div>
+      </div>
+    </div>
 
     <!-- ─── DESCULPAS ─── -->
     <section id="sec-desculpas" class="section">
@@ -3506,7 +3759,13 @@ const defaultData = {
   jogos: { lol: [], mhw: [], outros: [] },
   desculpas: [],
   segredo1: [],
-  segredo2: []
+  segredo2: [],
+  monitor: {
+    main_p1: null, main_p2: null,
+    meta_p1: 0, meta_p1_date: '',
+    meta_p2: 0, meta_p2_date: '',
+    partidas: [], sinergia_log: [], eventos: []
+  }
 };
 
 // ─── Storage (Firebase Realtime Database) ───────────────
@@ -3535,6 +3794,10 @@ function normalizarDados(d) {
   if (!d.jogos) d.jogos = { lol: [], mhw: [], outros: [] };
   d.segredo1 = normSegredo(d.segredo1);
   d.segredo2 = normSegredo(d.segredo2);
+  if (!d.monitor) d.monitor = JSON.parse(JSON.stringify(defaultData.monitor));
+  d.monitor.partidas     = toArray(d.monitor.partidas);
+  d.monitor.sinergia_log = toArray(d.monitor.sinergia_log);
+  d.monitor.eventos      = toArray(d.monitor.eventos);
   d.cartas    = toArray(d.cartas);
   d.planos    = toArray(d.planos);
   d.datas     = toArray(d.datas);
@@ -3897,10 +4160,11 @@ function showSection(id) {
 }
 
 function switchGame(g) {
-  ['lol','mhw','outros'].forEach(k => {
+  ['lol','mhw','outros','monitor'].forEach(k => {
     document.getElementById('game-' + k).style.display = k === g ? 'block' : 'none';
     document.getElementById('gtab-' + k).classList.toggle('active', k === g);
   });
+  if (g === 'monitor') renderMonitor(cachedData);
 }
 
 // ─── Sincronização em tempo real ────────────────────────
@@ -3926,6 +4190,7 @@ function ativarSyncTempoReal() {
       renderJogos(d);
       renderDesculpas(d);
       renderSegredo(d);
+      if (document.getElementById('game-monitor')?.style.display !== 'none') renderMonitor(d);
     }
   });
 }
@@ -4837,6 +5102,359 @@ async function toggleFixado(id, e) {
   entry[fixKey] = !entry[fixKey];
   if (entry[fixKey]) entry[favKey] = false;
   await saveData(d);
+}
+
+// ═══════════════════════════════════════════════════════
+// ─── MONITOR ────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
+
+// ─── Música ──────────────────────────────────────────────
+const monMusicas = [
+  { t: 'Tema da Sona', a: 'League of Legends OST',       url: 'https://www.youtube.com/results?search_query=sona+league+of+legends+theme+official' },
+  { t: 'Harpa Celta — Ethereal', a: 'Instrumental',      url: 'https://www.youtube.com/results?search_query=relaxing+celtic+harp+music' },
+  { t: 'Clair de Lune', a: 'Debussy — Harpa',            url: 'https://www.youtube.com/results?search_query=clair+de+lune+harp+version' },
+  { t: 'Serenity', a: 'Harpa & Cordas',                  url: 'https://www.youtube.com/results?search_query=beautiful+harp+strings+relaxing+instrumental' },
+  { t: 'Peaceful Garden', a: 'Koto & Harpa',             url: 'https://www.youtube.com/results?search_query=peaceful+harp+koto+relaxing+music' },
+  { t: 'Legends Never Die', a: 'LoL World Championship', url: 'https://www.youtube.com/results?search_query=legends+never+die+league+of+legends+harp' },
+];
+let monMusicIdx = 0;
+function monMusicRender() {
+  const m = monMusicas[monMusicIdx];
+  const t = document.getElementById('mon-track-title');
+  const a = document.getElementById('mon-track-artist');
+  if (t) t.textContent = m.t;
+  if (a) a.textContent = m.a;
+}
+function monMusicPrev() { monMusicIdx = (monMusicIdx - 1 + monMusicas.length) % monMusicas.length; monMusicRender(); }
+function monMusicNext() { monMusicIdx = (monMusicIdx + 1) % monMusicas.length; monMusicRender(); }
+function monMusicPlay() { window.open(monMusicas[monMusicIdx].url, '_blank'); }
+
+// ─── Sub-nav ─────────────────────────────────────────────
+const monPanels = ['home','analise','sinergia','celebracoes'];
+function switchMonitor(p) {
+  monPanels.forEach(k => {
+    document.getElementById('mpanel-' + k).style.display = k === p ? '' : 'none';
+    document.getElementById('mtab-' + k).classList.toggle('active', k === p);
+  });
+}
+
+// ─── Set main champion ───────────────────────────────────
+let monChampSelVal = null;
+function abrirSetChamp() { document.getElementById('mon-set-champ-overlay').classList.add('open'); }
+function fecharSetChamp(e) { if (e.target === document.getElementById('mon-set-champ-overlay')) document.getElementById('mon-set-champ-overlay').classList.remove('open'); }
+
+function filtrarCampeoesMon(v) {
+  const drop = document.getElementById('mon-champ-drop');
+  if (!v || v.length < 2) { drop.style.display = 'none'; return; }
+  const matches = (lolChampionsData || []).filter(c => c.name.toLowerCase().startsWith(v.toLowerCase())).slice(0,8);
+  drop.innerHTML = matches.map(c => `<div class="lol-drop-item" onmousedown="selecionarChampMon('${c.name.replace(/'/g,"\\'")}','${c.img}')">
+    <img src="${c.img}" style="width:28px;height:28px;object-fit:cover;border-radius:2px"> ${c.name}</div>`).join('');
+  drop.style.display = matches.length ? 'block' : 'none';
+}
+function selecionarChampMon(nome, img) {
+  monChampSelVal = { nome, img };
+  document.getElementById('mon-champ-search').value = nome;
+  document.getElementById('mon-champ-drop').style.display = 'none';
+  const prev = document.getElementById('mon-champ-sel-preview');
+  if (prev) { prev.style.display = 'flex'; document.getElementById('mon-champ-sel-img').src = img; document.getElementById('mon-champ-sel-name').textContent = nome; }
+}
+async function salvarMainChamp() {
+  if (!monChampSelVal) { toast('selecione um campeão'); return; }
+  const key = currentUser === 'player1' ? 'main_p1' : 'main_p2';
+  await db.ref(STORAGE_KEY + '/monitor/' + key).set(monChampSelVal);
+  if (cachedData) cachedData.monitor[key] = monChampSelVal;
+  document.getElementById('mon-set-champ-overlay').classList.remove('open');
+  renderMonHome(cachedData);
+  toast('campeão principal definido ✦');
+}
+
+// ─── Meta diária ─────────────────────────────────────────
+let monMetaSelecionada = 0;
+function todayStr() { return new Date().toISOString().split('T')[0]; }
+
+function renderMonGoalOpts() {
+  const wrap = document.getElementById('mon-goal-opts');
+  if (!wrap) return;
+  wrap.innerHTML = [1,2,3,4,5,6,7,8,9,10].map(n =>
+    `<button class="mon-goal-opt${monMetaSelecionada === n ? ' sel' : ''}" onclick="selectMetaOpt(${n})">${n}</button>`
+  ).join('');
+}
+function selectMetaOpt(n) {
+  monMetaSelecionada = n;
+  renderMonGoalOpts();
+}
+async function travarMeta() {
+  if (!monMetaSelecionada) { toast('selecione uma quantidade primeiro'); return; }
+  const metaKey  = currentUser === 'player1' ? 'meta_p1' : 'meta_p2';
+  const dateKey  = currentUser === 'player1' ? 'meta_p1_date' : 'meta_p2_date';
+  const today    = todayStr();
+  await db.ref(STORAGE_KEY + '/monitor').update({ [metaKey]: monMetaSelecionada, [dateKey]: today });
+  if (cachedData) { cachedData.monitor[metaKey] = monMetaSelecionada; cachedData.monitor[dateKey] = today; }
+  toast('meta travada 🔒');
+  renderMonHome(cachedData);
+}
+
+function getMetaHoje(d) {
+  const metaKey = currentUser === 'player1' ? 'meta_p1' : 'meta_p2';
+  const dateKey = currentUser === 'player1' ? 'meta_p1_date' : 'meta_p2_date';
+  const meta = d.monitor[metaKey] || 0;
+  const date = d.monitor[dateKey] || '';
+  if (date !== todayStr()) return 0; // expirou
+  return meta;
+}
+function getPartidaseHoje(d) {
+  const today = todayStr();
+  return (d.monitor.partidas || []).filter(p => p.jogador === currentUser && (p.data || '').startsWith(today)).length;
+}
+
+// ─── Render Home ─────────────────────────────────────────
+function renderMonHome(d) {
+  if (!d || !d.monitor) return;
+  monMusicRender();
+  // champion
+  const mainKey = currentUser === 'player1' ? 'main_p1' : 'main_p2';
+  const main = d.monitor[mainKey];
+  const img = document.getElementById('mon-champ-img');
+  const ph  = document.getElementById('mon-champ-ph');
+  const nm  = document.getElementById('mon-champ-nm');
+  if (main && main.img) { img.src = main.img; img.style.display = 'block'; if (ph) ph.style.display = 'none'; }
+  else { img.style.display = 'none'; if (ph) ph.style.display = 'flex'; }
+  if (nm) nm.textContent = main ? main.nome : '';
+  // goal fraction
+  const meta  = getMetaHoje(d);
+  const feito = getPartidaseHoje(d);
+  const domDone = document.getElementById('mon-done-cnt');
+  const domTot  = document.getElementById('mon-goal-tot');
+  if (domDone) domDone.textContent = feito;
+  if (domTot)  domTot.textContent  = meta || '?';
+  // show form or locked
+  const formEl   = document.getElementById('mon-meta-form');
+  const lockEl   = document.getElementById('mon-meta-locked');
+  if (meta) {
+    formEl.style.display = 'none';
+    lockEl.style.display = '';
+    const pct = Math.min(100, Math.round(feito / meta * 100));
+    document.getElementById('mon-locked-num').textContent = meta;
+    document.getElementById('mon-prog-fill').style.width = pct + '%';
+    document.getElementById('mon-prog-pct').textContent  = pct + '%';
+  } else {
+    formEl.style.display = '';
+    lockEl.style.display = 'none';
+    monMetaSelecionada = 0;
+    renderMonGoalOpts();
+  }
+}
+
+// ─── Partidas ────────────────────────────────────────────
+const sinCriterios = [
+  { nome: 'vitória',       icon: '🏆', p1: 0.25, p2: 0.35 },
+  { nome: 'abates',        icon: '⚔',  p1: 0.05, p2: 0.30 },
+  { nome: 'mortes',        icon: '💀',  p1: -0.05, p2: -0.25 },
+  { nome: 'assistências',  icon: '🤝',  p1: 0.40, p2: 0.05 },
+  { nome: 'visão',         icon: '👁',  p1: 0.35, p2: 0.05 },
+];
+
+function gerarAnaliseIA(p, d) {
+  const nome = p.jogador === 'player1' ? (d.config.name1||'jogador 1') : (d.config.name2||'jogador 2');
+  const isP1  = p.jogador === 'player1';
+  const frases = [];
+  if (p.vitoria) frases.push(`Vitória com ${p.champ}. Bom trabalho.`);
+  else frases.push(`Derrota com ${p.champ}. Analise o que falhou.`);
+  if (isP1) {
+    if (p.assists >= 10) frases.push(`Excelentes assistências (${p.assists}) — suporte impecável.`);
+    else if (p.assists < 4) frases.push(`Poucas assistências (${p.assists}) — busque mais presença na equipe.`);
+    if (p.visao >= 40) frases.push(`Ótimo controle de visão (${p.visao} pts).`);
+    else if (p.visao < 15) frases.push(`Visão baixa (${p.visao}) — coloque mais wards e use o trinket.`);
+    if (p.mortes > 3) frases.push(`${p.mortes} mortes compromete sua presença no mapa.`);
+  } else {
+    if (p.kills >= 8) frases.push(`Ótimo impacto em abates (${p.kills}) — manteve pressão.`);
+    else if (p.kills < 2 && !p.vitoria) frases.push(`Abates baixos (${p.kills}) — busque mais oportunidades.`);
+    if (p.mortes > 5) frases.push(`${p.mortes} mortes é muito para seu papel — fique mais segura.`);
+    else if (p.mortes <= 1) frases.push(`Excelente sobrevivência (${p.mortes} morte).`);
+  }
+  if (!p.vitoria && frases.length < 3) frases.push('Na derrota, foque em consistência e comunicação.');
+  return frases.join(' ');
+}
+
+async function adicionarPartida() {
+  const vitoria  = document.getElementById('mon-res').value === '1';
+  const champ    = document.getElementById('mon-champ-jogado').value.trim() || '—';
+  const kills    = parseInt(document.getElementById('mon-kills').value)   || 0;
+  const mortes   = parseInt(document.getElementById('mon-mortes').value)  || 0;
+  const assists  = parseInt(document.getElementById('mon-assists').value) || 0;
+  const visao    = parseInt(document.getElementById('mon-visao').value)   || 0;
+  const entrada  = { id: Date.now(), jogador: currentUser, champ, vitoria, kills, mortes, assists, visao, data: new Date().toISOString() };
+  entrada.analise = gerarAnaliseIA(entrada, cachedData || {config:{}});
+
+  const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
+  d.monitor.partidas.push(entrada);
+
+  // verifica meta
+  const meta  = getMetaHoje(d);
+  const feito = getPartidaseHoje(d); // ainda com dado antigo; nova partida não contada ainda
+  const novoFeito = feito + 1;
+  if (meta && novoFeito >= meta) {
+    const ev = { id: Date.now()+1, data: new Date().toISOString(), tipo: 'meta_batida', msg: `Meta de ${meta} partidas batida! ${novoFeito}/${meta} atingido.`, jogador: currentUser };
+    d.monitor.eventos.push(ev);
+  }
+
+  await db.ref(STORAGE_KEY + '/monitor/partidas').set(d.monitor.partidas);
+  if (meta && novoFeito >= meta) await db.ref(STORAGE_KEY + '/monitor/eventos').set(d.monitor.eventos);
+  if (cachedData) { cachedData.monitor.partidas = d.monitor.partidas; if (d.monitor.eventos.length > (cachedData.monitor.eventos||[]).length) cachedData.monitor.eventos = d.monitor.eventos; }
+
+  // limpar form
+  ['mon-kills','mon-mortes','mon-assists','mon-visao'].forEach(id => document.getElementById(id).value = 0);
+  document.getElementById('mon-champ-jogado').value = '';
+  renderMonitor(cachedData);
+  toast('partida registrada ✦');
+}
+
+async function deletarPartida(id) {
+  const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
+  d.monitor.partidas = d.monitor.partidas.filter(p => p.id !== id);
+  await db.ref(STORAGE_KEY + '/monitor/partidas').set(d.monitor.partidas.length ? d.monitor.partidas : []);
+  if (cachedData) cachedData.monitor.partidas = d.monitor.partidas;
+  renderMonPartidas(cachedData);
+  renderMonHome(cachedData);
+}
+
+function renderMonPartidas(d) {
+  const el = document.getElementById('mon-partidas-list');
+  if (!el || !d) return;
+  const lista = (d.monitor.partidas || []).filter(p => p.jogador === currentUser).slice().reverse();
+  if (!lista.length) { el.innerHTML = emptyState('nenhuma partida registrada ainda'); return; }
+  el.innerHTML = lista.map(p => `<div class="mon-partida-card ${p.vitoria ? 'vitoria' : 'derrota'}">
+    <div class="card-header">
+      <div class="card-title" style="display:flex;align-items:center;gap:8px">
+        <span style="color:${p.vitoria ? 'var(--green)' : 'var(--red)'};">${p.vitoria ? '✓' : '✗'}</span>
+        ${esc(p.champ)}
+      </div>
+      <div class="card-meta">${timeAgo(p.data)}</div>
+    </div>
+    <div class="mon-kda-row">
+      <div class="mon-stat"><div class="mon-stat-val" style="color:var(--green)">${p.kills}</div><div class="mon-stat-lbl">K</div></div>
+      <div class="mon-stat"><div class="mon-stat-val" style="color:var(--red)">${p.mortes}</div><div class="mon-stat-lbl">D</div></div>
+      <div class="mon-stat"><div class="mon-stat-val">${p.assists}</div><div class="mon-stat-lbl">A</div></div>
+      <div class="mon-stat"><div class="mon-stat-val">${p.visao}</div><div class="mon-stat-lbl">👁</div></div>
+    </div>
+    ${p.analise ? `<div class="mon-ia-box">${esc(p.analise)}</div>` : ''}
+    <div class="card-actions">
+      <button class="icon-btn del" onclick="deletarPartida(${p.id})">apagar</button>
+    </div>
+  </div>`).join('');
+}
+
+// ─── Sinergia ────────────────────────────────────────────
+function calcularScoreJogador(partidas, isP1) {
+  if (!partidas.length) return null;
+  const recentes = partidas.slice(-10);
+  const pesos = isP1
+    ? { vitoria:0.25, kills:0.05, mortes:-0.05, assists:0.40, visao:0.35 }
+    : { vitoria:0.35, kills:0.30, mortes:-0.25, assists:0.05, visao:0.05 };
+  const scores = recentes.map(p => {
+    return (p.vitoria ? 1 : 0) * pesos.vitoria
+         + Math.min(p.kills||0, 20)/20 * pesos.kills
+         + Math.min(p.mortes||0, 15)/15 * pesos.mortes
+         + Math.min(p.assists||0, 25)/25 * pesos.assists
+         + Math.min(p.visao||0, 100)/100 * pesos.visao;
+  });
+  return scores.reduce((a,b) => a+b, 0) / scores.length;
+}
+
+function calcularSinergia(d) {
+  const p1 = (d.monitor.partidas||[]).filter(p => p.jogador === 'player1');
+  const p2 = (d.monitor.partidas||[]).filter(p => p.jogador === 'player2');
+  if (!p1.length || !p2.length) return null;
+  const s1 = calcularScoreJogador(p1, true);
+  const s2 = calcularScoreJogador(p2, false);
+  if (s1 === null || s2 === null) return null;
+  return Math.max(0, Math.min(100, Math.round(((s1 + s2) / 2) * 100)));
+}
+
+async function calcularSinergiaAgora() {
+  const d = cachedData || await loadData();
+  const score = calcularSinergia(d);
+  if (score === null) { toast('registre partidas dos dois jogadores primeiro'); return; }
+  const prev = (d.monitor.sinergia_log||[]).slice(-1)[0];
+  const subiu = prev && score > prev.score;
+  const entrada = { id: Date.now(), data: new Date().toISOString(), score };
+  const d2 = JSON.parse(JSON.stringify(d));
+  d2.monitor.sinergia_log.push(entrada);
+  if (subiu) {
+    d2.monitor.eventos.push({ id: Date.now()+1, data: new Date().toISOString(), tipo: 'sinergia_up', msg: `Sinergia subiu de ${prev.score} para ${score} pts! ⚡` });
+  }
+  await db.ref(STORAGE_KEY + '/monitor/sinergia_log').set(d2.monitor.sinergia_log);
+  if (subiu) await db.ref(STORAGE_KEY + '/monitor/eventos').set(d2.monitor.eventos);
+  if (cachedData) { cachedData.monitor.sinergia_log = d2.monitor.sinergia_log; if (subiu) cachedData.monitor.eventos = d2.monitor.eventos; }
+  renderMonSinergia(cachedData);
+  renderMonEventos(cachedData);
+  toast(`sinergia calculada: ${score} pts ⚡`);
+}
+
+function renderMonSinergia(d) {
+  if (!d) return;
+  const score = calcularSinergia(d);
+  const numEl = document.getElementById('mon-sin-num');
+  const stEl  = document.getElementById('mon-sin-status');
+  if (numEl) numEl.textContent = score !== null ? score : '—';
+  if (stEl) {
+    if (score === null) stEl.textContent = 'registre partidas dos dois jogadores para calcular.';
+    else if (score >= 80) stEl.textContent = 'duo excepcional — sintonia perfeita. 🌟';
+    else if (score >= 60) stEl.textContent = 'boa sinergia — continuem assim. ⚡';
+    else if (score >= 40) stEl.textContent = 'sinergia em desenvolvimento — espaço para crescer.';
+    else stEl.textContent = 'sinergia baixa — foco em comunicação e consistência.';
+  }
+  // critérios
+  const crEl = document.getElementById('mon-sin-criterios');
+  if (crEl) {
+    const n1 = d.config?.name1 || 'P1';
+    const n2 = d.config?.name2 || 'P2';
+    crEl.innerHTML = sinCriterios.map(c => `<div class="mon-sin-row">
+      <span class="mon-sin-name">${c.icon} ${c.nome}</span>
+      <div class="mon-sin-weights">
+        <span class="mon-sin-w">${n1}: <b style="color:${c.p1 >= 0 ? 'var(--green)' : 'var(--red)'}">×${Math.abs(c.p1).toFixed(2)}</b></span>
+        <span class="mon-sin-w">${n2}: <b style="color:${c.p2 >= 0 ? 'var(--green)' : 'var(--red)'}">×${Math.abs(c.p2).toFixed(2)}</b></span>
+      </div>
+    </div>`).join('');
+  }
+  // log
+  const logEl = document.getElementById('mon-sin-log');
+  if (logEl) {
+    const log = (d.monitor.sinergia_log||[]).slice().reverse().slice(0,10);
+    if (!log.length) { logEl.innerHTML = ''; return; }
+    logEl.innerHTML = `<div style="color:var(--text-muted);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin:16px 0 10px">histórico</div>` +
+      log.map((l, i) => {
+        const prev = log[i+1];
+        const delta = prev ? l.score - prev.score : 0;
+        const arrow = delta > 0 ? `<span style="color:var(--green)">↑${delta}</span>` : delta < 0 ? `<span style="color:var(--red)">↓${Math.abs(delta)}</span>` : '';
+        return `<div class="mon-sin-row"><span>${fmt(l.data)}</span><span><b style="color:var(--accent)">${l.score}</b> pts ${arrow}</span></div>`;
+      }).join('');
+  }
+}
+
+// ─── Eventos/Conquistas ──────────────────────────────────
+function renderMonEventos(d) {
+  const el = document.getElementById('mon-eventos-list');
+  if (!el || !d) return;
+  const lista = (d.monitor.eventos||[]).slice().reverse();
+  if (!lista.length) { el.innerHTML = emptyState('nenhuma conquista ou fail registrado ainda'); return; }
+  const icons = { meta_batida: '🎯', sinergia_up: '⚡', fail: '❌' };
+  el.innerHTML = lista.map(ev => `<div class="mon-evento">
+    <div class="mon-evento-icon">${icons[ev.tipo] || '★'}</div>
+    <div>
+      <div class="mon-evento-msg">${esc(ev.msg)}</div>
+      <div class="mon-evento-meta">${fmt(ev.data)}</div>
+    </div>
+  </div>`).join('');
+}
+
+// ─── Render completo ─────────────────────────────────────
+function renderMonitor(d) {
+  if (!d || !d.monitor) return;
+  renderMonHome(d);
+  renderMonPartidas(d);
+  renderMonSinergia(d);
+  renderMonEventos(d);
 }
 
 // ─── Editar item ─────────────────────────────────────────
