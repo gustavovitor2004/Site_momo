@@ -3039,7 +3039,9 @@ function closeCartaModal(e) {
 
 // Carrega nomes e avatares nos cards de login
 initLoginScreen();
-initLoginBg();
+// initLoginBg usa `loginThemes` declarado mais abaixo no script —
+// setTimeout(0) garante que todo o script foi avaliado antes de chamá-la
+setTimeout(initLoginBg, 0);
 
 const defaultData = {
   config: { name1: 'Jogador 1', name2: 'Jogador 2', pass1: '1234', pass2: '1234',
