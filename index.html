@@ -708,20 +708,7 @@
   .header-user {
     display: flex;
     align-items: center;
-    gap: 16px;
-    color: var(--text-muted);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-  }
-
-  .user-badge {
-    background: var(--accent-dim);
-    color: var(--accent);
-    border: 1px solid rgba(200,184,122,0.25);
-    padding: 4px 10px;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    gap: 10px;
   }
 
   .theme-toggle {
@@ -738,22 +725,126 @@
     transition: all 0.2s;
     flex-shrink: 0;
   }
-
   .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
-  .logout-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
+  /* ─── PROFILE PILL ───────────────────────────────── */
+  .profile-pill {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: color 0.2s;
+    padding: 4px 10px 4px 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color 0.22s, background 0.22s, box-shadow 0.22s;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .profile-pill:hover {
+    border-color: rgba(200,184,122,0.5);
+    background: var(--surface2);
+    box-shadow: 0 0 12px rgba(200,184,122,0.06);
+  }
+  .profile-pill.open {
+    border-color: rgba(200,184,122,0.6);
+    background: var(--surface2);
   }
 
-  .logout-btn:hover { color: var(--text); }
+  .profile-avatar-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    display: none;
+    flex-shrink: 0;
+  }
+  .profile-avatar-init {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid rgba(200,184,122,0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+  .profile-pill:hover .profile-avatar-init { border-color: rgba(200,184,122,0.5); }
+
+  .profile-name {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text);
+    font-family: var(--font-body);
+    transition: color 0.2s;
+  }
+  .profile-pill:hover .profile-name { color: var(--accent); }
+
+  .profile-caret {
+    font-size: 8px;
+    color: var(--text-muted);
+    transition: transform 0.22s ease;
+    line-height: 1;
+  }
+  .profile-pill:hover .profile-caret,
+  .profile-pill.open  .profile-caret { transform: rotate(180deg); color: var(--accent); }
+
+  /* Dropdown */
+  .profile-dropdown {
+    position: absolute;
+    top: calc(100% + 7px);
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    min-width: 170px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 200;
+    box-shadow: 0 10px 36px rgba(0,0,0,0.38), 0 0 0 1px rgba(200,184,122,0.06);
+  }
+  .profile-pill:hover .profile-dropdown,
+  .profile-pill.open  .profile-dropdown {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+
+  .profile-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    background: none;
+    width: 100%;
+    text-align: left;
+    transition: color 0.15s, background 0.15s, padding-left 0.15s;
+  }
+  .profile-dropdown-item:last-child { border-bottom: none; }
+  .profile-dropdown-item:hover {
+    color: var(--text);
+    background: var(--surface2);
+    padding-left: 20px;
+  }
+  .profile-dropdown-item.danger:hover { color: var(--red); }
+  .di-icon { font-size: 12px; opacity: 0.65; flex-shrink: 0; }
 
   /* ─── NAV ────────────────────────────────────────────── */
   nav {
@@ -1903,10 +1994,25 @@
     </div>
     <div class="header-user">
       <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="alternar tema">◐</button>
-      <img id="header-avatar" src="" style="display:none">
-      <span class="user-badge" id="header-username">—</span>
-      <button class="switch-user-btn" onclick="switchUser()" title="trocar de usuário">trocar</button>
-      <button class="logout-btn" onclick="logout()">sair</button>
+
+      <div class="profile-pill" id="profile-pill" onclick="toggleProfileDropdown(event)">
+        <img  class="profile-avatar-img"  id="header-avatar"      src="">
+        <div  class="profile-avatar-init" id="header-avatar-init">—</div>
+        <span class="profile-name"        id="header-username">—</span>
+        <span class="profile-caret">▾</span>
+
+        <div class="profile-dropdown" id="profile-dropdown">
+          <button class="profile-dropdown-item" onclick="showSection('config');closeProfileDropdown()">
+            <span class="di-icon">⚙</span> configurações
+          </button>
+          <button class="profile-dropdown-item" onclick="switchUser()">
+            <span class="di-icon">⇄</span> trocar usuário
+          </button>
+          <button class="profile-dropdown-item danger" onclick="logout()">
+            <span class="di-icon">↩</span> sair
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -1917,7 +2023,6 @@
     <button id="nav-jogos" class="nav-item" onclick="showSection('jogos')">⌗ jogos</button>
     <button id="nav-desculpas" class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
     <button id="nav-segredo" class="nav-item" onclick="showSection('segredo')">🔒 segredo</button>
-    <button id="nav-config" class="nav-item" onclick="showSection('config')">⚙ config</button>
   </nav>
 
   <main>
@@ -3322,6 +3427,10 @@ function logout() {
 
     const hav = document.getElementById('header-avatar');
     hav.src = ''; hav.style.display = 'none';
+    const havInit = document.getElementById('header-avatar-init');
+    if (havInit) { havInit.style.display = 'flex'; havInit.textContent = '—'; }
+    document.getElementById('header-username').textContent = '—';
+    closeProfileDropdown();
     document.body.style.backgroundImage = '';
     document.body.classList.remove('custom-bg');
     document.documentElement.style.removeProperty('--font-display');
@@ -3943,11 +4052,31 @@ async function saveConfig() {
 
 function atualizarHeaderAvatar(d) {
   if (!d || !d.config) return;
-  const src = currentUser === 'player1' ? d.config.avatar1 : d.config.avatar2;
-  const el = document.getElementById('header-avatar');
-  if (src) { el.src = src; el.style.display = 'block'; }
-  else { el.src = ''; el.style.display = 'none'; }
+  const src  = currentUser === 'player1' ? d.config.avatar1 : d.config.avatar2;
+  const name = currentUser === 'player1' ? d.config.name1   : d.config.name2;
+  const img  = document.getElementById('header-avatar');
+  const init = document.getElementById('header-avatar-init');
+  if (src) {
+    img.src = src; img.style.display = 'block';
+    if (init) init.style.display = 'none';
+  } else {
+    img.src = ''; img.style.display = 'none';
+    if (init) { init.style.display = 'flex'; init.textContent = (name || '?').charAt(0).toUpperCase(); }
+  }
 }
+
+// ─── Profile dropdown ─────────────────────────────────
+function toggleProfileDropdown(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('profile-pill').classList.toggle('open');
+}
+function closeProfileDropdown() {
+  const pill = document.getElementById('profile-pill');
+  if (pill) pill.classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#profile-pill')) closeProfileDropdown();
+});
 
 function previewAvatar(input) {
   const file = input.files[0]; if (!file) return;
