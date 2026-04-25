@@ -2478,25 +2478,7 @@
     <button id="nav-cartas"   class="nav-item active" onclick="showSection('cartas')">✉ cartas</button>
     <button id="nav-planos"   class="nav-item"        onclick="showSection('planos')">✦ planos</button>
     <button id="nav-datas"    class="nav-item"        onclick="showSection('datas')">◎ datas</button>
-    <div id="nav-jogos" class="nav-item has-drop" onclick="showSection('jogos')">⌗ jogos ▾
-      <div class="nav-drop">
-        <div class="nav-drop-inner">
-          <div class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('lol')">
-            <span style="font-size:12px">⚔</span> League of Legends
-          </div>
-          <div class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('mhw')">
-            <span style="font-size:12px">🐉</span> Monster Hunter
-          </div>
-          <div class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('outros')">
-            <span style="font-size:12px">🎮</span> outros jogos
-          </div>
-          <div class="nav-drop-sep"></div>
-          <div class="nav-drop-item accent" onclick="event.stopPropagation();showSectionGame('monitor')">
-            <span style="font-size:12px">⚡</span> monitor
-          </div>
-        </div>
-      </div>
-    </div>
+    <div id="nav-jogos" class="nav-item has-drop" onclick="showSection('jogos')">⌗ jogos ▾</div>
     <button id="nav-desculpas" class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
     <button id="nav-segredo"   class="nav-item" onclick="showSection('segredo')">🔒 segredo</button>
   </nav>
@@ -4248,12 +4230,26 @@ function showSectionGame(game) {
 }
 
 // ─── Nav Jogos Dropdown (position: fixed para não ser cortado pelo overflow do nav) ───
+// ─── Nav Jogos Dropdown ──────────────────────────────────
+// O dropdown é injetado diretamente no <body> para escapar
+// de qualquer overflow do <nav> e funcionar com position:fixed
 (function initNavJogosDrop() {
   function setup() {
     const trigger = document.getElementById('nav-jogos');
     if (!trigger) return;
-    const drop = trigger.querySelector('.nav-drop');
-    if (!drop) return;
+
+    // Cria o dropdown e injeta no body
+    const drop = document.createElement('div');
+    drop.className = 'nav-drop';
+    drop.innerHTML = `
+      <div class="nav-drop-inner">
+        <div class="nav-drop-item" onclick="showSectionGame('lol')"><span style="font-size:12px">⚔</span> League of Legends</div>
+        <div class="nav-drop-item" onclick="showSectionGame('mhw')"><span style="font-size:12px">🐉</span> Monster Hunter</div>
+        <div class="nav-drop-item" onclick="showSectionGame('outros')"><span style="font-size:12px">🎮</span> outros jogos</div>
+        <div class="nav-drop-sep"></div>
+        <div class="nav-drop-item accent" onclick="showSectionGame('monitor')"><span style="font-size:12px">⚡</span> monitor</div>
+      </div>`;
+    document.body.appendChild(drop);
 
     let hideTimer = null;
 
@@ -4265,7 +4261,7 @@ function showSectionGame(game) {
       drop.classList.add('nav-drop-open');
     }
     function hideDrop() {
-      hideTimer = setTimeout(() => drop.classList.remove('nav-drop-open'), 80);
+      hideTimer = setTimeout(() => drop.classList.remove('nav-drop-open'), 150);
     }
 
     trigger.addEventListener('mouseenter', showDrop);
@@ -5256,7 +5252,13 @@ function fecharSetChamp(e) { if (e.target === document.getElementById('mon-set-c
 function filtrarCampeoesMon(v) {
   const drop = document.getElementById('mon-champ-drop');
   if (!v || v.length < 2) { drop.style.display = 'none'; return; }
-  const matches = (lolChampionsData || []).filter(c => c.name.toLowerCase().startsWith(v.toLowerCase())).slice(0,8);
+  if (!lolCampeoes.length) {
+    drop.innerHTML = '<div class="lol-loading">carregando campeões...</div>';
+    drop.style.display = 'block';
+    carregarDDragon().then(() => filtrarCampeoesMon(v));
+    return;
+  }
+  const matches = lolCampeoes.filter(c => c.name.toLowerCase().includes(v.toLowerCase())).slice(0, 8);
   drop.innerHTML = matches.map(c => `<div class="lol-drop-item" onmousedown="selecionarChampMon('${c.name.replace(/'/g,"\\'")}','${c.img}')">
     <img src="${c.img}" style="width:28px;height:28px;object-fit:cover;border-radius:2px"> ${c.name}</div>`).join('');
   drop.style.display = matches.length ? 'block' : 'none';
