@@ -2100,67 +2100,115 @@
   .lane-btn img { width: 16px; height: 16px; opacity: 0.7; }
   .lane-btn.active img { opacity: 1; }
 
-  /* ─── SEGREDO ────────────────────────────────────────── */
-  .segredo-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 44px 36px 36px;
-    margin-bottom: 28px;
+  /* ─── SEGREDO COFRE ─────────────────────────────────── */
+  .segredo-vault {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(200,184,122,0.18);
+    padding: 20px 22px 14px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .segredo-vault::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(200,184,122,0.45), transparent);
+  }
+  .segredo-vault-title {
+    font-size: 8px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.5;
     text-align: center;
+    margin-bottom: 16px;
+    font-family: 'DM Mono', monospace;
+  }
+  .segredo-item {
+    border: 1px solid rgba(200,184,122,0.12);
+    background: rgba(0,0,0,0.28);
+    margin-bottom: 7px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
     position: relative;
     overflow: hidden;
   }
-  .segredo-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(200,184,122,0.07) 0%, transparent 65%);
-    pointer-events: none;
+  .segredo-item:hover {
+    border-color: rgba(200,184,122,0.38);
+    background: rgba(200,184,122,0.04);
   }
-  .segredo-lock {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    opacity: 0.35;
-    display: block;
-    letter-spacing: 0.2em;
-  }
-  .segredo-deco {
+  .segredo-item-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 28px;
+    gap: 10px;
+    padding: 12px 14px;
+    padding-right: 80px;
   }
-  .segredo-deco-line {
-    height: 1px;
-    width: 60px;
-    background: linear-gradient(90deg, transparent, rgba(200,184,122,0.4), transparent);
+  .segredo-item-icon { font-size: 0.8rem; flex-shrink: 0; }
+  .segredo-item-num {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: rgba(200,184,122,0.45);
+    font-family: 'DM Mono', monospace;
+    flex-shrink: 0;
   }
-  .segredo-deco-gem {
-    color: var(--accent);
-    font-size: 7px;
-    letter-spacing: 4px;
-    opacity: 0.6;
+  .segredo-item-meta {
+    font-size: 9px;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    flex: 1;
+    font-family: 'DM Mono', monospace;
   }
-  .segredo-text {
+  .segredo-item-hint {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.45;
+    flex-shrink: 0;
+    transition: opacity 0.18s, color 0.18s;
+  }
+  .segredo-item:hover .segredo-item-hint,
+  .segredo-item.revealed .segredo-item-hint { opacity: 0.9; color: var(--accent); }
+  .segredo-item-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.38s ease;
+  }
+  .segredo-item.revealed .segredo-item-content { max-height: 800px; }
+  .segredo-item-text-wrap {
+    padding: 0 16px 16px;
+    border-top: 1px solid rgba(200,184,122,0.09);
+    margin-top: 2px;
+  }
+  .segredo-item-text-inner {
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 1.25rem;
-    line-height: 2;
+    font-size: 1.15rem;
+    line-height: 1.85;
     color: var(--text);
     white-space: pre-wrap;
-    max-width: 560px;
-    margin: 0 auto;
+    padding-top: 14px;
   }
-  .segredo-meta {
+  .segredo-item-del {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    background: none;
+    border: 1px solid transparent;
+    color: var(--red);
+    cursor: pointer;
     font-size: 9px;
-    color: var(--text-muted);
-    letter-spacing: 0.2em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-top: 28px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
+    opacity: 0;
+    transition: opacity 0.2s, border-color 0.2s;
+    padding: 3px 7px;
   }
+  .segredo-item:hover .segredo-item-del { opacity: 0.55; }
+  .segredo-item-del:hover { opacity: 1 !important; border-color: var(--red) !important; }
 
   @media (max-width: 600px) {
     .form-row { grid-template-columns: 1fr; }
@@ -2386,18 +2434,39 @@
               <div class="field-label">nome da data</div>
               <input type="text" id="data-nome" placeholder="ex: nosso aniversário">
             </div>
-            <div class="form-group">
+            <div class="form-group" id="data-val-group">
               <div class="field-label">data</div>
               <input type="date" id="data-val">
             </div>
           </div>
           <div class="form-group">
             <div class="field-label">tipo</div>
-            <select id="data-tipo">
+            <select id="data-tipo" onchange="toggleDataRecorrente(this.value)">
               <option value="aniversario">💑 aniversário do casal</option>
               <option value="niver">🎂 aniversário de alguém</option>
               <option value="especial">✨ data especial</option>
+              <option value="recorrente">🔄 recorrente (todo dia X)</option>
             </select>
+          </div>
+          <div id="data-recorrente-fields" style="display:none">
+            <div class="form-row">
+              <div class="form-group">
+                <div class="field-label">dia da semana</div>
+                <select id="data-dia-semana">
+                  <option value="1">segunda-feira</option>
+                  <option value="2">terça-feira</option>
+                  <option value="3">quarta-feira</option>
+                  <option value="4">quinta-feira</option>
+                  <option value="5" selected>sexta-feira</option>
+                  <option value="6">sábado</option>
+                  <option value="0">domingo</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <div class="field-label">data limite <span style="opacity:0.5;font-size:10px">(vazio = sem limite)</span></div>
+                <input type="date" id="data-fim">
+              </div>
+            </div>
           </div>
           <div class="form-actions">
             <button class="btn gold" onclick="addData()">salvar data</button>
@@ -2617,8 +2686,8 @@
       <div class="form-panel">
         <div class="form-grid">
           <div class="form-group">
-            <div class="field-label">escreva nosso segredo</div>
-            <textarea id="segredo-texto" rows="6" placeholder="só você vai ler isso..."></textarea>
+            <div class="field-label">novo segredo</div>
+            <textarea id="segredo-texto" rows="5" placeholder="só você vai ler isso..."></textarea>
           </div>
           <div class="form-actions">
             <button class="btn gold" onclick="salvarSegredo()">🔒 guardar segredo</button>
@@ -3436,8 +3505,8 @@ const defaultData = {
   datas: [],
   jogos: { lol: [], mhw: [], outros: [] },
   desculpas: [],
-  segredo1: { texto: '', ts: '' },
-  segredo2: { texto: '', ts: '' }
+  segredo1: [],
+  segredo2: []
 };
 
 // ─── Storage (Firebase Realtime Database) ───────────────
@@ -3450,11 +3519,22 @@ function toArray(val) {
   return Object.keys(val).sort((a, b) => parseInt(a) - parseInt(b)).map(k => val[k]);
 }
 
+function normSegredo(s) {
+  if (!s) return [];
+  if (Array.isArray(s)) return s;
+  // objeto com chave 'texto' = formato antigo
+  if (typeof s === 'object' && Object.prototype.hasOwnProperty.call(s, 'texto')) {
+    return s.texto ? [{ id: 1, texto: s.texto, ts: s.ts || '' }] : [];
+  }
+  // Firebase object-array { '0': {...}, '1': {...} }
+  return toArray(s);
+}
+
 function normalizarDados(d) {
   if (!d.config) d.config = { ...defaultData.config };
   if (!d.jogos) d.jogos = { lol: [], mhw: [], outros: [] };
-  if (!d.segredo1) d.segredo1 = { texto: '', ts: '' };
-  if (!d.segredo2) d.segredo2 = { texto: '', ts: '' };
+  d.segredo1 = normSegredo(d.segredo1);
+  d.segredo2 = normSegredo(d.segredo2);
   d.cartas    = toArray(d.cartas);
   d.planos    = toArray(d.planos);
   d.datas     = toArray(d.datas);
@@ -3932,8 +4012,10 @@ function renderCartas(d) {
     const mine = c.de === currentUser;
     const borderTopStyle = c.cor ? `border-top-color:${c.cor};` : '';
     const unreadDot = (!c.lida && c.para === currentUser) ? '<span class="carta-env-unread-dot"></span>' : '';
-    const avatarSrc = c.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
-    const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
+    const avatarDeSrc   = c.de   === 'player1' ? d.config.avatar1 : d.config.avatar2;
+    const avatarParaSrc = c.para === 'player1' ? d.config.avatar1 : c.para === 'player2' ? d.config.avatar2 : null;
+    const avatarDe   = avatarDeSrc   ? `<img class="avatar-sm" src="${avatarDeSrc}">` : '';
+    const avatarPara = (c.para !== 'ambos' && avatarParaSrc) ? `<img class="avatar-sm" src="${avatarParaSrc}">` : '';
     const delay = idx * 55;
     return `<div class="carta-envelope" style="${borderTopStyle}animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both" onclick="abrirCartaById(${c.id})">
       <div class="carta-env-head">
@@ -3942,7 +4024,7 @@ function renderCartas(d) {
       </div>
       <div class="carta-env-body">
         <div class="carta-env-title">${esc(c.titulo)}</div>
-        <div class="carta-env-route">${avatarHtml}${deNome} <span style="color:var(--accent)">→</span> ${paraNome}</div>
+        <div class="carta-env-route">${avatarDe}${deNome} <span style="color:var(--accent)">→</span> ${paraNome}${avatarPara}</div>
         <div class="carta-env-divider"></div>
         <div class="carta-env-hint">✦ clique para abrir</div>
       </div>
@@ -4012,17 +4094,33 @@ function renderPlanos(d) {
 }
 
 // ─── DATAS ──────────────────────────────────────────────
+const diasSemana = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+
+function toggleDataRecorrente(val) {
+  const isRec = val === 'recorrente';
+  document.getElementById('data-val-group').style.display = isRec ? 'none' : '';
+  document.getElementById('data-recorrente-fields').style.display = isRec ? '' : 'none';
+}
+
 async function addData() {
   const nome = document.getElementById('data-nome').value.trim();
-  const val = document.getElementById('data-val').value;
   const tipo = document.getElementById('data-tipo').value;
-  if (!nome || !val) { toast('preencha nome e data'); return; }
+  if (!nome) { toast('preencha o nome da data'); return; }
 
   const d = await loadData();
-  d.datas.push({ id: Date.now(), nome, val, tipo });
+  if (tipo === 'recorrente') {
+    const diaSemana = parseInt(document.getElementById('data-dia-semana').value);
+    const fimData = document.getElementById('data-fim').value || null;
+    d.datas.push({ id: Date.now(), nome, tipo: 'recorrente', diaSemana, fimData });
+    document.getElementById('data-fim').value = '';
+  } else {
+    const val = document.getElementById('data-val').value;
+    if (!val) { toast('preencha a data'); return; }
+    d.datas.push({ id: Date.now(), nome, val, tipo });
+    document.getElementById('data-val').value = '';
+  }
   await saveData(d);
   document.getElementById('data-nome').value = '';
-  document.getElementById('data-val').value = '';
   renderDatas(d);
   toast('data salva ◎');
 }
@@ -4042,16 +4140,43 @@ function daysUntilNext(dateStr) {
   return Math.round((next - today) / 86400000);
 }
 
+function daysUntilNextRecorrente(dt) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  if (dt.fimData) {
+    const fim = new Date(dt.fimData + 'T00:00:00');
+    if (today > fim) return Infinity;
+  }
+  const todayDay = today.getDay();
+  const targetDay = parseInt(dt.diaSemana);
+  let diff = targetDay - todayDay;
+  if (diff < 0) diff += 7;
+  return diff; // 0 = hoje
+}
+
+function daysUntilNextDt(dt) {
+  if (dt.tipo === 'recorrente') return daysUntilNextRecorrente(dt);
+  return daysUntilNext(dt.val);
+}
+
 function renderDatas(d) {
-  const upcoming = [...d.datas].sort((a, b) => daysUntilNext(a.val) - daysUntilNext(b.val)).slice(0, 3);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const validDatas = d.datas.filter(dt => {
+    if (dt.tipo === 'recorrente' && dt.fimData) {
+      return today <= new Date(dt.fimData + 'T00:00:00');
+    }
+    return true;
+  });
+  const upcoming = [...validDatas].sort((a, b) => daysUntilNextDt(a) - daysUntilNextDt(b)).slice(0, 3);
 
   document.getElementById('next-dates').innerHTML = upcoming.map(dt => {
-    const days = daysUntilNext(dt.val);
+    const days = daysUntilNextDt(dt);
+    const isRec = dt.tipo === 'recorrente';
+    const subLabel = isRec ? `toda ${diasSemana[dt.diaSemana]}` : fmt(dt.val);
     return `<div class="date-card">
-      <div class="date-number">${days === 0 ? '🎉' : days}</div>
-      <div class="date-label">${days === 0 ? 'hoje!' : `dia${days !== 1 ? 's' : ''} para`}</div>
+      <div class="date-number">${days === 0 ? '🎉' : days === Infinity ? '—' : days}</div>
+      <div class="date-label">${days === 0 ? 'hoje!' : days === Infinity ? 'encerrado' : `dia${days !== 1 ? 's' : ''} para`}</div>
       <div class="date-name">${esc(dt.nome)}</div>
-      <div class="date-countdown">${fmt(dt.val)}</div>
+      <div class="date-countdown">${subLabel}</div>
     </div>`;
   }).join('');
 
@@ -4059,13 +4184,19 @@ function renderDatas(d) {
   if (!d.datas.length) { el.innerHTML = emptyState('nenhuma data especial salva ainda'); return; }
   el.innerHTML = `<div style="color:var(--text-muted);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px">todas as datas</div>` +
     d.datas.map(dt => {
-      const days = daysUntilNext(dt.val);
-      return `<div class="card">
+      const days = daysUntilNextDt(dt);
+      const isRec = dt.tipo === 'recorrente';
+      const isExpired = days === Infinity;
+      const metaStr = isExpired ? 'encerrado' : (days === 0 ? '🎉 hoje!' : `em ${days} dia${days !== 1 ? 's' : ''}`);
+      const subStr = isRec
+        ? `toda ${diasSemana[dt.diaSemana]}${dt.fimData ? ` · até ${fmt(dt.fimData)}` : ' · sem limite'}`
+        : fmt(dt.val);
+      return `<div class="card" style="${isExpired ? 'opacity:0.45' : ''}">
         <div class="card-header">
           <div class="card-title">${esc(dt.nome)}</div>
-          <div class="card-meta">${days === 0 ? '🎉 hoje!' : `em ${days} dia${days !== 1 ? 's' : ''}`}</div>
+          <div class="card-meta">${metaStr}</div>
         </div>
-        <div class="card-body" style="color:var(--text-muted)">${fmt(dt.val)}</div>
+        <div class="card-body" style="color:var(--text-muted)">${subStr}</div>
         <span class="card-tag ${dt.tipo === 'aniversario' ? 'red' : ''}">${dt.tipo}</span>
         <div class="card-actions">
           <button class="icon-btn" onclick="editarItem('data',${dt.id})">editar</button>
@@ -4345,37 +4476,79 @@ function renderDesculpas(d) {
 }
 
 // ─── SEGREDO ─────────────────────────────────────────────
+const segredosRevelados = new Set();
+
 async function salvarSegredo() {
-  const texto = document.getElementById('segredo-texto').value.trim();
+  const el = document.getElementById('segredo-texto');
+  const texto = el.value.trim();
   if (!texto) { toast('escreva o segredo primeiro'); return; }
   const key = currentUser === 'player1' ? 'segredo1' : 'segredo2';
-  const segredo = { texto, ts: new Date().toISOString() };
-  await db.ref(STORAGE_KEY + '/' + key).set(segredo);
-  if (cachedData) cachedData[key] = segredo;
+  const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
+  const arr = Array.isArray(d[key]) ? d[key] : [];
+  const novoId = Date.now();
+  arr.push({ id: novoId, texto, ts: new Date().toISOString() });
+  await db.ref(STORAGE_KEY + '/' + key).set(arr);
+  if (cachedData) cachedData[key] = arr;
+  el.value = '';
   renderSegredo(cachedData || {});
   toast('segredo guardado 🔒');
+}
+
+async function deletarSegredo(id) {
+  const key = currentUser === 'player1' ? 'segredo1' : 'segredo2';
+  const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
+  d[key] = (Array.isArray(d[key]) ? d[key] : []).filter(s => s.id !== id);
+  segredosRevelados.delete(id);
+  await db.ref(STORAGE_KEY + '/' + key).set(d[key].length ? d[key] : []);
+  if (cachedData) cachedData[key] = d[key];
+  renderSegredo(cachedData || {});
+}
+
+function revelarSegredo(id) {
+  if (segredosRevelados.has(id)) segredosRevelados.delete(id);
+  else segredosRevelados.add(id);
+  renderSegredo(cachedData || {});
 }
 
 function renderSegredo(d) {
   const el = document.getElementById('segredo-display');
   if (!el) return;
   const key = currentUser === 'player1' ? 'segredo1' : 'segredo2';
-  const s = d[key];
-  if (!s || !s.texto) {
-    el.innerHTML = emptyState('nenhum segredo guardado — só você vai ver isso');
+  const lista = Array.isArray(d[key]) ? d[key] : [];
+
+  if (!lista.length) {
+    el.innerHTML = `<div class="segredo-vault">
+      <div class="segredo-vault-title">▪ cofre pessoal ▪</div>
+      <div style="text-align:center;padding:28px 0;color:var(--text-muted);font-size:11px;letter-spacing:0.08em">
+        cofre vazio — nenhum segredo guardado ainda
+      </div>
+    </div>`;
     return;
   }
-  el.innerHTML = `<div class="segredo-card">
-    <span class="segredo-lock">🔒</span>
-    <div class="segredo-deco">
-      <div class="segredo-deco-line"></div>
-      <span class="segredo-deco-gem">◆ ◆ ◆</span>
-      <div class="segredo-deco-line"></div>
-    </div>
-    <div class="segredo-text">${esc(s.texto)}</div>
-    <div class="segredo-meta">guardado em ${fmt(s.ts)}</div>
+
+  const items = lista.slice().reverse().map((s, idx) => {
+    const revelado = segredosRevelados.has(s.id);
+    const num = String(lista.length - idx).padStart(3, '0');
+    return `<div class="segredo-item${revelado ? ' revealed' : ''}" onclick="revelarSegredo(${s.id})">
+      <div class="segredo-item-header">
+        <span class="segredo-item-icon">${revelado ? '🔓' : '🔒'}</span>
+        <span class="segredo-item-num">#${num}</span>
+        <span class="segredo-item-meta">${fmt(s.ts)}</span>
+        <span class="segredo-item-hint">${revelado ? '▴ esconder' : '▾ revelar'}</span>
+      </div>
+      <div class="segredo-item-content">
+        <div class="segredo-item-text-wrap">
+          <div class="segredo-item-text-inner">${esc(s.texto)}</div>
+        </div>
+      </div>
+      <button class="segredo-item-del" onclick="event.stopPropagation();deletarSegredo(${s.id})">✕ apagar</button>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div class="segredo-vault">
+    <div class="segredo-vault-title">▪ cofre pessoal — ${lista.length} registro${lista.length !== 1 ? 's' : ''} ▪</div>
+    ${items}
   </div>`;
-  document.getElementById('segredo-texto').value = s.texto;
 }
 
 // ─── CONFIG ──────────────────────────────────────────────
