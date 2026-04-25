@@ -1733,8 +1733,8 @@
 
   /* ─── FONT SELECTOR ─────────────────────────────────── */
   .font-picker-wrap {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
@@ -1744,37 +1744,39 @@
     background: var(--surface);
     border: none;
     cursor: pointer;
-    padding: 10px 14px 8px;
+    padding: 12px 8px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
-    flex-shrink: 0;
-    transition: background 0.2s ease, transform 0.22s cubic-bezier(0.34,1.4,0.64,1);
+    gap: 5px;
+    transition: background 0.18s ease, transform 0.2s cubic-bezier(0.34,1.4,0.64,1);
     position: relative;
-    min-width: 72px;
   }
 
   .font-card-sample {
-    font-size: 1.55rem;
+    font-size: 1.7rem;
     line-height: 1;
     color: var(--text);
-    transition: color 0.2s ease;
+    transition: color 0.18s ease;
   }
 
   .font-card-label {
     font-size: 8px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-muted);
     font-family: 'DM Mono', monospace;
-    transition: color 0.2s ease;
+    transition: color 0.18s ease;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 
   .font-card:hover {
     background: var(--accent-dim);
     transform: translateY(-2px);
+    z-index: 1;
   }
   .font-card:hover .font-card-label { color: var(--accent); }
   .font-card:hover .font-card-sample { color: var(--accent); }
@@ -1787,12 +1789,14 @@
   .font-card.active .font-card-sample { color: var(--accent); }
 
   .font-section-label {
-    font-size: 10px;
-    letter-spacing: 0.15em;
+    font-size: 9px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 8px;
-    margin-top: 16px;
+    margin-bottom: 6px;
+    margin-top: 18px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
   }
   .font-section-label:first-child { margin-top: 0; }
 
@@ -2112,7 +2116,6 @@
     <!-- ─── CARTAS ─── -->
     <section id="sec-cartas" class="section active">
       <div class="section-title">cartas</div>
-      <div class="section-desc">mensagens do coração — para guardar para sempre</div>
 
       <div class="form-panel">
         <div class="form-grid">
@@ -2171,7 +2174,6 @@
     <!-- ─── PLANOS ─── -->
     <section id="sec-planos" class="section">
       <div class="section-title">planos & sonhos</div>
-      <div class="section-desc">tudo que queremos fazer juntos algum dia</div>
 
       <div class="form-panel">
         <div class="form-grid">
@@ -2206,7 +2208,6 @@
     <!-- ─── DATAS ─── -->
     <section id="sec-datas" class="section">
       <div class="section-title">datas especiais</div>
-      <div class="section-desc">aniversários, comemorações, momentos para nunca esquecer</div>
 
       <div id="next-dates" class="dates-grid"></div>
 
@@ -2242,7 +2243,6 @@
     <!-- ─── JOGOS ─── -->
     <section id="sec-jogos" class="section">
       <div class="section-title">jogos</div>
-      <div class="section-desc">builds, estratégias e anotações de gaming</div>
 
       <div class="game-tabs">
         <button class="game-tab active" onclick="switchGame('lol')" id="gtab-lol">League of Legends</button>
@@ -2405,7 +2405,6 @@
     <!-- ─── DESCULPAS ─── -->
     <section id="sec-desculpas" class="section">
       <div class="section-title">pedido de desculpas</div>
-      <div class="section-desc">quando as palavras importam mais do que qualquer coisa</div>
 
       <div class="form-panel">
         <div class="form-grid">
@@ -2444,7 +2443,6 @@
     <!-- ─── SEGREDO ─── -->
     <section id="sec-segredo" class="section">
       <div class="section-title">segredo</div>
-      <div class="section-desc">só seu — ninguém mais vê isso aqui</div>
 
       <div id="segredo-display"></div>
 
@@ -2464,14 +2462,12 @@
     <!-- ─── CONFIG ─── -->
     <section id="sec-config" class="section">
       <div class="section-title">configurações</div>
-      <div class="section-desc">tudo salva automaticamente ao alterar</div>
 
       <div class="form-panel">
         <div class="form-grid">
 
           <div class="field-label" style="font-size:12px;color:var(--text);margin-bottom:-4px">foto de perfil</div>
           <div class="form-group">
-            <div class="field-label">aparece no header e nas cartas</div>
             <label class="img-upload-label">
               ＋ escolher foto
               <input type="file" id="avatar-input" accept="image/*" onchange="previewAvatar(this)">
@@ -2488,7 +2484,7 @@
             <input type="text" id="cfg-name" placeholder="seu nome ou apelido" onchange="saveConfig()">
           </div>
 
-          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:4px">fonte do site <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.1em">— passe o mouse para pré-visualizar, clique para salvar</span></div>
+          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:4px">fonte do site</div>
           <div class="form-group" style="gap:8px">
             <div class="font-section-label">títulos e destaques</div>
             <div class="font-picker-wrap" id="font-display-opts"></div>
@@ -2498,7 +2494,6 @@
 
           <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:-4px">background personalizado</div>
           <div class="form-group">
-            <div class="field-label">imagem de fundo do site</div>
             <label class="img-upload-label">
               ＋ escolher imagem
               <input type="file" id="bg-img-input" accept="image/*" onchange="previewBgImg(this)">
@@ -2507,7 +2502,6 @@
               <img id="bg-img-thumb" src="" style="width:100%;max-height:120px;object-fit:cover;border:1px solid var(--border)">
               <button class="img-remove" onclick="removeBgImg()">✕</button>
             </div>
-            <div style="margin-top:6px;font-size:10px;color:var(--text-muted);letter-spacing:0.08em">sincronizado entre dispositivos — só aparece para você</div>
           </div>
 
         </div>
@@ -3424,22 +3418,28 @@ async function doLogin(player) {
   // Lembra quem entrou por último
   try { localStorage.setItem('last_user', currentUser); } catch {}
 
-  // Para o rotate de temas ao entrar no app e esconde o fundo de login
+  // Para o rotate
   if (loginRotateInterval) { clearInterval(loginRotateInterval); loginRotateInterval = null; }
-  hideLoginBgLayer();
 
+  // Inicia fade-out IMEDIATAMENTE (mantém o fundo visível durante o carregamento)
+  const ls = document.getElementById('login-screen');
+  const loginVisivel = ls.style.display !== 'none';
+  if (loginVisivel) {
+    ls.style.transition = 'opacity 0.38s ease';
+    ls.style.opacity = '0';
+  }
+
+  // Carrega dados em paralelo com o fade
   const d = await loadData();
 
-  // Fade-out da tela de login (só se estiver visível)
-  const ls = document.getElementById('login-screen');
-  if (ls.style.display !== 'none') {
-    ls.style.transition = 'opacity 0.32s ease';
-    ls.style.opacity = '0';
-    await new Promise(r => setTimeout(r, 340));
+  // Aguarda o fade-out terminar (caso não tenha terminado ainda)
+  if (loginVisivel) {
+    await new Promise(r => setTimeout(r, 400));
     ls.style.transition = '';
   }
   ls.style.display = 'none';
   ls.style.opacity = '1';
+  hideLoginBgLayer(); // ← oculta o fundo SÓ depois do fade completo
 
   // Fade-in do app
   const app = document.getElementById('app');
