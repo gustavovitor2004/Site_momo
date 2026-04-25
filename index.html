@@ -800,16 +800,22 @@
   /* Dropdown */
   .profile-dropdown {
     position: absolute;
-    top: calc(100% + 7px);
+    top: 100%;
     right: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    /* padding-top cria zona de hover invisível que conecta pill → dropdown */
+    padding-top: 8px;
+    background: transparent;
     min-width: 170px;
     opacity: 0;
     pointer-events: none;
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     transition: opacity 0.2s ease, transform 0.2s ease;
     z-index: 200;
+  }
+  /* Caixa visual dentro do padding */
+  .profile-dropdown-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
     box-shadow: 0 10px 36px rgba(0,0,0,0.38), 0 0 0 1px rgba(200,184,122,0.06);
   }
   .profile-pill:hover .profile-dropdown,
@@ -2002,15 +2008,17 @@
         <span class="profile-caret">▾</span>
 
         <div class="profile-dropdown" id="profile-dropdown">
-          <button class="profile-dropdown-item" onclick="showSection('config');closeProfileDropdown()">
-            <span class="di-icon">⚙</span> configurações
-          </button>
-          <button class="profile-dropdown-item" onclick="switchUser()">
-            <span class="di-icon">⇄</span> trocar usuário
-          </button>
-          <button class="profile-dropdown-item danger" onclick="logout()">
-            <span class="di-icon">↩</span> sair
-          </button>
+          <div class="profile-dropdown-inner">
+            <button class="profile-dropdown-item" onclick="showSection('config');closeProfileDropdown()">
+              <span class="di-icon">⚙</span> configurações
+            </button>
+            <button class="profile-dropdown-item" onclick="switchUser()">
+              <span class="di-icon">⇄</span> trocar usuário
+            </button>
+            <button class="profile-dropdown-item danger" onclick="logout()">
+              <span class="di-icon">↩</span> sair
+            </button>
+          </div>
         </div>
       </div>
     </div>
