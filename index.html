@@ -3317,7 +3317,7 @@ function logout() {
     if (localStorage.getItem('login_rotate') === '1' && !loginRotateInterval) {
       loginRotateInterval = setInterval(() => {
         applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
-      }, 14000);
+      }, 8000);
       const rotBtn = document.getElementById('login-rotate-btn');
       if (rotBtn) rotBtn.classList.add('on');
     }
@@ -4445,9 +4445,11 @@ function toggleLoginRotate() {
     if (btn) btn.classList.remove('on');
     try { localStorage.setItem('login_rotate', '0'); } catch {}
   } else {
+    // Troca imediatamente para o próximo tema (feedback visual instantâneo)
+    applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
     loginRotateInterval = setInterval(() => {
       applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
-    }, 14000);
+    }, 8000);
     if (btn) btn.classList.add('on');
     try { localStorage.setItem('login_rotate', '1'); } catch {}
   }
@@ -4553,7 +4555,7 @@ function initLoginBg() {
     if (localStorage.getItem('login_rotate') === '1') {
       loginRotateInterval = setInterval(() => {
         applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
-      }, 14000);
+      }, 8000);
       const btn = document.getElementById('login-rotate-btn');
       if (btn) btn.classList.add('on');
     }
@@ -4601,7 +4603,7 @@ function switchUser() {
       if (localStorage.getItem('login_rotate') === '1' && !loginRotateInterval) {
         loginRotateInterval = setInterval(() => {
           applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
-        }, 14000);
+        }, 8000);
         const btn = document.getElementById('login-rotate-btn');
         if (btn) btn.classList.add('on');
       }
