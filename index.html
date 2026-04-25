@@ -1475,11 +1475,36 @@
   .mon-partida-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--border); padding: 14px 18px; margin-bottom: 10px; }
   .mon-partida-card.vitoria { border-left-color: var(--green); }
   .mon-partida-card.derrota  { border-left-color: var(--red); }
-  .mon-kda-row { display: flex; gap: 24px; margin: 10px 0; flex-wrap: wrap; }
+  .mon-kda-row { display: flex; gap: 24px; margin: 10px 0; flex-wrap: wrap; align-items: center; }
   .mon-stat { text-align: center; }
   .mon-stat-val { font-size: 1.4rem; font-weight: 300; color: var(--text); font-family: var(--font-display); line-height: 1; }
   .mon-stat-lbl { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
   .mon-ia-box { padding: 12px 16px; background: rgba(200,184,122,0.05); border-left: 2px solid var(--accent); margin-top: 10px; font-style: italic; font-size: 12px; line-height: 1.8; color: var(--text-muted); }
+  .mon-card-champ-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
+
+  /* KDA input grid */
+  .mon-kda-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin: 12px 0 4px; }
+  .mon-kda-input-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .mon-kda-input {
+    width: 100%; text-align: center; font-size: 1.8rem; font-family: var(--font-display);
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    padding: 12px 4px 8px; border-radius: 2px; line-height: 1;
+    -moz-appearance: textfield;
+  }
+  .mon-kda-input::-webkit-outer-spin-button,
+  .mon-kda-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .mon-kda-input:focus { border-color: var(--accent); outline: none; }
+  .mon-kda-input.mon-kda-d { color: var(--red); }
+  .mon-kda-input.mon-kda-d:focus { border-color: var(--red); }
+  .mon-kda-input.mon-kda-k { color: var(--green); }
+  .mon-kda-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); }
+
+  /* Análise header (campeão ativo) */
+  .mon-analise-header { display: flex; align-items: center; gap: 14px; padding: 14px 18px; margin-bottom: 10px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); }
+  .mon-analise-champ-img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); flex-shrink: 0; }
+  .mon-analise-champ-ph { width: 54px; height: 54px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.5rem; flex-shrink: 0; }
+  .mon-analise-champ-name { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--accent); }
+  .mon-analise-champ-sub { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 3px; }
 
   .mon-sin-gauge { text-align: center; padding: 36px 20px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 16px; position: relative; overflow: hidden; }
   .mon-sin-gauge::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 20%, rgba(200,184,122,0.09) 0%, transparent 60%); pointer-events: none; }
@@ -2908,24 +2933,32 @@
           </div>
           <!-- ANÁLISE -->
           <div id="mpanel-analise" class="mpanel" style="display:none">
+            <!-- Campeão ativo -->
+            <div class="mon-analise-header" id="mon-analise-header"></div>
             <div class="form-panel">
               <div class="form-grid">
-                <div class="field-label" style="font-size:12px;color:var(--text)">registrar partida</div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <div class="field-label">resultado</div>
-                    <select id="mon-res"><option value="1">vitória ✓</option><option value="0">derrota ✗</option></select>
-                  </div>
-                  <div class="form-group">
-                    <div class="field-label">campeão jogado</div>
-                    <input type="text" id="mon-champ-jogado" placeholder="ex: Sona">
-                  </div>
+                <div class="field-label" style="font-size:11px;color:var(--text-muted);letter-spacing:0.18em">registrar partida</div>
+                <div class="form-group">
+                  <div class="field-label">resultado</div>
+                  <select id="mon-res"><option value="1">vitória ✓</option><option value="0">derrota ✗</option></select>
                 </div>
-                <div class="form-row" style="grid-template-columns:repeat(4,1fr)">
-                  <div class="form-group"><div class="field-label">abates K</div><input type="number" id="mon-kills" min="0" max="60" value="0"></div>
-                  <div class="form-group"><div class="field-label">mortes D</div><input type="number" id="mon-mortes" min="0" max="60" value="0"></div>
-                  <div class="form-group"><div class="field-label">assist A</div><input type="number" id="mon-assists" min="0" max="60" value="0"></div>
-                  <div class="form-group"><div class="field-label">visão</div><input type="number" id="mon-visao" min="0" max="300" value="0"></div>
+                <div class="mon-kda-grid">
+                  <div class="mon-kda-input-wrap">
+                    <input type="number" id="mon-kills" class="mon-kda-input mon-kda-k" min="0" max="60" value="" placeholder="0">
+                    <div class="mon-kda-label">abates K</div>
+                  </div>
+                  <div class="mon-kda-input-wrap">
+                    <input type="number" id="mon-mortes" class="mon-kda-input mon-kda-d" min="0" max="60" value="" placeholder="0">
+                    <div class="mon-kda-label">mortes D</div>
+                  </div>
+                  <div class="mon-kda-input-wrap">
+                    <input type="number" id="mon-assists" class="mon-kda-input" min="0" max="60" value="" placeholder="0">
+                    <div class="mon-kda-label">assists A</div>
+                  </div>
+                  <div class="mon-kda-input-wrap">
+                    <input type="number" id="mon-visao" class="mon-kda-input" min="0" max="300" value="" placeholder="0">
+                    <div class="mon-kda-label">visão 👁</div>
+                  </div>
                 </div>
                 <div class="form-actions">
                   <button class="btn gold" onclick="adicionarPartida()">+ registrar partida</button>
@@ -2975,9 +3008,9 @@
           <input type="hidden" id="mon-champ-sel-val">
           <div class="lol-dropdown" id="mon-champ-drop" style="display:none"></div>
         </div>
-        <div id="mon-champ-sel-preview" style="display:none;margin-top:10px;display:flex;align-items:center;gap:10px">
-          <img id="mon-champ-sel-img" src="" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">
-          <span id="mon-champ-sel-name" style="font-family:var(--font-display);font-size:1.1rem"></span>
+        <div id="mon-champ-sel-preview" style="display:none;margin-top:12px;align-items:center;gap:10px">
+          <img id="mon-champ-sel-img" src="" style="width:48px;height:48px;object-fit:cover;border-radius:50%;border:2px solid var(--accent)" onerror="this.style.opacity='0.3'">
+          <span id="mon-champ-sel-name" style="font-family:var(--font-display);font-style:italic;font-size:1.15rem;color:var(--accent)"></span>
         </div>
         <div class="form-actions" style="margin-top:16px">
           <button class="btn gold" onclick="salvarMainChamp()">confirmar</button>
@@ -4267,6 +4300,18 @@ function switchGame(g) {
     const el = document.getElementById('game-' + k);
     if (el) el.style.display = k === g ? 'block' : 'none';
   });
+  // aba Monitor só faz sentido para LoL
+  const tabMon = document.getElementById('jtab-monitor');
+  if (tabMon) tabMon.style.display = g === 'lol' ? '' : 'none';
+  // se trocou pra jogo sem monitor, garante que está na aba builds
+  if (g !== 'lol') {
+    const pMon = document.getElementById('jpanel-monitor');
+    const pBld = document.getElementById('jpanel-builds');
+    if (pMon) pMon.style.display = 'none';
+    if (pBld) pBld.style.display = '';
+    document.getElementById('jtab-builds')?.classList.add('active');
+    document.getElementById('jtab-monitor')?.classList.remove('active');
+  }
 }
 
 // switchJogosTab: alterna entre BUILDS e MONITOR
@@ -5346,11 +5391,23 @@ function switchMonitor(p) {
     document.getElementById('mpanel-' + k).style.display = k === p ? '' : 'none';
     document.getElementById('mtab-' + k).classList.toggle('active', k === p);
   });
+  if (p === 'analise') renderMonAnalise(cachedData);
 }
 
 // ─── Set main champion ───────────────────────────────────
 let monChampSelVal = null;
-function abrirSetChamp() { document.getElementById('mon-set-champ-overlay').classList.add('open'); }
+function abrirSetChamp() {
+  monChampSelVal = null;
+  document.getElementById('mon-champ-search').value = '';
+  document.getElementById('mon-champ-drop').style.display = 'none';
+  const prev = document.getElementById('mon-champ-sel-preview');
+  if (prev) prev.style.display = 'none';
+  const img = document.getElementById('mon-champ-sel-img');
+  if (img) img.src = '';
+  const nm = document.getElementById('mon-champ-sel-name');
+  if (nm) nm.textContent = '';
+  document.getElementById('mon-set-champ-overlay').classList.add('open');
+}
 function fecharSetChamp(e) { if (e.target === document.getElementById('mon-set-champ-overlay')) document.getElementById('mon-set-champ-overlay').classList.remove('open'); }
 
 function filtrarCampeoesMon(v) {
@@ -5545,13 +5602,16 @@ function gerarAnaliseIA(p, d) {
 }
 
 async function adicionarPartida() {
-  const vitoria  = document.getElementById('mon-res').value === '1';
-  const champ    = document.getElementById('mon-champ-jogado').value.trim() || '—';
-  const kills    = parseInt(document.getElementById('mon-kills').value)   || 0;
-  const mortes   = parseInt(document.getElementById('mon-mortes').value)  || 0;
-  const assists  = parseInt(document.getElementById('mon-assists').value) || 0;
-  const visao    = parseInt(document.getElementById('mon-visao').value)   || 0;
-  const entrada  = { id: Date.now(), jogador: currentUser, champ, vitoria, kills, mortes, assists, visao, data: new Date().toISOString() };
+  const vitoria   = document.getElementById('mon-res').value === '1';
+  const mainKey   = currentUser === 'player1' ? 'main_p1' : 'main_p2';
+  const main      = (cachedData?.monitor || {})[mainKey];
+  const champ     = main ? main.nome : '—';
+  const champImg  = main ? (main.img || '') : '';
+  const kills     = parseInt(document.getElementById('mon-kills').value)   || 0;
+  const mortes    = parseInt(document.getElementById('mon-mortes').value)  || 0;
+  const assists   = parseInt(document.getElementById('mon-assists').value) || 0;
+  const visao     = parseInt(document.getElementById('mon-visao').value)   || 0;
+  const entrada   = { id: Date.now(), jogador: currentUser, champ, champImg, vitoria, kills, mortes, assists, visao, data: new Date().toISOString() };
   entrada.analise = gerarAnaliseIA(entrada, cachedData || {config:{}});
 
   const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
@@ -5580,8 +5640,7 @@ async function adicionarPartida() {
   if (cachedData) cachedData.monitor.partidas = d.monitor.partidas;
 
   // limpar form
-  ['mon-kills','mon-mortes','mon-assists','mon-visao'].forEach(id => document.getElementById(id).value = 0);
-  document.getElementById('mon-champ-jogado').value = '';
+  ['mon-kills','mon-mortes','mon-assists','mon-visao'].forEach(id => document.getElementById(id).value = '');
   renderMonitor(cachedData);
   toast(metaBatida ? '🏆 meta batida! parabéns!' : 'partida registrada ✦');
 }
@@ -5602,9 +5661,14 @@ function renderMonPartidas(d) {
   if (!lista.length) { el.innerHTML = emptyState('nenhuma partida registrada ainda'); return; }
   el.innerHTML = lista.map(p => `<div class="mon-partida-card ${p.vitoria ? 'vitoria' : 'derrota'}">
     <div class="card-header">
-      <div class="card-title" style="display:flex;align-items:center;gap:8px">
-        <span style="color:${p.vitoria ? 'var(--green)' : 'var(--red)'};">${p.vitoria ? '✓' : '✗'}</span>
-        ${esc(p.champ)}
+      <div class="card-title" style="display:flex;align-items:center;gap:10px">
+        ${p.champImg ? `<img class="mon-card-champ-img" src="${p.champImg}" onerror="this.style.opacity='0.3'">` : ''}
+        <div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="color:${p.vitoria ? 'var(--green)' : 'var(--red)'};">${p.vitoria ? '✓' : '✗'}</span>
+            <span style="font-family:var(--font-display);font-style:italic">${esc(p.champ)}</span>
+          </div>
+        </div>
       </div>
       <div class="card-meta">${timeAgo(p.data)}</div>
     </div>
@@ -5735,11 +5799,35 @@ function renderMonEventos(d) {
   </div>`).join('');
 }
 
+// ─── Análise header (campeão ativo) ──────────────────────
+function renderMonAnalise(d) {
+  const el = document.getElementById('mon-analise-header');
+  if (!el || !d || !d.monitor) return;
+  const mainKey = currentUser === 'player1' ? 'main_p1' : 'main_p2';
+  const main = d.monitor[mainKey];
+  if (main && main.img) {
+    el.innerHTML = `
+      <img class="mon-analise-champ-img" src="${main.img}" onerror="this.style.opacity='0.3'">
+      <div>
+        <div class="mon-analise-champ-name">${esc(main.nome)}</div>
+        <div class="mon-analise-champ-sub">campeão ativo — partidas registradas com este campeão</div>
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div class="mon-analise-champ-ph">?</div>
+      <div>
+        <div class="mon-analise-champ-name" style="color:var(--text-muted);font-style:normal">nenhum campeão definido</div>
+        <div class="mon-analise-champ-sub">defina seu main na aba hoje</div>
+      </div>`;
+  }
+}
+
 // ─── Render completo ─────────────────────────────────────
 function renderMonitor(d) {
   if (!d || !d.monitor) return;
   renderMonHome(d);
   renderMonPartidas(d);
+  renderMonAnalise(d);
   renderMonSinergia(d);
   renderMonEventos(d);
 }
