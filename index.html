@@ -3243,13 +3243,18 @@ async function doLogin(player) {
 
   const d = await loadData();
 
-  // transição suave login → app
+  // Fade-out da tela de login (só se estiver visível)
   const ls = document.getElementById('login-screen');
-  ls.style.opacity = '0';
-  await new Promise(r => setTimeout(r, 280));
+  if (ls.style.display !== 'none') {
+    ls.style.transition = 'opacity 0.32s ease';
+    ls.style.opacity = '0';
+    await new Promise(r => setTimeout(r, 340));
+    ls.style.transition = '';
+  }
   ls.style.display = 'none';
   ls.style.opacity = '1';
 
+  // Fade-in do app
   const app = document.getElementById('app');
   app.style.opacity = '0';
   app.style.display = 'flex';
@@ -3297,33 +3302,54 @@ async function doLogin(player) {
 }
 
 function logout() {
-  currentUser = null;
-  realtimeListenerAtivo = false;
-  cachedData = null;
-  cartasPage = 5;
-  db.ref(STORAGE_KEY).off();
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  const hav = document.getElementById('header-avatar');
-  hav.src = ''; hav.style.display = 'none';
-  document.body.style.backgroundImage = '';
-  document.body.classList.remove('custom-bg');
-  // reset font to default on logout
-  document.documentElement.style.removeProperty('--font-display');
-  document.documentElement.style.removeProperty('--font-body');
-  // Restaura fundo de login e reinicia rotate se estava ativo
-  showLoginBgLayer();
-  try {
-    if (localStorage.getItem('login_rotate') === '1' && !loginRotateInterval) {
-      loginRotateInterval = setInterval(() => {
-        applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
-      }, 8000);
-      const rotBtn = document.getElementById('login-rotate-btn');
-      if (rotBtn) rotBtn.classList.add('on');
-    }
-  } catch {}
-  // recarrega os cards de login com dados atuais
-  initLoginScreen();
+  const app = document.getElementById('app');
+  const ls  = document.getElementById('login-screen');
+
+  // Fade-out do app
+  app.style.transition = 'opacity 0.32s ease';
+  app.style.opacity = '0';
+
+  setTimeout(() => {
+    app.style.transition = '';
+    app.style.opacity  = '';
+    app.style.display  = 'none';
+
+    currentUser = null;
+    realtimeListenerAtivo = false;
+    cachedData = null;
+    cartasPage = 5;
+    db.ref(STORAGE_KEY).off();
+
+    const hav = document.getElementById('header-avatar');
+    hav.src = ''; hav.style.display = 'none';
+    document.body.style.backgroundImage = '';
+    document.body.classList.remove('custom-bg');
+    document.documentElement.style.removeProperty('--font-display');
+    document.documentElement.style.removeProperty('--font-body');
+
+    // Restaura fundo de login
+    showLoginBgLayer();
+    try {
+      if (localStorage.getItem('login_rotate') === '1' && !loginRotateInterval) {
+        loginRotateInterval = setInterval(() => {
+          applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
+        }, 8000);
+        const rotBtn = document.getElementById('login-rotate-btn');
+        if (rotBtn) rotBtn.classList.add('on');
+      }
+    } catch {}
+
+    // Fade-in da tela de login
+    ls.style.opacity = '0';
+    ls.style.display = 'flex';
+    requestAnimationFrame(() => {
+      ls.style.transition = 'opacity 0.45s ease';
+      ls.style.opacity = '1';
+      setTimeout(() => { ls.style.transition = ''; }, 500);
+    });
+
+    initLoginScreen();
+  }, 350);
 }
 
 // ─── Navigation ─────────────────────────────────────────
@@ -4568,19 +4594,30 @@ function initLoginBg() {
 function switchUser() {
   if (!currentUser) return;
   const other = currentUser === 'player1' ? 'player2' : 'player1';
+  const app = document.getElementById('app');
 
-  // Limpa estado do usuário atual
-  realtimeListenerAtivo = false;
-  cachedData = null;
-  cartasPage = 5;
-  db.ref(STORAGE_KEY).off();
-  document.body.style.backgroundImage = '';
-  document.body.classList.remove('custom-bg');
-  document.documentElement.style.removeProperty('--font-display');
-  document.documentElement.style.removeProperty('--font-body');
+  // Fade-out do app atual
+  app.style.transition = 'opacity 0.32s ease';
+  app.style.opacity = '0';
 
-  // Entra diretamente no outro usuário
-  doLogin(other);
+  setTimeout(() => {
+    app.style.transition = '';
+    app.style.opacity = '';
+    app.style.display = 'none';
+
+    // Limpa estado do usuário atual
+    realtimeListenerAtivo = false;
+    cachedData = null;
+    cartasPage = 5;
+    db.ref(STORAGE_KEY).off();
+    document.body.style.backgroundImage = '';
+    document.body.classList.remove('custom-bg');
+    document.documentElement.style.removeProperty('--font-display');
+    document.documentElement.style.removeProperty('--font-body');
+
+    // Entra diretamente no outro usuário (doLogin faz o fade-in)
+    doLogin(other);
+  }, 350);
 }
 
 // ─── Theme ────────────────────────────────────────────
