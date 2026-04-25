@@ -856,8 +856,10 @@
   nav {
     border-bottom: 1px solid var(--border);
     display: flex;
+    align-items: stretch;
     padding: 0 24px;
     overflow-x: auto;
+    overflow-y: visible;
     scrollbar-width: none;
     background: rgba(10,10,10,0.72);
     backdrop-filter: blur(12px);
@@ -900,7 +902,12 @@
   }
 
   /* ─── NAV DROPDOWN (mesmo padrão do profile pill) ─────── */
-  .nav-item.has-drop { overflow: visible; }
+  .nav-item.has-drop {
+    overflow: visible;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
 
   .nav-drop {
     position: absolute;
@@ -2475,25 +2482,25 @@
     <button id="nav-cartas"   class="nav-item active" onclick="showSection('cartas')">✉ cartas</button>
     <button id="nav-planos"   class="nav-item"        onclick="showSection('planos')">✦ planos</button>
     <button id="nav-datas"    class="nav-item"        onclick="showSection('datas')">◎ datas</button>
-    <button id="nav-jogos"    class="nav-item has-drop" onclick="showSection('jogos')">⌗ jogos ▾
+    <div id="nav-jogos" class="nav-item has-drop" onclick="showSection('jogos')">⌗ jogos ▾
       <div class="nav-drop">
         <div class="nav-drop-inner">
-          <button class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('lol')">
+          <div class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('lol')">
             <span style="font-size:12px">⚔</span> League of Legends
-          </button>
-          <button class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('mhw')">
+          </div>
+          <div class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('mhw')">
             <span style="font-size:12px">🐉</span> Monster Hunter
-          </button>
-          <button class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('outros')">
+          </div>
+          <div class="nav-drop-item" onclick="event.stopPropagation();showSectionGame('outros')">
             <span style="font-size:12px">🎮</span> outros jogos
-          </button>
+          </div>
           <div class="nav-drop-sep"></div>
-          <button class="nav-drop-item accent" onclick="event.stopPropagation();showSectionGame('monitor')">
+          <div class="nav-drop-item accent" onclick="event.stopPropagation();showSectionGame('monitor')">
             <span style="font-size:12px">⚡</span> monitor
-          </button>
+          </div>
         </div>
       </div>
-    </button>
+    </div>
     <button id="nav-desculpas" class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
     <button id="nav-segredo"   class="nav-item" onclick="showSection('segredo')">🔒 segredo</button>
   </nav>
