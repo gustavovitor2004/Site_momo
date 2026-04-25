@@ -2641,10 +2641,17 @@
         <button class="game-tab active" onclick="switchGame('lol')" id="gtab-lol">League of Legends</button>
         <button class="game-tab" onclick="switchGame('mhw')" id="gtab-mhw">Monster Hunter</button>
         <button class="game-tab" onclick="switchGame('outros')" id="gtab-outros">outros</button>
-        <button class="game-tab" onclick="switchGame('monitor')" id="gtab-monitor" style="border-left:1px solid rgba(200,184,122,0.3);color:rgba(200,184,122,0.7)">⚡ monitor</button>
       </div>
 
       <div id="game-lol">
+        <!-- Sub-tabs: Builds | Monitor -->
+        <div class="game-tabs" style="margin-bottom:0;border-bottom:none;padding-bottom:0">
+          <button class="game-tab active" onclick="switchLolTab('builds')" id="lstab-builds">⚔ builds</button>
+          <button class="game-tab" onclick="switchLolTab('monitor')" id="lstab-monitor">⚡ monitor</button>
+        </div>
+
+        <!-- BUILDS -->
+        <div id="lpanel-builds">
         <div class="form-panel">
           <div class="form-grid">
 
@@ -2722,81 +2729,10 @@
           </button>
         </div>
         <div id="lol-list"></div>
-      </div>
+        </div><!-- /lpanel-builds -->
 
-      <div id="game-mhw" style="display:none">
-        <div class="form-panel">
-          <div class="form-grid">
-            <div class="form-row">
-              <div class="form-group">
-                <div class="field-label">arma / set</div>
-                <input type="text" id="mhw-arma" placeholder="ex: Switch Axe — Almudron">
-              </div>
-              <div class="form-group">
-                <div class="field-label">tipo de caça</div>
-                <select id="mhw-tipo">
-                  <option value="solo">Solo</option>
-                  <option value="coop">Co-op</option>
-                  <option value="speedrun">Speedrun</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="field-label">armadura / decorações</div>
-              <input type="text" id="mhw-armor" placeholder="ex: Teostra Head + Narwa Chest...">
-            </div>
-            <div class="form-group">
-              <div class="field-label">habilidades ativas</div>
-              <input type="text" id="mhw-skills" placeholder="ex: Attack Boost 7, Critical Eye 5...">
-            </div>
-            <div class="form-group">
-              <div class="field-label">estratégia / notas</div>
-              <textarea id="mhw-notas" rows="4" placeholder="dicas de fraquezas, pontos de ataque..."></textarea>
-            </div>
-            <div class="form-actions">
-              <button class="btn gold" onclick="addJogo('mhw')">salvar build MHW</button>
-            </div>
-          </div>
-        </div>
-        <div id="mhw-list"></div>
-      </div>
-
-      <div id="game-outros" style="display:none">
-        <div class="form-panel">
-          <div class="form-grid">
-            <div class="form-row">
-              <div class="form-group">
-                <div class="field-label">nome do jogo</div>
-                <input type="text" id="out-jogo" placeholder="ex: Valorant, Minecraft...">
-              </div>
-              <div class="form-group">
-                <div class="field-label">tipo de anotação</div>
-                <select id="out-tipo">
-                  <option value="build">Build</option>
-                  <option value="estrategia">Estratégia</option>
-                  <option value="dica">Dica</option>
-                  <option value="geral">Geral</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="field-label">título</div>
-              <input type="text" id="out-titulo" placeholder="nome da build ou estratégia">
-            </div>
-            <div class="form-group">
-              <div class="field-label">conteúdo</div>
-              <textarea id="out-notas" rows="5" placeholder="anote tudo que precisar..."></textarea>
-            </div>
-            <div class="form-actions">
-              <button class="btn gold" onclick="addJogo('outros')">salvar anotação</button>
-            </div>
-          </div>
-        </div>
-        <div id="outros-list"></div>
-      </div>
-
-      <!-- ─── MONITOR ─── -->
-      <div id="game-monitor" style="display:none">
+        <!-- MONITOR (dentro do LoL) -->
+        <div id="lpanel-monitor" style="display:none">
         <div class="monitor-nav">
           <button class="monitor-tab active" id="mtab-home"        onclick="switchMonitor('home')">🏠 hoje</button>
           <button class="monitor-tab"         id="mtab-analise"     onclick="switchMonitor('analise')">⚔ análise</button>
@@ -2923,7 +2859,80 @@
         <div id="mpanel-celebracoes" class="mpanel" style="display:none">
           <div id="mon-eventos-list"></div>
         </div>
+        </div><!-- /lpanel-monitor -->
+      </div><!-- /game-lol -->
+
+      <div id="game-mhw" style="display:none">
+        <div class="form-panel">
+          <div class="form-grid">
+            <div class="form-row">
+              <div class="form-group">
+                <div class="field-label">arma / set</div>
+                <input type="text" id="mhw-arma" placeholder="ex: Switch Axe — Almudron">
+              </div>
+              <div class="form-group">
+                <div class="field-label">tipo de caça</div>
+                <select id="mhw-tipo">
+                  <option value="solo">Solo</option>
+                  <option value="coop">Co-op</option>
+                  <option value="speedrun">Speedrun</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="field-label">armadura / decorações</div>
+              <input type="text" id="mhw-armor" placeholder="ex: Teostra Head + Narwa Chest...">
+            </div>
+            <div class="form-group">
+              <div class="field-label">habilidades ativas</div>
+              <input type="text" id="mhw-skills" placeholder="ex: Attack Boost 7, Critical Eye 5...">
+            </div>
+            <div class="form-group">
+              <div class="field-label">estratégia / notas</div>
+              <textarea id="mhw-notas" rows="4" placeholder="dicas de fraquezas, pontos de ataque..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn gold" onclick="addJogo('mhw')">salvar build MHW</button>
+            </div>
+          </div>
+        </div>
+        <div id="mhw-list"></div>
       </div>
+
+      <div id="game-outros" style="display:none">
+        <div class="form-panel">
+          <div class="form-grid">
+            <div class="form-row">
+              <div class="form-group">
+                <div class="field-label">nome do jogo</div>
+                <input type="text" id="out-jogo" placeholder="ex: Valorant, Minecraft...">
+              </div>
+              <div class="form-group">
+                <div class="field-label">tipo de anotação</div>
+                <select id="out-tipo">
+                  <option value="build">Build</option>
+                  <option value="estrategia">Estratégia</option>
+                  <option value="dica">Dica</option>
+                  <option value="geral">Geral</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="field-label">título</div>
+              <input type="text" id="out-titulo" placeholder="nome da build ou estratégia">
+            </div>
+            <div class="form-group">
+              <div class="field-label">conteúdo</div>
+              <textarea id="out-notas" rows="5" placeholder="anote tudo que precisar..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn gold" onclick="addJogo('outros')">salvar anotação</button>
+            </div>
+          </div>
+        </div>
+        <div id="outros-list"></div>
+      </div>
+
     </section>
 
     <!-- ─── SET CHAMP OVERLAY ─── -->
@@ -4217,16 +4226,27 @@ function showSection(id) {
 }
 
 function switchGame(g) {
-  ['lol','mhw','outros','monitor'].forEach(k => {
+  ['lol','mhw','outros'].forEach(k => {
     document.getElementById('game-' + k).style.display = k === g ? 'block' : 'none';
     document.getElementById('gtab-' + k).classList.toggle('active', k === g);
   });
-  if (g === 'monitor') renderMonitor(cachedData);
+}
+
+function switchLolTab(tab) {
+  ['builds','monitor'].forEach(k => {
+    document.getElementById('lpanel-' + k).style.display = k === tab ? '' : 'none';
+    document.getElementById('lstab-' + k).classList.toggle('active', k === tab);
+  });
+  if (tab === 'monitor') renderMonitor(cachedData);
 }
 
 function showSectionGame(game) {
   showSection('jogos');
-  setTimeout(() => switchGame(game), 50);
+  if (game === 'monitor') {
+    setTimeout(() => { switchGame('lol'); switchLolTab('monitor'); }, 50);
+  } else {
+    setTimeout(() => switchGame(game), 50);
+  }
 }
 
 // ─── Nav Jogos Dropdown (position: fixed para não ser cortado pelo overflow do nav) ───
@@ -4245,9 +4265,6 @@ function showSectionGame(game) {
       <div class="nav-drop-inner">
         <div class="nav-drop-item" onclick="showSectionGame('lol')"><span style="font-size:12px">⚔</span> League of Legends</div>
         <div class="nav-drop-item" onclick="showSectionGame('mhw')"><span style="font-size:12px">🐉</span> Monster Hunter</div>
-        <div class="nav-drop-item" onclick="showSectionGame('outros')"><span style="font-size:12px">🎮</span> outros jogos</div>
-        <div class="nav-drop-sep"></div>
-        <div class="nav-drop-item accent" onclick="showSectionGame('monitor')"><span style="font-size:12px">⚡</span> monitor</div>
       </div>`;
     document.body.appendChild(drop);
 
@@ -4296,7 +4313,7 @@ function ativarSyncTempoReal() {
       renderJogos(d);
       renderDesculpas(d);
       renderSegredo(d);
-      if (document.getElementById('game-monitor')?.style.display !== 'none') renderMonitor(d);
+      if (document.getElementById('lpanel-monitor')?.style.display !== 'none') renderMonitor(d);
     }
   });
 }
