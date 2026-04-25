@@ -1573,6 +1573,79 @@
     letter-spacing: 0.1em;
   }
 
+  /* ─── TEMA TRISTE (desculpas) ───────────────────────── */
+  @keyframes rainFall {
+    0%   { transform: translateY(-8vh) translateX(0);              opacity: 0; }
+    6%   { opacity: var(--ro, 0.55); }
+    92%  { opacity: var(--ro, 0.35); }
+    100% { transform: translateY(112vh) translateX(var(--rx,18px)); opacity: 0; }
+  }
+
+  #rain-wrap {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9;
+    display: none;
+  }
+  body.sad-mode #rain-wrap { display: block; }
+
+  .rain-drop {
+    position: absolute;
+    width: 1px;
+    border-radius: 1px;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(140,170,210,0.55) 40%,
+      rgba(140,170,210,0.15) 100%);
+    animation: rainFall linear infinite;
+  }
+
+  /* Overrides visuais no sad-mode */
+  body.sad-mode { transition: background-image 0.9s ease; }
+
+  body.sad-mode #sec-desculpas .section-title {
+    color: #8ab0d0 !important;
+    text-shadow: 0 0 40px rgba(100,150,200,0.3);
+  }
+  body.sad-mode #sec-desculpas .section-desc {
+    color: #6688aa !important;
+    letter-spacing: 0.22em;
+  }
+  body.sad-mode #sec-desculpas .form-panel,
+  body.sad-mode #sec-desculpas .apology-card {
+    border-color: rgba(100,140,190,0.25) !important;
+    background: rgba(5,12,28,0.72) !important;
+    backdrop-filter: blur(8px) !important;
+  }
+  body.sad-mode #sec-desculpas .btn.gold,
+  body.sad-mode #sec-desculpas .btn.secondary,
+  body.sad-mode #sec-desculpas .btn {
+    background: rgba(80,110,160,0.85) !important;
+    color: #c8d8f0 !important;
+    border-color: rgba(100,140,200,0.4) !important;
+  }
+  body.sad-mode #sec-desculpas .btn:hover {
+    background: rgba(100,130,185,0.95) !important;
+  }
+  body.sad-mode #sec-desculpas .field-label {
+    color: #7090b8 !important;
+  }
+  body.sad-mode #sec-desculpas input,
+  body.sad-mode #sec-desculpas textarea {
+    background: rgba(8,15,35,0.7) !important;
+    border-color: rgba(80,120,180,0.3) !important;
+    color: #b8cce0 !important;
+  }
+  body.sad-mode #sec-desculpas input:focus,
+  body.sad-mode #sec-desculpas textarea:focus {
+    border-color: rgba(100,150,220,0.6) !important;
+    box-shadow: 0 0 0 3px rgba(80,130,200,0.12) !important;
+  }
+  body.sad-mode #sec-desculpas .apology-card .apo-header {
+    color: #8ab0d0 !important;
+  }
+
   /* ─── BACKGROUND PERSONALIZADO ───────────────────────── */
   body.custom-bg {
     background-attachment: fixed;
@@ -1992,6 +2065,7 @@
 
 <!-- ═══════════════ APP ═══════════════ -->
 <div id="app">
+  <div id="rain-wrap"></div>
   <header>
     <div class="header-logo">
       <span class="header-logo-gem">✦✦✦</span>
@@ -3440,7 +3514,8 @@ function logout() {
     document.getElementById('header-username').textContent = '—';
     closeProfileDropdown();
     document.body.style.backgroundImage = '';
-    document.body.classList.remove('custom-bg');
+    document.body.classList.remove('custom-bg', 'sad-mode');
+    clearRain();
     document.documentElement.style.removeProperty('--font-display');
     document.documentElement.style.removeProperty('--font-body');
 
@@ -3469,6 +3544,57 @@ function logout() {
   }, 350);
 }
 
+// ─── Tema triste (desculpas) ──────────────────────────────
+const SAD_BG = 'https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1920&q=80';
+let _sadSavedBg = null;
+let _sadHadCustomBg = false;
+
+function enterSadMode() {
+  if (document.body.classList.contains('sad-mode')) return;
+  _sadSavedBg      = document.body.style.backgroundImage;
+  _sadHadCustomBg  = document.body.classList.contains('custom-bg');
+  // Fundo melancólico com overlay escuro azulado, direto no backgroundImage
+  document.body.style.backgroundImage =
+    `linear-gradient(rgba(4,9,22,0.74), rgba(4,9,22,0.74)), url('${SAD_BG}')`;
+  document.body.classList.add('custom-bg', 'sad-mode');
+  spawnRain();
+}
+
+function exitSadMode() {
+  if (!document.body.classList.contains('sad-mode')) return;
+  document.body.style.backgroundImage = _sadSavedBg || '';
+  if (!_sadHadCustomBg) document.body.classList.remove('custom-bg');
+  document.body.classList.remove('sad-mode');
+  clearRain();
+}
+
+function spawnRain() {
+  const wrap = document.getElementById('rain-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const count = 80;
+  for (let i = 0; i < count; i++) {
+    const el   = document.createElement('div');
+    const left = Math.random() * 100;
+    const dur  = 0.6 + Math.random() * 0.8;
+    const del  = -(Math.random() * 3);
+    const h    = 14 + Math.random() * 22;
+    const op   = 0.25 + Math.random() * 0.45;
+    const rx   = 10 + Math.random() * 30;
+    el.className = 'rain-drop';
+    el.style.cssText =
+      `left:${left}%;top:-${h}px;height:${h}px;` +
+      `animation-duration:${dur}s;animation-delay:${del}s;` +
+      `--rx:${rx}px;--ro:${op.toFixed(2)};`;
+    wrap.appendChild(el);
+  }
+}
+
+function clearRain() {
+  const wrap = document.getElementById('rain-wrap');
+  if (wrap) wrap.innerHTML = '';
+}
+
 // ─── Navigation ─────────────────────────────────────────
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -3477,6 +3603,11 @@ function showSection(id) {
   event.target.classList.add('active');
   const badge = event.target.querySelector('.nav-badge');
   if (badge) badge.remove();
+
+  // Tema triste ao entrar/sair da aba de desculpas
+  if (id === 'desculpas') enterSadMode();
+  else exitSadMode();
+
   // Marca como lido ao abrir a aba
   if (cachedData && (id === 'cartas' || id === 'desculpas')) {
     if (id === 'cartas') renderCartas(cachedData);
@@ -4748,7 +4879,8 @@ function switchUser() {
     cartasPage = 5;
     db.ref(STORAGE_KEY).off();
     document.body.style.backgroundImage = '';
-    document.body.classList.remove('custom-bg');
+    document.body.classList.remove('custom-bg', 'sad-mode');
+    clearRain();
     document.documentElement.style.removeProperty('--font-display');
     document.documentElement.style.removeProperty('--font-body');
 
