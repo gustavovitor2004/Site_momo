@@ -4564,53 +4564,23 @@ function initLoginBg() {
   syncLoginThemeBtn();
 }
 
-// Trocar de usuário sem sair do tema/fundo
+// Trocar direto pro outro usuário (sem passar pela tela de login)
 function switchUser() {
-  currentUser = null;
+  if (!currentUser) return;
+  const other = currentUser === 'player1' ? 'player2' : 'player1';
+
+  // Limpa estado do usuário atual
   realtimeListenerAtivo = false;
   cachedData = null;
   cartasPage = 5;
   db.ref(STORAGE_KEY).off();
+  document.body.style.backgroundImage = '';
+  document.body.classList.remove('custom-bg');
+  document.documentElement.style.removeProperty('--font-display');
+  document.documentElement.style.removeProperty('--font-body');
 
-  const app = document.getElementById('app');
-  const ls  = document.getElementById('login-screen');
-
-  app.style.transition = 'opacity 0.28s ease';
-  app.style.opacity = '0';
-  setTimeout(() => {
-    app.style.display = 'none';
-    app.style.opacity = '';
-    app.style.transition = '';
-
-    const hav = document.getElementById('header-avatar');
-    hav.src = ''; hav.style.display = 'none';
-    document.body.style.backgroundImage = '';
-    document.body.classList.remove('custom-bg');
-    document.documentElement.style.removeProperty('--font-display');
-    document.documentElement.style.removeProperty('--font-body');
-
-    ls.style.display = 'flex';
-    ls.style.opacity = '0';
-    showLoginBgLayer();
-    requestAnimationFrame(() => {
-      ls.style.transition = 'opacity 0.35s ease';
-      ls.style.opacity = '1';
-      setTimeout(() => { ls.style.transition = ''; }, 400);
-    });
-
-    // Reinicia rotate se estava ativo
-    try {
-      if (localStorage.getItem('login_rotate') === '1' && !loginRotateInterval) {
-        loginRotateInterval = setInterval(() => {
-          applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
-        }, 8000);
-        const btn = document.getElementById('login-rotate-btn');
-        if (btn) btn.classList.add('on');
-      }
-    } catch {}
-
-    initLoginScreen();
-  }, 300);
+  // Entra diretamente no outro usuário
+  doLogin(other);
 }
 
 // ─── Theme ────────────────────────────────────────────
