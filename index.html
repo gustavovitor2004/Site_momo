@@ -901,37 +901,33 @@
     border-bottom-color: var(--accent);
   }
 
-  /* ─── NAV DROPDOWN (mesmo padrão do profile pill) ─────── */
+  /* ─── NAV DROPDOWN ─────────────────────────────────────── */
   .nav-item.has-drop {
-    overflow: visible;
     display: inline-flex;
     align-items: center;
     gap: 4px;
   }
 
   .nav-drop {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    /* ponte invisível para evitar gap de hover */
-    padding-top: 8px;
+    position: fixed;   /* fixed: sai do fluxo e não é cortado por overflow do nav */
+    padding-top: 6px;
     background: transparent;
     min-width: 210px;
     opacity: 0;
     pointer-events: none;
     transform: translateY(-4px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 200;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 9999;
+  }
+  .nav-drop.nav-drop-open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
   }
   .nav-drop-inner {
     background: var(--surface);
     border: 1px solid var(--border);
     box-shadow: 0 10px 36px rgba(0,0,0,0.42), 0 0 0 1px rgba(200,184,122,0.06);
-  }
-  .nav-item.has-drop:hover .nav-drop {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
   }
   .nav-drop-item {
     display: flex;
@@ -4250,6 +4246,36 @@ function showSectionGame(game) {
   showSection('jogos');
   setTimeout(() => switchGame(game), 50);
 }
+
+// ─── Nav Jogos Dropdown (position: fixed para não ser cortado pelo overflow do nav) ───
+(function initNavJogosDrop() {
+  function setup() {
+    const trigger = document.getElementById('nav-jogos');
+    if (!trigger) return;
+    const drop = trigger.querySelector('.nav-drop');
+    if (!drop) return;
+
+    let hideTimer = null;
+
+    function showDrop() {
+      clearTimeout(hideTimer);
+      const rect = trigger.getBoundingClientRect();
+      drop.style.top  = rect.bottom + 'px';
+      drop.style.left = rect.left + 'px';
+      drop.classList.add('nav-drop-open');
+    }
+    function hideDrop() {
+      hideTimer = setTimeout(() => drop.classList.remove('nav-drop-open'), 80);
+    }
+
+    trigger.addEventListener('mouseenter', showDrop);
+    trigger.addEventListener('mouseleave', hideDrop);
+    drop.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+    drop.addEventListener('mouseleave', hideDrop);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
+  else setup();
+})();
 
 // ─── Sincronização em tempo real ────────────────────────
 let realtimeListenerAtivo = false;
