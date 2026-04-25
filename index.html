@@ -1483,28 +1483,58 @@
   .mon-card-champ-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
 
   /* KDA input grid */
-  .mon-kda-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin: 12px 0 4px; }
-  .mon-kda-input-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .mon-kda-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 14px 0 6px; }
+  .mon-kda-input-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    overflow: hidden; transition: border-color 0.18s;
+  }
+  .mon-kda-input-wrap:focus-within { border-color: var(--accent); }
+  .mon-kda-input-wrap.kda-k:focus-within { border-color: var(--green); }
+  .mon-kda-input-wrap.kda-d:focus-within { border-color: var(--red); }
   .mon-kda-input {
-    width: 100%; text-align: center; font-size: 1.8rem; font-family: var(--font-display);
-    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
-    padding: 12px 4px 8px; border-radius: 2px; line-height: 1;
+    width: 100%; text-align: center; font-size: 2rem; font-family: var(--font-display);
+    background: transparent; border: none; color: var(--text);
+    padding: 14px 4px 6px; line-height: 1;
     -moz-appearance: textfield;
   }
   .mon-kda-input::-webkit-outer-spin-button,
   .mon-kda-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-  .mon-kda-input:focus { border-color: var(--accent); outline: none; }
+  .mon-kda-input:focus { outline: none; }
   .mon-kda-input.mon-kda-d { color: var(--red); }
-  .mon-kda-input.mon-kda-d:focus { border-color: var(--red); }
   .mon-kda-input.mon-kda-k { color: var(--green); }
-  .mon-kda-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); }
+  .mon-kda-label {
+    width: 100%; text-align: center; font-size: 9px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--text-muted);
+    padding: 5px 4px 8px; background: rgba(0,0,0,0.18);
+  }
 
   /* Análise header (campeão ativo) */
-  .mon-analise-header { display: flex; align-items: center; gap: 14px; padding: 14px 18px; margin-bottom: 10px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); }
-  .mon-analise-champ-img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); flex-shrink: 0; }
-  .mon-analise-champ-ph { width: 54px; height: 54px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.5rem; flex-shrink: 0; }
-  .mon-analise-champ-name { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--accent); }
-  .mon-analise-champ-sub { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 3px; }
+  .mon-analise-header {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; gap: 18px;
+    padding: 18px 20px; margin-bottom: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 4px;
+  }
+  .mon-analise-header-bg {
+    position: absolute; inset: 0; background-size: cover; background-position: center top;
+    opacity: 0.10; filter: blur(4px); pointer-events: none;
+  }
+  .mon-analise-champ-img {
+    width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--accent); flex-shrink: 0;
+    box-shadow: 0 0 18px rgba(200,184,122,0.25); position: relative; z-index: 1;
+  }
+  .mon-analise-champ-ph {
+    width: 72px; height: 72px; border-radius: 50%; background: var(--surface2);
+    border: 2px solid var(--border); display: flex; align-items: center;
+    justify-content: center; color: var(--text-muted); font-size: 2rem;
+    flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .mon-analise-champ-info { position: relative; z-index: 1; }
+  .mon-analise-champ-name { font-family: var(--font-display); font-style: italic; font-size: 1.4rem; color: var(--accent); line-height: 1.2; }
+  .mon-analise-champ-sub { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 5px; }
 
   /* Monitor tab só visível quando LoL está ativo */
   #sec-jogos:not(.game-lol-active) #jtab-monitor { display: none !important; }
@@ -2946,20 +2976,20 @@
                   <select id="mon-res"><option value="1">vitória ✓</option><option value="0">derrota ✗</option></select>
                 </div>
                 <div class="mon-kda-grid">
-                  <div class="mon-kda-input-wrap">
-                    <input type="number" id="mon-kills" class="mon-kda-input mon-kda-k" min="0" max="60" value="" placeholder="0">
+                  <div class="mon-kda-input-wrap kda-k">
+                    <input type="number" id="mon-kills" class="mon-kda-input mon-kda-k" min="0" max="60" placeholder="">
                     <div class="mon-kda-label">abates K</div>
                   </div>
-                  <div class="mon-kda-input-wrap">
-                    <input type="number" id="mon-mortes" class="mon-kda-input mon-kda-d" min="0" max="60" value="" placeholder="0">
+                  <div class="mon-kda-input-wrap kda-d">
+                    <input type="number" id="mon-mortes" class="mon-kda-input mon-kda-d" min="0" max="60" placeholder="">
                     <div class="mon-kda-label">mortes D</div>
                   </div>
                   <div class="mon-kda-input-wrap">
-                    <input type="number" id="mon-assists" class="mon-kda-input" min="0" max="60" value="" placeholder="0">
+                    <input type="number" id="mon-assists" class="mon-kda-input" min="0" max="60" placeholder="">
                     <div class="mon-kda-label">assists A</div>
                   </div>
                   <div class="mon-kda-input-wrap">
-                    <input type="number" id="mon-visao" class="mon-kda-input" min="0" max="300" value="" placeholder="0">
+                    <input type="number" id="mon-visao" class="mon-kda-input" min="0" max="300" placeholder="">
                     <div class="mon-kda-label">visão 👁</div>
                   </div>
                 </div>
@@ -4303,10 +4333,11 @@ function switchGame(g) {
     const el = document.getElementById('game-' + k);
     if (el) el.style.display = k === g ? 'block' : 'none';
   });
-  // controla visibilidade do monitor tab via classe CSS (mais confiável)
   const sec = document.getElementById('sec-jogos');
   if (sec) sec.classList.toggle('game-lol-active', g === 'lol');
-  // se trocou pra jogo sem monitor, garante que está na aba builds
+  // esconde/mostra aba monitor via inline style (mais confiável que só CSS)
+  const monTab = document.getElementById('jtab-monitor');
+  if (monTab) monTab.style.display = g === 'lol' ? '' : 'none';
   if (g !== 'lol') {
     const pMon = document.getElementById('jpanel-monitor');
     const pBld = document.getElementById('jpanel-builds');
@@ -5406,7 +5437,7 @@ function abrirSetChamp() {
   const prev = document.getElementById('mon-champ-sel-preview');
   if (prev) prev.style.display = 'none';
   const img = document.getElementById('mon-champ-sel-img');
-  if (img) img.src = '';
+  if (img) { img.removeAttribute('src'); img.style.opacity = '1'; }
   const nm = document.getElementById('mon-champ-sel-name');
   if (nm) nm.textContent = '';
   document.getElementById('mon-set-champ-overlay').classList.add('open');
@@ -5432,7 +5463,13 @@ function selecionarChampMon(nome, img) {
   document.getElementById('mon-champ-search').value = nome;
   document.getElementById('mon-champ-drop').style.display = 'none';
   const prev = document.getElementById('mon-champ-sel-preview');
-  if (prev) { prev.style.display = 'flex'; document.getElementById('mon-champ-sel-img').src = img; document.getElementById('mon-champ-sel-name').textContent = nome; }
+  if (prev) {
+    prev.style.display = 'flex';
+    const selImg = document.getElementById('mon-champ-sel-img');
+    selImg.style.opacity = '1';
+    selImg.src = img;
+    document.getElementById('mon-champ-sel-name').textContent = nome;
+  }
 }
 async function salvarMainChamp() {
   if (!monChampSelVal) { toast('selecione um campeão'); return; }
@@ -5810,17 +5847,18 @@ function renderMonAnalise(d) {
   const main = d.monitor[mainKey];
   if (main && main.img) {
     el.innerHTML = `
-      <img class="mon-analise-champ-img" src="${main.img}" onerror="this.style.opacity='0.3'">
-      <div>
+      <div class="mon-analise-header-bg" style="background-image:url('${main.img}')"></div>
+      <img class="mon-analise-champ-img" src="${main.img}" onerror="this.style.opacity='0.4'">
+      <div class="mon-analise-champ-info">
         <div class="mon-analise-champ-name">${esc(main.nome)}</div>
-        <div class="mon-analise-champ-sub">campeão ativo — partidas registradas com este campeão</div>
+        <div class="mon-analise-champ-sub">campeão ativo — registrando partidas</div>
       </div>`;
   } else {
     el.innerHTML = `
       <div class="mon-analise-champ-ph">?</div>
-      <div>
-        <div class="mon-analise-champ-name" style="color:var(--text-muted);font-style:normal">nenhum campeão definido</div>
-        <div class="mon-analise-champ-sub">defina seu main na aba hoje</div>
+      <div class="mon-analise-champ-info">
+        <div class="mon-analise-champ-name" style="color:var(--text-muted);font-style:normal;font-size:1rem">nenhum campeão definido</div>
+        <div class="mon-analise-champ-sub">defina seu main na aba hoje ↑</div>
       </div>`;
   }
 }
