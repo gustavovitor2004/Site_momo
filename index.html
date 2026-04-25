@@ -325,6 +325,280 @@
     animation: fadeUp 0.5s ease 0.3s both;
   }
 
+  /* ─── LOGIN BG & THEMES ─────────────────────────────── */
+  #login-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity 1s ease;
+  }
+  #login-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--login-overlay, rgba(0,0,0,0));
+    transition: background 0.8s ease;
+    pointer-events: none;
+  }
+
+  #login-particles-wrap {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  #login-screen { position: relative; z-index: 3; }
+
+  /* Controls (fixed top-right) */
+  .login-controls {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+    animation: fadeIn 0.6s ease 0.3s both;
+  }
+
+  .login-ctrl-btn {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.13);
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    font-size: 15px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.25s;
+    font-family: var(--font-body);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .login-ctrl-btn:hover {
+    border-color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.95);
+    background: rgba(0,0,0,0.65);
+  }
+  :root.light .login-ctrl-btn {
+    background: rgba(255,255,255,0.6);
+    border-color: rgba(0,0,0,0.13);
+    color: rgba(0,0,0,0.6);
+  }
+  :root.light .login-ctrl-btn:hover {
+    background: rgba(255,255,255,0.88);
+    color: rgba(0,0,0,0.9);
+  }
+
+  /* Theme panel */
+  .login-theme-panel {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    background: rgba(0,0,0,0.62);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 16px 22px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    animation: fadeUp 0.35s ease both;
+    max-width: 94vw;
+  }
+  .login-theme-panel.hidden { display: none !important; }
+
+  .login-theme-panel-title {
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-family: var(--font-body);
+    align-self: flex-start;
+  }
+
+  .login-theme-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .login-theme-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .login-theme-item:hover { transform: translateY(-4px); }
+
+  .login-theme-thumb {
+    width: 54px;
+    height: 36px;
+    border-radius: 2px;
+    border: 2px solid rgba(255,255,255,0.1);
+    background-size: cover;
+    background-position: center;
+    background-color: #0a0a0a;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .login-theme-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+  }
+  .login-theme-item.active .login-theme-thumb {
+    border-color: rgba(255,255,255,0.75);
+    box-shadow: 0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.1);
+  }
+  .login-theme-name {
+    font-size: 7.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    font-family: var(--font-body);
+    transition: color 0.2s;
+  }
+  .login-theme-item.active .login-theme-name { color: rgba(255,255,255,0.9); }
+
+  .theme-panel-footer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+  }
+  .login-rotate-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.42);
+    font-family: var(--font-body);
+    font-size: 8px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 4px 14px;
+    transition: all 0.2s;
+    border-radius: 1px;
+  }
+  .login-rotate-btn.on {
+    border-color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.82);
+    background: rgba(255,255,255,0.07);
+  }
+  .login-rotate-btn:hover {
+    border-color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* Last user badge */
+  .last-user-tag {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #0a0a0a;
+    font-size: 7px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    white-space: nowrap;
+    font-family: var(--font-body);
+    pointer-events: none;
+  }
+  .player-card.was-last {
+    border-color: rgba(200,184,122,0.5);
+    box-shadow: 0 0 28px rgba(200,184,122,0.1);
+  }
+
+  /* Switch user btn in header */
+  .switch-user-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    height: 28px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .switch-user-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Particles */
+  @keyframes petalFall {
+    0%   { transform: translateY(-5vh)  translateX(0)                   rotate(0deg);   opacity: 0; }
+    5%   { opacity: 0.85; }
+    92%  { opacity: 0.55; }
+    100% { transform: translateY(110vh) translateX(var(--px,60px))      rotate(var(--pr,540deg)); opacity: 0; }
+  }
+  @keyframes starBlink {
+    0%,100% { opacity: 0;   transform: scale(0.3); }
+    50%     { opacity: 0.9; transform: scale(1); }
+  }
+  @keyframes sparkleFloat {
+    0%   { transform: translateY(0)    scale(1);   opacity: 0; }
+    18%  { opacity: 0.85; }
+    80%  { opacity: 0.45; }
+    100% { transform: translateY(-70px) scale(0.4); opacity: 0; }
+  }
+
+  .lp-petal {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 60% 40% 60% 40% / 70% 30% 70% 30%;
+    animation: petalFall linear infinite;
+  }
+  .lp-star {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 0 5px 1px rgba(255,255,255,0.6);
+    animation: starBlink ease-in-out infinite;
+  }
+  .lp-sparkle {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: sparkleFloat ease-out infinite;
+  }
+
+  /* Extra glow/shimmer no título do login */
+  @keyframes accentPulse {
+    0%,100% { text-shadow: 0 0 80px rgba(200,184,122,0.22), 0 0 20px rgba(200,184,122,0.10); }
+    50%     { text-shadow: 0 0 120px rgba(200,184,122,0.35), 0 0 40px rgba(200,184,122,0.18), 0 2px 6px rgba(200,184,122,0.08); }
+  }
+  .login-title { animation: floatTitle 5s ease-in-out infinite, accentPulse 4s ease-in-out infinite !important; }
+
+  /* Brilho extra nos cards */
+  .player-card {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .player-card:hover {
+    box-shadow: 0 24px 60px rgba(200,184,122,0.14), 0 0 0 1px rgba(200,184,122,0.18), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+  }
+
   .field-label {
     color: var(--text-muted);
     font-size: 10px;
@@ -1556,8 +1830,19 @@
 </head>
 <body>
 
+<!-- Fundo do tema (fora do login-screen para z-index correto) -->
+<div id="login-bg" style="display:none"></div>
+<div id="login-particles-wrap"></div>
+
 <!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
 <div id="login-screen">
+
+  <!-- Controles fixos (canto superior direito) -->
+  <div class="login-controls">
+    <button class="login-ctrl-btn" id="login-theme-toggle-btn" onclick="toggleTheme();syncLoginThemeBtn()" title="claro / escuro">◐</button>
+    <button class="login-ctrl-btn" onclick="toggleLoginThemePanel()" title="escolher fundo">✦</button>
+  </div>
+
   <div class="login-orb"></div>
 
   <div class="login-header">
@@ -1576,7 +1861,7 @@
   </div>
 
   <div class="login-players">
-    <div class="player-card" onclick="doLogin('player1')">
+    <div class="player-card" id="login-card-p1" onclick="doLogin('player1')">
       <div class="player-avatar-wrap">
         <img class="player-avatar-img" id="login-avatar-p1" src="">
         <div class="player-avatar-init" id="login-init-p1">G</div>
@@ -1585,7 +1870,7 @@
       <div class="player-enter">entrar</div>
     </div>
 
-    <div class="player-card" onclick="doLogin('player2')">
+    <div class="player-card" id="login-card-p2" onclick="doLogin('player2')">
       <div class="player-avatar-wrap">
         <img class="player-avatar-img" id="login-avatar-p2" src="">
         <div class="player-avatar-init" id="login-init-p2">M</div>
@@ -1596,6 +1881,16 @@
   </div>
 
   <div class="login-loading" id="login-loading">carregando...</div>
+
+  <!-- Painel de temas (fixo, centro inferior) -->
+  <div class="login-theme-panel hidden" id="login-theme-panel">
+    <div class="login-theme-panel-title">✦ escolher fundo</div>
+    <div class="login-theme-grid" id="login-theme-grid"></div>
+    <div class="theme-panel-footer">
+      <button class="login-rotate-btn" id="login-rotate-btn" onclick="toggleLoginRotate()">⟳ alternar automático</button>
+    </div>
+  </div>
+
 </div>
 
 <!-- ═══════════════ APP ═══════════════ -->
@@ -1610,6 +1905,7 @@
       <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="alternar tema">◐</button>
       <img id="header-avatar" src="" style="display:none">
       <span class="user-badge" id="header-username">—</span>
+      <button class="switch-user-btn" onclick="switchUser()" title="trocar de usuário">trocar</button>
       <button class="logout-btn" onclick="logout()">sair</button>
     </div>
   </header>
@@ -2743,6 +3039,7 @@ function closeCartaModal(e) {
 
 // Carrega nomes e avatares nos cards de login
 initLoginScreen();
+initLoginBg();
 
 const defaultData = {
   config: { name1: 'Jogador 1', name2: 'Jogador 2', pass1: '1234', pass2: '1234',
@@ -2911,11 +3208,36 @@ async function initLoginScreen() {
     } catch {}
   } catch {}
   document.getElementById('login-loading').style.display = 'none';
+
+  // Marca último usuário nos cards
+  try {
+    const lastUser = localStorage.getItem('last_user');
+    ['player1', 'player2'].forEach((p, i) => {
+      const card = document.getElementById(i === 0 ? 'login-card-p1' : 'login-card-p2');
+      if (!card) return;
+      card.classList.toggle('was-last', p === lastUser);
+      const oldTag = card.querySelector('.last-user-tag');
+      if (oldTag) oldTag.remove();
+      if (p === lastUser) {
+        const tag = document.createElement('div');
+        tag.className = 'last-user-tag';
+        tag.textContent = 'último acesso';
+        card.appendChild(tag);
+      }
+    });
+  } catch {}
 }
 
 async function doLogin(player) {
   selectedUser = player || selectedUser;
   currentUser = selectedUser;
+
+  // Lembra quem entrou por último
+  try { localStorage.setItem('last_user', currentUser); } catch {}
+
+  // Para o rotate de temas ao entrar no app e esconde o fundo de login
+  if (loginRotateInterval) { clearInterval(loginRotateInterval); loginRotateInterval = null; }
+  hideLoginBgLayer();
 
   const d = await loadData();
 
@@ -2987,6 +3309,17 @@ function logout() {
   // reset font to default on logout
   document.documentElement.style.removeProperty('--font-display');
   document.documentElement.style.removeProperty('--font-body');
+  // Restaura fundo de login e reinicia rotate se estava ativo
+  showLoginBgLayer();
+  try {
+    if (localStorage.getItem('login_rotate') === '1' && !loginRotateInterval) {
+      loginRotateInterval = setInterval(() => {
+        applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
+      }, 14000);
+      const rotBtn = document.getElementById('login-rotate-btn');
+      if (rotBtn) rotBtn.classList.add('on');
+    }
+  } catch {}
   // recarrega os cards de login com dados atuais
   initLoginScreen();
 }
@@ -3983,11 +4316,314 @@ async function salvarEdicao(tipo, id) {
   toast('salvo ✦');
 }
 
+// ─── Login Themes & Background ────────────────────────
+const loginThemes = [
+  {
+    id: 'escuro',
+    label: 'Escuro',
+    img: null,
+    overlay: 'rgba(0,0,0,0)',
+    particles: 'sparkles',
+    thumb: ''
+  },
+  {
+    id: 'cerejeiras',
+    label: 'Cerejeiras',
+    img: 'https://images.unsplash.com/photo-1522383225339-4be3a9f8b8c4?auto=format&fit=crop&w=1920&q=80',
+    overlay: 'rgba(6,0,10,0.52)',
+    particles: 'petals',
+    thumb: 'https://images.unsplash.com/photo-1522383225339-4be3a9f8b8c4?auto=format&fit=crop&w=120&q=70'
+  },
+  {
+    id: 'galaxia',
+    label: 'Galáxia',
+    img: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1920&q=80',
+    overlay: 'rgba(0,0,16,0.42)',
+    particles: 'stars',
+    thumb: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=120&q=70'
+  },
+  {
+    id: 'floresta',
+    label: 'Floresta',
+    img: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80',
+    overlay: 'rgba(0,10,4,0.50)',
+    particles: null,
+    thumb: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=120&q=70'
+  },
+  {
+    id: 'oceano',
+    label: 'Oceano',
+    img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80',
+    overlay: 'rgba(0,6,20,0.50)',
+    particles: null,
+    thumb: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=120&q=70'
+  },
+  {
+    id: 'montanhas',
+    label: 'Montanhas',
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=80',
+    overlay: 'rgba(2,6,16,0.48)',
+    particles: 'stars',
+    thumb: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=120&q=70'
+  },
+  {
+    id: 'lavanda',
+    label: 'Lavanda',
+    img: 'https://images.unsplash.com/photo-1499002238440-d264edd596ec?auto=format&fit=crop&w=1920&q=80',
+    overlay: 'rgba(10,2,20,0.50)',
+    particles: null,
+    thumb: 'https://images.unsplash.com/photo-1499002238440-d264edd596ec?auto=format&fit=crop&w=120&q=70'
+  },
+  {
+    id: 'aurora',
+    label: 'Aurora',
+    img: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1920&q=80',
+    overlay: 'rgba(0,6,12,0.36)',
+    particles: 'stars',
+    thumb: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=120&q=70'
+  }
+];
+
+let currentLoginTheme = 0;
+let loginRotateInterval = null;
+
+function applyLoginTheme(idx, save = true) {
+  if (idx < 0 || idx >= loginThemes.length) idx = 0;
+  currentLoginTheme = idx;
+  const t = loginThemes[idx];
+  const bg = document.getElementById('login-bg');
+  if (!bg) return;
+
+  if (t.img) {
+    bg.style.backgroundImage = `url('${t.img}')`;
+    bg.style.setProperty('--login-overlay', t.overlay);
+    bg.style.display = 'block';
+  } else {
+    bg.style.backgroundImage = '';
+    bg.style.removeProperty('--login-overlay');
+    bg.style.display = 'none';
+  }
+
+  clearLoginParticles();
+  if (t.particles) spawnLoginParticles(t.particles);
+
+  // Atualiza grid
+  document.querySelectorAll('.login-theme-item').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+
+  if (save) {
+    try { localStorage.setItem('login_theme', String(idx)); } catch {}
+  }
+}
+
+function hideLoginBgLayer() {
+  const bg = document.getElementById('login-bg');
+  const pw = document.getElementById('login-particles-wrap');
+  if (bg) bg.style.display = 'none';
+  if (pw) pw.style.display = 'none';
+}
+
+function showLoginBgLayer() {
+  const pw = document.getElementById('login-particles-wrap');
+  if (pw) pw.style.display = '';
+  applyLoginTheme(currentLoginTheme, false);
+}
+
+function toggleLoginThemePanel() {
+  const panel = document.getElementById('login-theme-panel');
+  if (panel) panel.classList.toggle('hidden');
+}
+
+function toggleLoginRotate() {
+  const btn = document.getElementById('login-rotate-btn');
+  if (loginRotateInterval) {
+    clearInterval(loginRotateInterval);
+    loginRotateInterval = null;
+    if (btn) btn.classList.remove('on');
+    try { localStorage.setItem('login_rotate', '0'); } catch {}
+  } else {
+    loginRotateInterval = setInterval(() => {
+      applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
+    }, 14000);
+    if (btn) btn.classList.add('on');
+    try { localStorage.setItem('login_rotate', '1'); } catch {}
+  }
+}
+
+function buildLoginThemeGrid() {
+  const grid = document.getElementById('login-theme-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  loginThemes.forEach((t, i) => {
+    const item = document.createElement('div');
+    item.className = 'login-theme-item' + (i === currentLoginTheme ? ' active' : '');
+    item.onclick = () => applyLoginTheme(i);
+
+    const thumb = document.createElement('div');
+    thumb.className = 'login-theme-thumb';
+    if (t.thumb) thumb.style.backgroundImage = `url('${t.thumb}')`;
+    else {
+      thumb.style.background = 'linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 100%)';
+      thumb.innerHTML = '<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(200,184,122,0.6);z-index:1">✦</span>';
+    }
+
+    const label = document.createElement('div');
+    label.className = 'login-theme-name';
+    label.textContent = t.label;
+
+    item.appendChild(thumb);
+    item.appendChild(label);
+    grid.appendChild(item);
+  });
+}
+
+function clearLoginParticles() {
+  const wrap = document.getElementById('login-particles-wrap');
+  if (wrap) wrap.innerHTML = '';
+}
+
+function spawnLoginParticles(type) {
+  const wrap = document.getElementById('login-particles-wrap');
+  if (!wrap) return;
+
+  const count = type === 'petals' ? 20 : type === 'stars' ? 35 : 22;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    const left  = Math.random() * 100;
+    const delay = Math.random() * 14;
+    const size  = type === 'petals' ? 7 + Math.random() * 9
+                : type === 'stars'  ? 2 + Math.random() * 3
+                :                     3 + Math.random() * 4;
+
+    if (type === 'petals') {
+      const dur = 8 + Math.random() * 9;
+      const px  = -60 + Math.random() * 140;
+      const pr  = 300 + Math.random() * 500;
+      const r   = 230 + Math.floor(Math.random() * 25);
+      const g   = 140 + Math.floor(Math.random() * 80);
+      const b   = 170 + Math.floor(Math.random() * 50);
+      el.className = 'lp-petal';
+      el.style.cssText =
+        `left:${left}%;top:-20px;` +
+        `width:${size}px;height:${(size*1.3).toFixed(1)}px;` +
+        `animation-duration:${dur}s;animation-delay:-${delay}s;` +
+        `--px:${px}px;--pr:${pr}deg;` +
+        `opacity:${(0.5+Math.random()*0.5).toFixed(2)};` +
+        `background:rgba(${r},${g},${b},0.78);` +
+        `box-shadow:inset 0 0 3px rgba(255,220,230,0.4);`;
+
+    } else if (type === 'stars') {
+      const dur = 2.5 + Math.random() * 4;
+      const top = Math.random() * 100;
+      el.className = 'lp-star';
+      el.style.cssText =
+        `left:${left}%;top:${top}%;` +
+        `width:${size}px;height:${size}px;` +
+        `animation-duration:${dur}s;animation-delay:-${delay}s;`;
+
+    } else { // sparkles (tema escuro)
+      const dur = 2.5 + Math.random() * 4;
+      const top = 15 + Math.random() * 70;
+      el.className = 'lp-sparkle';
+      el.style.cssText =
+        `left:${left}%;top:${top}%;` +
+        `width:${size}px;height:${size}px;` +
+        `background:rgba(200,184,122,0.65);` +
+        `box-shadow:0 0 6px 1px rgba(200,184,122,0.45);` +
+        `animation-duration:${dur}s;animation-delay:-${delay}s;`;
+    }
+    wrap.appendChild(el);
+  }
+}
+
+function initLoginBg() {
+  buildLoginThemeGrid();
+
+  let savedIdx = 0;
+  try { savedIdx = parseInt(localStorage.getItem('login_theme') || '0', 10); } catch {}
+  if (isNaN(savedIdx) || savedIdx < 0 || savedIdx >= loginThemes.length) savedIdx = 0;
+  applyLoginTheme(savedIdx, false);
+
+  // Restaura rotate
+  try {
+    if (localStorage.getItem('login_rotate') === '1') {
+      loginRotateInterval = setInterval(() => {
+        applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
+      }, 14000);
+      const btn = document.getElementById('login-rotate-btn');
+      if (btn) btn.classList.add('on');
+    }
+  } catch {}
+
+  syncLoginThemeBtn();
+}
+
+// Trocar de usuário sem sair do tema/fundo
+function switchUser() {
+  currentUser = null;
+  realtimeListenerAtivo = false;
+  cachedData = null;
+  cartasPage = 5;
+  db.ref(STORAGE_KEY).off();
+
+  const app = document.getElementById('app');
+  const ls  = document.getElementById('login-screen');
+
+  app.style.transition = 'opacity 0.28s ease';
+  app.style.opacity = '0';
+  setTimeout(() => {
+    app.style.display = 'none';
+    app.style.opacity = '';
+    app.style.transition = '';
+
+    const hav = document.getElementById('header-avatar');
+    hav.src = ''; hav.style.display = 'none';
+    document.body.style.backgroundImage = '';
+    document.body.classList.remove('custom-bg');
+    document.documentElement.style.removeProperty('--font-display');
+    document.documentElement.style.removeProperty('--font-body');
+
+    ls.style.display = 'flex';
+    ls.style.opacity = '0';
+    showLoginBgLayer();
+    requestAnimationFrame(() => {
+      ls.style.transition = 'opacity 0.35s ease';
+      ls.style.opacity = '1';
+      setTimeout(() => { ls.style.transition = ''; }, 400);
+    });
+
+    // Reinicia rotate se estava ativo
+    try {
+      if (localStorage.getItem('login_rotate') === '1' && !loginRotateInterval) {
+        loginRotateInterval = setInterval(() => {
+          applyLoginTheme((currentLoginTheme + 1) % loginThemes.length);
+        }, 14000);
+        const btn = document.getElementById('login-rotate-btn');
+        if (btn) btn.classList.add('on');
+      }
+    } catch {}
+
+    initLoginScreen();
+  }, 300);
+}
+
 // ─── Theme ────────────────────────────────────────────
 function toggleTheme() {
   const isLight = document.documentElement.classList.toggle('light');
   document.getElementById('theme-toggle').textContent = isLight ? '◑' : '◐';
+  syncLoginThemeBtn();
   try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch {}
+}
+
+function syncLoginThemeBtn() {
+  const isLight = document.documentElement.classList.contains('light');
+  const btn = document.getElementById('login-theme-toggle-btn');
+  if (btn) btn.textContent = isLight ? '◑' : '◐';
+  // Sincroniza o botão do app também
+  const appBtn = document.getElementById('theme-toggle');
+  if (appBtn) appBtn.textContent = isLight ? '◑' : '◐';
 }
 
 // Apply saved theme on load
