@@ -1506,6 +1506,9 @@
   .mon-analise-champ-name { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--accent); }
   .mon-analise-champ-sub { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 3px; }
 
+  /* Monitor tab só visível quando LoL está ativo */
+  #sec-jogos:not(.game-lol-active) #jtab-monitor { display: none !important; }
+
   .mon-sin-gauge { text-align: center; padding: 36px 20px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 16px; position: relative; overflow: hidden; }
   .mon-sin-gauge::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 20%, rgba(200,184,122,0.09) 0%, transparent 60%); pointer-events: none; }
   .mon-sin-num { font-size: 6rem; font-weight: 300; font-family: var(--font-display); color: var(--accent); line-height: 1; text-shadow: 0 0 60px rgba(200,184,122,0.35); }
@@ -2704,7 +2707,7 @@
     </section>
 
     <!-- ─── JOGOS ─── -->
-    <section id="sec-jogos" class="section">
+    <section id="sec-jogos" class="section game-lol-active">
       <div class="section-title">jogos</div>
 
       <!-- Duas tabs principais: Builds | Monitor -->
@@ -4300,9 +4303,9 @@ function switchGame(g) {
     const el = document.getElementById('game-' + k);
     if (el) el.style.display = k === g ? 'block' : 'none';
   });
-  // aba Monitor só faz sentido para LoL
-  const tabMon = document.getElementById('jtab-monitor');
-  if (tabMon) tabMon.style.display = g === 'lol' ? '' : 'none';
+  // controla visibilidade do monitor tab via classe CSS (mais confiável)
+  const sec = document.getElementById('sec-jogos');
+  if (sec) sec.classList.toggle('game-lol-active', g === 'lol');
   // se trocou pra jogo sem monitor, garante que está na aba builds
   if (g !== 'lol') {
     const pMon = document.getElementById('jpanel-monitor');
