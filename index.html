@@ -2682,12 +2682,14 @@
     <section id="sec-jogos" class="section">
       <div class="section-title">jogos</div>
 
+      <!-- Duas tabs principais: Builds | Monitor -->
       <div class="game-tabs">
-        <button class="game-tab active" onclick="switchGame('lol')" id="gtab-lol">League of Legends</button>
-        <button class="game-tab" onclick="switchGame('mhw')" id="gtab-mhw">Monster Hunter</button>
-        <button class="game-tab" onclick="switchGame('outros')" id="gtab-outros">outros</button>
+        <button class="game-tab active" onclick="switchJogosTab('builds')"  id="jtab-builds">⚔ builds</button>
+        <button class="game-tab"        onclick="switchJogosTab('monitor')" id="jtab-monitor">⚡ monitor</button>
       </div>
 
+      <!-- BUILDS: conteúdo do jogo selecionado (LoL por padrão) -->
+      <div id="jpanel-builds">
       <div id="game-lol">
         <div class="form-panel">
           <div class="form-grid">
@@ -2768,136 +2770,7 @@
         <div id="lol-list"></div>
       </div><!-- /game-lol -->
 
-      <!-- ─── MONITOR (painel separado, acessível pelo dropdown) ─── -->
-      <div id="game-monitor" style="display:none">
-        <div class="monitor-nav">
-          <button class="monitor-tab active" id="mtab-home"        onclick="switchMonitor('home')">🏠 hoje</button>
-          <button class="monitor-tab"         id="mtab-analise"     onclick="switchMonitor('analise')">⚔ análise</button>
-          <button class="monitor-tab"         id="mtab-sinergia"    onclick="switchMonitor('sinergia')">⚡ sinergia</button>
-          <button class="monitor-tab"         id="mtab-celebracoes" onclick="switchMonitor('celebracoes')">★ conquistas</button>
-        </div>
-
-        <!-- HOME -->
-        <div id="mpanel-home" class="mpanel">
-          <div class="mon-music-box">
-            <span class="mon-music-note">♫</span>
-            <div class="mon-music-info">
-              <div class="mon-music-title" id="mon-track-title">—</div>
-              <div class="mon-music-artist" id="mon-track-artist">—</div>
-            </div>
-            <div class="mon-music-btns">
-              <button class="mon-music-btn" onclick="monMusicPrev()">‹</button>
-              <button class="mon-music-btn" onclick="monMusicPlay()">▶ ouvir</button>
-              <button class="mon-music-btn" onclick="monMusicNext()">›</button>
-            </div>
-          </div>
-          <div class="mon-hero-area">
-            <div class="mon-champ-wrap">
-              <div class="mon-champ-circle">
-                <img id="mon-champ-img" src="" style="display:none">
-                <div class="mon-champ-ph" id="mon-champ-ph">♪</div>
-              </div>
-              <div class="mon-champ-name" id="mon-champ-nm"></div>
-              <button class="mon-champ-btn" onclick="abrirSetChamp()">✦ definir main</button>
-            </div>
-            <div class="mon-goal-frac">
-              <div class="mon-goal-done" id="mon-done-cnt">0</div>
-              <div class="mon-goal-bar-line"></div>
-              <div class="mon-goal-total" id="mon-goal-tot">?</div>
-              <div class="mon-goal-label">partidas hoje</div>
-            </div>
-          </div>
-          <div class="form-panel" id="mon-meta-form">
-            <div class="form-grid">
-              <div class="field-label">meta de partidas hoje — escolha e trave</div>
-              <div class="mon-goal-opts" id="mon-goal-opts"></div>
-              <div class="form-actions">
-                <button class="btn gold" onclick="travarMeta()">🔒 travar meta</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-panel" id="mon-meta-locked" style="display:none">
-            <div class="mon-locked-row">
-              <span class="mon-locked-icon">🔒</span>
-              <div>
-                <div class="mon-locked-num" id="mon-locked-num">—</div>
-                <div class="mon-locked-lbl">partidas — meta travada</div>
-              </div>
-              <div class="mon-prog-wrap">
-                <div class="mon-prog-bar"><div class="mon-prog-fill" id="mon-prog-fill" style="width:0%"></div></div>
-                <div class="mon-prog-pct" id="mon-prog-pct">0%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ANÁLISE -->
-        <div id="mpanel-analise" class="mpanel" style="display:none">
-          <div class="form-panel">
-            <div class="form-grid">
-              <div class="field-label" style="font-size:12px;color:var(--text)">registrar partida</div>
-              <div class="form-row">
-                <div class="form-group">
-                  <div class="field-label">resultado</div>
-                  <select id="mon-res"><option value="1">vitória ✓</option><option value="0">derrota ✗</option></select>
-                </div>
-                <div class="form-group">
-                  <div class="field-label">campeão jogado</div>
-                  <input type="text" id="mon-champ-jogado" placeholder="ex: Sona">
-                </div>
-              </div>
-              <div class="form-row" style="grid-template-columns:repeat(4,1fr)">
-                <div class="form-group">
-                  <div class="field-label">abates K</div>
-                  <input type="number" id="mon-kills" min="0" max="60" value="0">
-                </div>
-                <div class="form-group">
-                  <div class="field-label">mortes D</div>
-                  <input type="number" id="mon-mortes" min="0" max="60" value="0">
-                </div>
-                <div class="form-group">
-                  <div class="field-label">assist A</div>
-                  <input type="number" id="mon-assists" min="0" max="60" value="0">
-                </div>
-                <div class="form-group">
-                  <div class="field-label">visão</div>
-                  <input type="number" id="mon-visao" min="0" max="300" value="0">
-                </div>
-              </div>
-              <div class="form-actions">
-                <button class="btn gold" onclick="adicionarPartida()">+ registrar partida</button>
-              </div>
-            </div>
-          </div>
-          <div id="mon-partidas-list"></div>
-        </div>
-
-        <!-- SINERGIA -->
-        <div id="mpanel-sinergia" class="mpanel" style="display:none">
-          <div class="mon-sin-gauge">
-            <div style="font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px">AMA — análise mútua adaptativa</div>
-            <div class="mon-sin-num" id="mon-sin-num">—</div>
-            <div style="font-size:9px;letter-spacing:0.15em;color:var(--text-muted);margin-top:8px">pontos de 100</div>
-            <div id="mon-sin-status" style="font-size:12px;color:var(--text-muted);margin-top:14px;font-style:italic"></div>
-          </div>
-          <div class="form-panel" style="margin-bottom:16px">
-            <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px">critérios de avaliação</div>
-            <div id="mon-sin-criterios"></div>
-          </div>
-          <div class="form-panel">
-            <div class="form-actions">
-              <button class="btn gold" onclick="calcularSinergiaAgora()">⚡ calcular sinergia agora</button>
-            </div>
-          </div>
-          <div id="mon-sin-log"></div>
-        </div>
-
-        <!-- CONQUISTAS -->
-        <div id="mpanel-celebracoes" class="mpanel" style="display:none">
-          <div id="mon-eventos-list"></div>
-        </div>
-      </div><!-- /game-monitor -->
-
+      <!-- MHW e Outros dentro de jpanel-builds, ocultos por padrão -->
       <div id="game-mhw" style="display:none">
         <div class="form-panel">
           <div class="form-grid">
@@ -2968,6 +2841,124 @@
         </div>
         <div id="outros-list"></div>
       </div>
+      </div><!-- /jpanel-builds -->
+
+      <!-- MONITOR: painel da aba Monitor -->
+      <div id="jpanel-monitor" style="display:none">
+        <div id="game-monitor">
+          <div class="monitor-nav">
+            <button class="monitor-tab active" id="mtab-home"        onclick="switchMonitor('home')">🏠 hoje</button>
+            <button class="monitor-tab"         id="mtab-analise"     onclick="switchMonitor('analise')">⚔ análise</button>
+            <button class="monitor-tab"         id="mtab-sinergia"    onclick="switchMonitor('sinergia')">⚡ sinergia</button>
+            <button class="monitor-tab"         id="mtab-celebracoes" onclick="switchMonitor('celebracoes')">★ conquistas</button>
+          </div>
+          <!-- HOME -->
+          <div id="mpanel-home" class="mpanel">
+            <div class="mon-music-box">
+              <span class="mon-music-note">♫</span>
+              <div class="mon-music-info">
+                <div class="mon-music-title" id="mon-track-title">—</div>
+                <div class="mon-music-artist" id="mon-track-artist">—</div>
+              </div>
+              <div class="mon-music-btns">
+                <button class="mon-music-btn" onclick="monMusicPrev()">‹</button>
+                <button class="mon-music-btn" onclick="monMusicPlay()">▶ ouvir</button>
+                <button class="mon-music-btn" onclick="monMusicNext()">›</button>
+              </div>
+            </div>
+            <div class="mon-hero-area">
+              <div class="mon-champ-wrap">
+                <div class="mon-champ-circle">
+                  <img id="mon-champ-img" src="" style="display:none">
+                  <div class="mon-champ-ph" id="mon-champ-ph">♪</div>
+                </div>
+                <div class="mon-champ-name" id="mon-champ-nm"></div>
+                <button class="mon-champ-btn" onclick="abrirSetChamp()">✦ definir main</button>
+              </div>
+              <div class="mon-goal-frac">
+                <div class="mon-goal-done" id="mon-done-cnt">0</div>
+                <div class="mon-goal-bar-line"></div>
+                <div class="mon-goal-total" id="mon-goal-tot">?</div>
+                <div class="mon-goal-label">partidas hoje</div>
+              </div>
+            </div>
+            <div class="form-panel" id="mon-meta-form">
+              <div class="form-grid">
+                <div class="field-label">meta de partidas hoje — escolha e trave</div>
+                <div class="mon-goal-opts" id="mon-goal-opts"></div>
+                <div class="form-actions">
+                  <button class="btn gold" onclick="travarMeta()">🔒 travar meta</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-panel" id="mon-meta-locked" style="display:none">
+              <div class="mon-locked-row">
+                <span class="mon-locked-icon">🔒</span>
+                <div>
+                  <div class="mon-locked-num" id="mon-locked-num">—</div>
+                  <div class="mon-locked-lbl">partidas — meta travada</div>
+                </div>
+                <div class="mon-prog-wrap">
+                  <div class="mon-prog-bar"><div class="mon-prog-fill" id="mon-prog-fill" style="width:0%"></div></div>
+                  <div class="mon-prog-pct" id="mon-prog-pct">0%</div>
+                </div>
+                <button class="meta-complete-reset" onclick="cancelarMeta()" style="flex-shrink:0">✕ cancelar</button>
+              </div>
+            </div>
+          </div>
+          <!-- ANÁLISE -->
+          <div id="mpanel-analise" class="mpanel" style="display:none">
+            <div class="form-panel">
+              <div class="form-grid">
+                <div class="field-label" style="font-size:12px;color:var(--text)">registrar partida</div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <div class="field-label">resultado</div>
+                    <select id="mon-res"><option value="1">vitória ✓</option><option value="0">derrota ✗</option></select>
+                  </div>
+                  <div class="form-group">
+                    <div class="field-label">campeão jogado</div>
+                    <input type="text" id="mon-champ-jogado" placeholder="ex: Sona">
+                  </div>
+                </div>
+                <div class="form-row" style="grid-template-columns:repeat(4,1fr)">
+                  <div class="form-group"><div class="field-label">abates K</div><input type="number" id="mon-kills" min="0" max="60" value="0"></div>
+                  <div class="form-group"><div class="field-label">mortes D</div><input type="number" id="mon-mortes" min="0" max="60" value="0"></div>
+                  <div class="form-group"><div class="field-label">assist A</div><input type="number" id="mon-assists" min="0" max="60" value="0"></div>
+                  <div class="form-group"><div class="field-label">visão</div><input type="number" id="mon-visao" min="0" max="300" value="0"></div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn gold" onclick="adicionarPartida()">+ registrar partida</button>
+                </div>
+              </div>
+            </div>
+            <div id="mon-partidas-list"></div>
+          </div>
+          <!-- SINERGIA -->
+          <div id="mpanel-sinergia" class="mpanel" style="display:none">
+            <div class="mon-sin-gauge">
+              <div style="font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px">AMA — análise mútua adaptativa</div>
+              <div class="mon-sin-num" id="mon-sin-num">—</div>
+              <div style="font-size:9px;letter-spacing:0.15em;color:var(--text-muted);margin-top:8px">pontos de 100</div>
+              <div id="mon-sin-status" style="font-size:12px;color:var(--text-muted);margin-top:14px;font-style:italic"></div>
+            </div>
+            <div class="form-panel" style="margin-bottom:16px">
+              <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px">critérios de avaliação</div>
+              <div id="mon-sin-criterios"></div>
+            </div>
+            <div class="form-panel">
+              <div class="form-actions">
+                <button class="btn gold" onclick="calcularSinergiaAgora()">⚡ calcular sinergia agora</button>
+              </div>
+            </div>
+            <div id="mon-sin-log"></div>
+          </div>
+          <!-- CONQUISTAS -->
+          <div id="mpanel-celebracoes" class="mpanel" style="display:none">
+            <div id="mon-eventos-list"></div>
+          </div>
+        </div><!-- /game-monitor -->
+      </div><!-- /jpanel-monitor -->
 
     </section>
 
@@ -4270,19 +4261,32 @@ function showSection(id) {
   }
 }
 
+// switchGame: controla qual jogo aparece no painel BUILDS
 function switchGame(g) {
-  ['lol','mhw','outros','monitor'].forEach(k => {
+  ['lol','mhw','outros'].forEach(k => {
     const el = document.getElementById('game-' + k);
     if (el) el.style.display = k === g ? 'block' : 'none';
-    const tab = document.getElementById('gtab-' + k);
-    if (tab) tab.classList.toggle('active', k === g);
   });
-  if (g === 'monitor') renderMonitor(cachedData);
+}
+
+// switchJogosTab: alterna entre BUILDS e MONITOR
+function switchJogosTab(tab) {
+  ['builds','monitor'].forEach(k => {
+    const panel = document.getElementById('jpanel-' + k);
+    const btn   = document.getElementById('jtab-' + k);
+    if (panel) panel.style.display = k === tab ? '' : 'none';
+    if (btn)   btn.classList.toggle('active', k === tab);
+  });
+  if (tab === 'monitor') renderMonitor(cachedData);
 }
 
 function showSectionGame(game) {
   showSection('jogos');
-  setTimeout(() => switchGame(game), 50);
+  if (game === 'monitor') {
+    setTimeout(() => switchJogosTab('monitor'), 50);
+  } else {
+    setTimeout(() => { switchJogosTab('builds'); switchGame(game); }, 50);
+  }
 }
 
 // ─── Nav Jogos Dropdown (position: fixed para não ser cortado pelo overflow do nav) ───
@@ -4351,7 +4355,7 @@ function ativarSyncTempoReal() {
       renderJogos(d);
       renderDesculpas(d);
       renderSegredo(d);
-      if (document.getElementById('game-monitor')?.style.display !== 'none') renderMonitor(d);
+      if (document.getElementById('jpanel-monitor')?.style.display !== 'none') renderMonitor(d);
     }
   });
 }
@@ -5389,7 +5393,7 @@ function todayStr() { return new Date().toISOString().split('T')[0]; }
 function renderMonGoalOpts() {
   const wrap = document.getElementById('mon-goal-opts');
   if (!wrap) return;
-  wrap.innerHTML = [1,2,3,4,5,6,7,8,9,10].map(n =>
+  wrap.innerHTML = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(n =>
     `<button class="mon-goal-opt${monMetaSelecionada === n ? ' sel' : ''}" onclick="selectMetaOpt(${n})">${n}</button>`
   ).join('');
 }
@@ -5481,11 +5485,34 @@ function renderMonHome(d) {
 }
 
 async function resetarMeta() {
+  // chamado pelo banner de meta completa — apenas libera para nova meta
   const metaKey = currentUser === 'player1' ? 'meta_p1' : 'meta_p2';
   const dateKey = currentUser === 'player1' ? 'meta_p1_date' : 'meta_p2_date';
   await db.ref(STORAGE_KEY + '/monitor').update({ [metaKey]: 0, [dateKey]: '' });
   if (cachedData) { cachedData.monitor[metaKey] = 0; cachedData.monitor[dateKey] = ''; }
   renderMonHome(cachedData);
+}
+
+async function cancelarMeta() {
+  // cancela a meta E remove todas as partidas de hoje do usuário
+  const metaKey = currentUser === 'player1' ? 'meta_p1' : 'meta_p2';
+  const dateKey = currentUser === 'player1' ? 'meta_p1_date' : 'meta_p2_date';
+  const today = todayStr();
+  const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
+  d.monitor.partidas = d.monitor.partidas.filter(
+    p => !(p.jogador === currentUser && (p.data || '').startsWith(today))
+  );
+  await db.ref(STORAGE_KEY + '/monitor').update({ [metaKey]: 0, [dateKey]: '' });
+  await db.ref(STORAGE_KEY + '/monitor/partidas').set(d.monitor.partidas.length ? d.monitor.partidas : []);
+  if (cachedData) {
+    cachedData.monitor[metaKey] = 0;
+    cachedData.monitor[dateKey] = '';
+    cachedData.monitor.partidas = d.monitor.partidas;
+  }
+  const done = document.getElementById('mon-meta-complete');
+  if (done) done.remove();
+  renderMonitor(cachedData);
+  toast('meta cancelada — partidas do dia removidas');
 }
 
 // ─── Partidas ────────────────────────────────────────────
@@ -5530,13 +5557,14 @@ async function adicionarPartida() {
   entrada.analise = gerarAnaliseIA(entrada, cachedData || {config:{}});
 
   const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
-  d.monitor.partidas.push(entrada);
 
-  // verifica meta e celebração
-  const meta  = getMetaHoje(d);
-  const feito = getPartidaseHoje(d);
-  const novoFeito = feito + 1;
-  const metaBatida = meta && novoFeito >= meta && feito < meta; // só dispara 1x (quando cruza)
+  // contar ANTES de adicionar a nova partida (evita off-by-one no confetti)
+  const meta       = getMetaHoje(d);
+  const feito      = getPartidaseHoje(d);
+  const novoFeito  = feito + 1;
+  const metaBatida = meta > 0 && novoFeito === meta; // dispara exatamente ao completar
+
+  d.monitor.partidas.push(entrada);
 
   if (metaBatida) {
     const evKey = currentUser === 'player1' ? 'eventos_p1' : 'eventos_p2';
@@ -5548,7 +5576,6 @@ async function adicionarPartida() {
     // celebração!
     launchConfetti();
     playVictoryFanfare();
-    setTimeout(monMusicPlay, 800); // abre o player de música após 0.8s
   }
 
   await db.ref(STORAGE_KEY + '/monitor/partidas').set(d.monitor.partidas);
