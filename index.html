@@ -956,6 +956,51 @@
     margin: 0;
   }
 
+  /* ─── CONFETTI ──────────────────────────────────────── */
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg) scale(1); opacity:1; }
+    80%  { opacity:.8; }
+    100% { transform: translateY(105vh) rotate(800deg) scale(.6); opacity:0; }
+  }
+  .confetti-piece {
+    position: fixed;
+    top: -16px;
+    z-index: 10000;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+  }
+
+  /* ─── META COMPLETA ──────────────────────────────────── */
+  .meta-complete-banner {
+    display: flex; align-items: center; gap: 14px;
+    background: linear-gradient(135deg, rgba(200,184,122,0.18), rgba(200,184,122,0.06));
+    border: 1px solid rgba(200,184,122,0.45);
+    padding: 18px 20px;
+    animation: sectionIn 0.5s ease both;
+  }
+  .meta-complete-icon { font-size: 2rem; }
+  .meta-complete-text { flex: 1; }
+  .meta-complete-title { font-family: var(--font-display); font-style:italic; font-size: 1.3rem; color: var(--accent); }
+  .meta-complete-sub   { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-top: 3px; }
+  .meta-complete-reset { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; cursor: pointer; transition: all .18s; }
+  .meta-complete-reset:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── MINI PLAYER (Spotify) ──────────────────────────── */
+  #mon-mini-player {
+    position: fixed; bottom: 20px; right: 20px; z-index: 9998;
+    background: var(--surface); border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+    width: 320px;
+    animation: sectionIn 0.3s ease both;
+  }
+  .mon-mini-player-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px; border-bottom: 1px solid var(--border);
+    font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted);
+  }
+  .mon-mini-player-close { background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px;padding:0; }
+  .mon-mini-player-close:hover { color:var(--text); }
+
   /* ─── MAIN ───────────────────────────────────────────── */
   main {
     padding: 32px 24px;
@@ -2644,14 +2689,6 @@
       </div>
 
       <div id="game-lol">
-        <!-- Sub-tabs: Builds | Monitor -->
-        <div class="game-tabs" style="margin-bottom:0;border-bottom:none;padding-bottom:0">
-          <button class="game-tab active" onclick="switchLolTab('builds')" id="lstab-builds">⚔ builds</button>
-          <button class="game-tab" onclick="switchLolTab('monitor')" id="lstab-monitor">⚡ monitor</button>
-        </div>
-
-        <!-- BUILDS -->
-        <div id="lpanel-builds">
         <div class="form-panel">
           <div class="form-grid">
 
@@ -2729,10 +2766,10 @@
           </button>
         </div>
         <div id="lol-list"></div>
-        </div><!-- /lpanel-builds -->
+      </div><!-- /game-lol -->
 
-        <!-- MONITOR (dentro do LoL) -->
-        <div id="lpanel-monitor" style="display:none">
+      <!-- ─── MONITOR (painel separado, acessível pelo dropdown) ─── -->
+      <div id="game-monitor" style="display:none">
         <div class="monitor-nav">
           <button class="monitor-tab active" id="mtab-home"        onclick="switchMonitor('home')">🏠 hoje</button>
           <button class="monitor-tab"         id="mtab-analise"     onclick="switchMonitor('analise')">⚔ análise</button>
@@ -2859,8 +2896,7 @@
         <div id="mpanel-celebracoes" class="mpanel" style="display:none">
           <div id="mon-eventos-list"></div>
         </div>
-        </div><!-- /lpanel-monitor -->
-      </div><!-- /game-lol -->
+      </div><!-- /game-monitor -->
 
       <div id="game-mhw" style="display:none">
         <div class="form-panel">
@@ -3830,7 +3866,8 @@ const defaultData = {
     main_p1: null, main_p2: null,
     meta_p1: 0, meta_p1_date: '',
     meta_p2: 0, meta_p2_date: '',
-    partidas: [], sinergia_log: [], eventos: []
+    partidas: [], sinergia_log: [],
+    eventos_p1: [], eventos_p2: []
   }
 };
 
@@ -3863,7 +3900,15 @@ function normalizarDados(d) {
   if (!d.monitor) d.monitor = JSON.parse(JSON.stringify(defaultData.monitor));
   d.monitor.partidas     = toArray(d.monitor.partidas);
   d.monitor.sinergia_log = toArray(d.monitor.sinergia_log);
-  d.monitor.eventos      = toArray(d.monitor.eventos);
+  // migrar eventos compartilhados para per-user se existir dado antigo
+  if (d.monitor.eventos && !d.monitor.eventos_p1 && !d.monitor.eventos_p2) {
+    const old = toArray(d.monitor.eventos);
+    d.monitor.eventos_p1 = old.filter(e => !e.jogador || e.jogador === 'player1');
+    d.monitor.eventos_p2 = old.filter(e => e.jogador === 'player2');
+    delete d.monitor.eventos;
+  }
+  d.monitor.eventos_p1 = toArray(d.monitor.eventos_p1);
+  d.monitor.eventos_p2 = toArray(d.monitor.eventos_p2);
   d.cartas    = toArray(d.cartas);
   d.planos    = toArray(d.planos);
   d.datas     = toArray(d.datas);
@@ -4226,27 +4271,18 @@ function showSection(id) {
 }
 
 function switchGame(g) {
-  ['lol','mhw','outros'].forEach(k => {
-    document.getElementById('game-' + k).style.display = k === g ? 'block' : 'none';
-    document.getElementById('gtab-' + k).classList.toggle('active', k === g);
+  ['lol','mhw','outros','monitor'].forEach(k => {
+    const el = document.getElementById('game-' + k);
+    if (el) el.style.display = k === g ? 'block' : 'none';
+    const tab = document.getElementById('gtab-' + k);
+    if (tab) tab.classList.toggle('active', k === g);
   });
-}
-
-function switchLolTab(tab) {
-  ['builds','monitor'].forEach(k => {
-    document.getElementById('lpanel-' + k).style.display = k === tab ? '' : 'none';
-    document.getElementById('lstab-' + k).classList.toggle('active', k === tab);
-  });
-  if (tab === 'monitor') renderMonitor(cachedData);
+  if (g === 'monitor') renderMonitor(cachedData);
 }
 
 function showSectionGame(game) {
   showSection('jogos');
-  if (game === 'monitor') {
-    setTimeout(() => { switchGame('lol'); switchLolTab('monitor'); }, 50);
-  } else {
-    setTimeout(() => switchGame(game), 50);
-  }
+  setTimeout(() => switchGame(game), 50);
 }
 
 // ─── Nav Jogos Dropdown (position: fixed para não ser cortado pelo overflow do nav) ───
@@ -4265,6 +4301,8 @@ function showSectionGame(game) {
       <div class="nav-drop-inner">
         <div class="nav-drop-item" onclick="showSectionGame('lol')"><span style="font-size:12px">⚔</span> League of Legends</div>
         <div class="nav-drop-item" onclick="showSectionGame('mhw')"><span style="font-size:12px">🐉</span> Monster Hunter</div>
+        <div class="nav-drop-sep"></div>
+        <div class="nav-drop-item accent" onclick="showSectionGame('monitor')"><span style="font-size:12px">⚡</span> monitor</div>
       </div>`;
     document.body.appendChild(drop);
 
@@ -4313,7 +4351,7 @@ function ativarSyncTempoReal() {
       renderJogos(d);
       renderDesculpas(d);
       renderSegredo(d);
-      if (document.getElementById('lpanel-monitor')?.style.display !== 'none') renderMonitor(d);
+      if (document.getElementById('game-monitor')?.style.display !== 'none') renderMonitor(d);
     }
   });
 }
@@ -5232,13 +5270,14 @@ async function toggleFixado(id, e) {
 // ═══════════════════════════════════════════════════════
 
 // ─── Música ──────────────────────────────────────────────
+// YouTube video IDs de OSTs oficiais do LoL (canais oficiais)
 const monMusicas = [
-  { t: 'Tema da Sona', a: 'League of Legends OST',       url: 'https://www.youtube.com/results?search_query=sona+league+of+legends+theme+official' },
-  { t: 'Harpa Celta — Ethereal', a: 'Instrumental',      url: 'https://www.youtube.com/results?search_query=relaxing+celtic+harp+music' },
-  { t: 'Clair de Lune', a: 'Debussy — Harpa',            url: 'https://www.youtube.com/results?search_query=clair+de+lune+harp+version' },
-  { t: 'Serenity', a: 'Harpa & Cordas',                  url: 'https://www.youtube.com/results?search_query=beautiful+harp+strings+relaxing+instrumental' },
-  { t: 'Peaceful Garden', a: 'Koto & Harpa',             url: 'https://www.youtube.com/results?search_query=peaceful+harp+koto+relaxing+music' },
-  { t: 'Legends Never Die', a: 'LoL World Championship', url: 'https://www.youtube.com/results?search_query=legends+never+die+league+of+legends+harp' },
+  { t: 'Warriors',            a: 'Imagine Dragons × LoL',  vid: 'fmI_Ndrxy14' },
+  { t: 'Legends Never Die',   a: 'LoL Worlds 2017',        vid: 'G9gLBxFkjGk' },
+  { t: 'RISE',                a: 'LoL Worlds 2018',        vid: 'fB8TyLTD7EE' },
+  { t: 'STAR',                a: 'LoL Worlds 2019',        vid: 'G4EqBFJPBKI' },
+  { t: 'Take Over',           a: 'LoL Worlds 2021',        vid: 'nfw26FNifqA' },
+  { t: 'GODS',                a: 'LoL Worlds 2023',        vid: '3dHP3EHp7NA' },
 ];
 let monMusicIdx = 0;
 function monMusicRender() {
@@ -5248,9 +5287,55 @@ function monMusicRender() {
   if (t) t.textContent = m.t;
   if (a) a.textContent = m.a;
 }
-function monMusicPrev() { monMusicIdx = (monMusicIdx - 1 + monMusicas.length) % monMusicas.length; monMusicRender(); }
-function monMusicNext() { monMusicIdx = (monMusicIdx + 1) % monMusicas.length; monMusicRender(); }
-function monMusicPlay() { window.open(monMusicas[monMusicIdx].url, '_blank'); }
+function monMusicPrev() { monMusicIdx = (monMusicIdx - 1 + monMusicas.length) % monMusicas.length; monMusicRender(); const p = document.getElementById('mon-yt-frame'); if (p) p.src = ytSrc(monMusicIdx); }
+function monMusicNext() { monMusicIdx = (monMusicIdx + 1) % monMusicas.length; monMusicRender(); const p = document.getElementById('mon-yt-frame'); if (p) p.src = ytSrc(monMusicIdx); }
+function ytSrc(idx) { return `https://www.youtube-nocookie.com/embed/${monMusicas[idx].vid}?autoplay=1&rel=0`; }
+
+function monMusicPlay() {
+  const existing = document.getElementById('mon-mini-player');
+  if (existing) { existing.remove(); return; }
+  const wrap = document.createElement('div');
+  wrap.id = 'mon-mini-player';
+  wrap.innerHTML = `
+    <div class="mon-mini-player-header">
+      <span>♫ tocando agora</span>
+      <button class="mon-mini-player-close" onclick="document.getElementById('mon-mini-player').remove()">✕</button>
+    </div>
+    <iframe id="mon-yt-frame" width="320" height="180" src="${ytSrc(monMusicIdx)}"
+      frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  document.body.appendChild(wrap);
+}
+
+// ─── Confetti ────────────────────────────────────────────
+function launchConfetti() {
+  const colors = ['#c8b87a','#fff','#7a9cc8','#e8c0c0','#a8c8a8','#f0d080'];
+  for (let i = 0; i < 90; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = 6 + Math.random() * 9;
+    el.style.cssText = `left:${Math.random()*100}vw;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-delay:${Math.random()*.6}s;animation-duration:${1.4+Math.random()*1.8}s;`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+}
+
+// ─── Fanfarra Web Audio ───────────────────────────────────
+function playVictoryFanfare() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [[523,0],[659,.18],[784,.36],[1047,.54],[784,.72],[1047,.90]].forEach(([freq, delay]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq; osc.type = 'sine';
+      const s = ctx.currentTime + delay;
+      gain.gain.setValueAtTime(0, s);
+      gain.gain.linearRampToValueAtTime(0.22, s + .05);
+      gain.gain.exponentialRampToValueAtTime(0.001, s + .35);
+      osc.start(s); osc.stop(s + .4);
+    });
+  } catch(e) {}
+}
 
 // ─── Sub-nav ─────────────────────────────────────────────
 const monPanels = ['home','analise','sinergia','celebracoes'];
@@ -5359,19 +5444,48 @@ function renderMonHome(d) {
   // show form or locked
   const formEl   = document.getElementById('mon-meta-form');
   const lockEl   = document.getElementById('mon-meta-locked');
+  const doneEl   = document.getElementById('mon-meta-complete');
   if (meta) {
-    formEl.style.display = 'none';
-    lockEl.style.display = '';
     const pct = Math.min(100, Math.round(feito / meta * 100));
-    document.getElementById('mon-locked-num').textContent = meta;
-    document.getElementById('mon-prog-fill').style.width = pct + '%';
-    document.getElementById('mon-prog-pct').textContent  = pct + '%';
+    const completa = feito >= meta;
+    formEl.style.display = 'none';
+    if (completa) {
+      lockEl.style.display  = 'none';
+      // banner de meta completa
+      if (!doneEl) {
+        const banner = document.createElement('div');
+        banner.id = 'mon-meta-complete';
+        banner.className = 'meta-complete-banner';
+        banner.innerHTML = `<div class="meta-complete-icon">🏆</div>
+          <div class="meta-complete-text">
+            <div class="meta-complete-title">Meta concluída!</div>
+            <div class="meta-complete-sub">${feito} de ${meta} partidas — ${pct}% ✦</div>
+          </div>
+          <button class="meta-complete-reset" onclick="resetarMeta()">✕ nova meta</button>`;
+        lockEl.parentNode.insertBefore(banner, lockEl.nextSibling);
+      }
+    } else {
+      if (doneEl) doneEl.remove();
+      lockEl.style.display = '';
+      document.getElementById('mon-locked-num').textContent = meta;
+      document.getElementById('mon-prog-fill').style.width = pct + '%';
+      document.getElementById('mon-prog-pct').textContent  = pct + '%';
+    }
   } else {
     formEl.style.display = '';
     lockEl.style.display = 'none';
+    if (doneEl) doneEl.remove();
     monMetaSelecionada = 0;
     renderMonGoalOpts();
   }
+}
+
+async function resetarMeta() {
+  const metaKey = currentUser === 'player1' ? 'meta_p1' : 'meta_p2';
+  const dateKey = currentUser === 'player1' ? 'meta_p1_date' : 'meta_p2_date';
+  await db.ref(STORAGE_KEY + '/monitor').update({ [metaKey]: 0, [dateKey]: '' });
+  if (cachedData) { cachedData.monitor[metaKey] = 0; cachedData.monitor[dateKey] = ''; }
+  renderMonHome(cachedData);
 }
 
 // ─── Partidas ────────────────────────────────────────────
@@ -5418,24 +5532,33 @@ async function adicionarPartida() {
   const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
   d.monitor.partidas.push(entrada);
 
-  // verifica meta
+  // verifica meta e celebração
   const meta  = getMetaHoje(d);
-  const feito = getPartidaseHoje(d); // ainda com dado antigo; nova partida não contada ainda
+  const feito = getPartidaseHoje(d);
   const novoFeito = feito + 1;
-  if (meta && novoFeito >= meta) {
-    const ev = { id: Date.now()+1, data: new Date().toISOString(), tipo: 'meta_batida', msg: `Meta de ${meta} partidas batida! ${novoFeito}/${meta} atingido.`, jogador: currentUser };
-    d.monitor.eventos.push(ev);
+  const metaBatida = meta && novoFeito >= meta && feito < meta; // só dispara 1x (quando cruza)
+
+  if (metaBatida) {
+    const evKey = currentUser === 'player1' ? 'eventos_p1' : 'eventos_p2';
+    const ev = { id: Date.now()+1, data: new Date().toISOString(), tipo: 'meta_batida',
+      msg: `Meta de ${meta} partidas batida! ${novoFeito}/${meta} atingido. 🏆`, jogador: currentUser };
+    d.monitor[evKey].push(ev);
+    await db.ref(STORAGE_KEY + '/monitor/' + evKey).set(d.monitor[evKey]);
+    if (cachedData) cachedData.monitor[evKey] = d.monitor[evKey];
+    // celebração!
+    launchConfetti();
+    playVictoryFanfare();
+    setTimeout(monMusicPlay, 800); // abre o player de música após 0.8s
   }
 
   await db.ref(STORAGE_KEY + '/monitor/partidas').set(d.monitor.partidas);
-  if (meta && novoFeito >= meta) await db.ref(STORAGE_KEY + '/monitor/eventos').set(d.monitor.eventos);
-  if (cachedData) { cachedData.monitor.partidas = d.monitor.partidas; if (d.monitor.eventos.length > (cachedData.monitor.eventos||[]).length) cachedData.monitor.eventos = d.monitor.eventos; }
+  if (cachedData) cachedData.monitor.partidas = d.monitor.partidas;
 
   // limpar form
   ['mon-kills','mon-mortes','mon-assists','mon-visao'].forEach(id => document.getElementById(id).value = 0);
   document.getElementById('mon-champ-jogado').value = '';
   renderMonitor(cachedData);
-  toast('partida registrada ✦');
+  toast(metaBatida ? '🏆 meta batida! parabéns!' : 'partida registrada ✦');
 }
 
 async function deletarPartida(id) {
@@ -5510,11 +5633,20 @@ async function calcularSinergiaAgora() {
   const d2 = JSON.parse(JSON.stringify(d));
   d2.monitor.sinergia_log.push(entrada);
   if (subiu) {
-    d2.monitor.eventos.push({ id: Date.now()+1, data: new Date().toISOString(), tipo: 'sinergia_up', msg: `Sinergia subiu de ${prev.score} para ${score} pts! ⚡` });
+    // sinergia_up vai para ambos os usuários
+    const ev = { id: Date.now()+1, data: new Date().toISOString(), tipo: 'sinergia_up', msg: `Sinergia subiu de ${prev.score} para ${score} pts! ⚡` };
+    d2.monitor.eventos_p1.push(ev);
+    d2.monitor.eventos_p2.push({...ev, id: Date.now()+2});
   }
   await db.ref(STORAGE_KEY + '/monitor/sinergia_log').set(d2.monitor.sinergia_log);
-  if (subiu) await db.ref(STORAGE_KEY + '/monitor/eventos').set(d2.monitor.eventos);
-  if (cachedData) { cachedData.monitor.sinergia_log = d2.monitor.sinergia_log; if (subiu) cachedData.monitor.eventos = d2.monitor.eventos; }
+  if (subiu) {
+    await db.ref(STORAGE_KEY + '/monitor/eventos_p1').set(d2.monitor.eventos_p1);
+    await db.ref(STORAGE_KEY + '/monitor/eventos_p2').set(d2.monitor.eventos_p2);
+  }
+  if (cachedData) {
+    cachedData.monitor.sinergia_log = d2.monitor.sinergia_log;
+    if (subiu) { cachedData.monitor.eventos_p1 = d2.monitor.eventos_p1; cachedData.monitor.eventos_p2 = d2.monitor.eventos_p2; }
+  }
   renderMonSinergia(cachedData);
   renderMonEventos(cachedData);
   toast(`sinergia calculada: ${score} pts ⚡`);
@@ -5561,12 +5693,13 @@ function renderMonSinergia(d) {
   }
 }
 
-// ─── Eventos/Conquistas ──────────────────────────────────
+// ─── Eventos/Conquistas (per-user) ───────────────────────
 function renderMonEventos(d) {
   const el = document.getElementById('mon-eventos-list');
   if (!el || !d) return;
-  const lista = (d.monitor.eventos||[]).slice().reverse();
-  if (!lista.length) { el.innerHTML = emptyState('nenhuma conquista ou fail registrado ainda'); return; }
+  const evKey = currentUser === 'player1' ? 'eventos_p1' : 'eventos_p2';
+  const lista = (d.monitor[evKey] || []).slice().reverse();
+  if (!lista.length) { el.innerHTML = emptyState('nenhuma conquista registrada ainda'); return; }
   const icons = { meta_batida: '🎯', sinergia_up: '⚡', fail: '❌' };
   el.innerHTML = lista.map(ev => `<div class="mon-evento">
     <div class="mon-evento-icon">${icons[ev.tipo] || '★'}</div>
