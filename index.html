@@ -112,8 +112,8 @@
   }
 
   @keyframes overlayIn {
-    from { opacity: 0; backdrop-filter: blur(0px); }
-    to   { opacity: 1; backdrop-filter: blur(6px); }
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
   @keyframes pulseGold {
@@ -383,8 +383,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     transition: all 0.25s;
     font-family: var(--font-body);
     border-radius: 2px;
@@ -412,9 +410,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 20;
-    background: rgba(0,0,0,0.62);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(0,0,0,0.85);
     border: 1px solid rgba(255,255,255,0.1);
     padding: 16px 22px 14px;
     display: flex;
@@ -680,14 +676,12 @@
     height: 56px;
     position: sticky;
     top: 0;
-    background: rgba(10,10,10,0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #0d0d0d;
     z-index: 100;
   }
 
   :root.light header {
-    background: rgba(245,242,236,0.92);
+    background: #f5f2ec;
   }
 
   .header-logo {
@@ -866,16 +860,14 @@
     overflow-x: auto;
     overflow-y: visible;
     scrollbar-width: none;
-    background: rgba(10,10,10,0.72);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #0a0a0a;
     position: sticky;
     top: 56px;
     z-index: 99;
   }
 
   :root.light nav {
-    background: rgba(245,242,236,0.88);
+    background: #efece6;
   }
 
   nav::-webkit-scrollbar { display: none; }
@@ -1069,6 +1061,7 @@
     padding: 24px;
     margin-bottom: 16px;
     position: relative;
+    contain: layout style;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   }
 
@@ -1251,6 +1244,7 @@
     padding: 28px;
     margin-bottom: 16px;
     border-left: 3px solid var(--accent);
+    contain: layout style;
     transition: transform 0.25s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.25s ease, border-color 0.2s ease;
   }
 
@@ -1597,6 +1591,7 @@
     border-top: 2px solid var(--accent);
     margin-bottom: 12px;
     cursor: pointer;
+    contain: layout style;
     transition: transform 0.22s ease, box-shadow 0.22s ease, border-top-color 0.22s ease;
     position: relative;
     overflow: hidden;
@@ -2261,7 +2256,7 @@
   .champ-detail-header {
     display: flex; align-items: center; gap: 14px; padding: 16px 24px;
     border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
-    background: inherit; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    background: var(--bg);
   }
   .champ-detail-name { font-family: var(--font-display); font-style: italic; font-size: 1.6rem; flex: 1; }
   .detail-close-btn {
@@ -3995,7 +3990,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.5/nosso-espaco-Setup-1.0.5.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.6/nosso-espaco-Setup-1.0.6.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -4009,7 +4004,7 @@
         <div class="dl-win-meta">
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            versão 1.0.5
+            versão 1.0.6
           </span>
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -4022,7 +4017,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.5/nosso-espaco-1.0.5-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.6/nosso-espaco-1.0.6-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           versão portátil (sem instalar)
@@ -5631,12 +5626,13 @@ function exitSadMode() {
 function spawnRain() {
   const wrap = document.getElementById('rain-wrap');
   if (!wrap) return;
-  wrap.innerHTML = '';
-  const count = 80;
+  // Usa DocumentFragment + reduz contagem (40 → menos pintura, mesma sensação)
+  const frag = document.createDocumentFragment();
+  const count = 40;
   for (let i = 0; i < count; i++) {
     const el   = document.createElement('div');
     const left = Math.random() * 100;
-    const dur  = 0.6 + Math.random() * 0.8;
+    const dur  = 0.7 + Math.random() * 0.9;
     const del  = -(Math.random() * 3);
     const h    = 14 + Math.random() * 22;
     const op   = 0.25 + Math.random() * 0.45;
@@ -5646,8 +5642,10 @@ function spawnRain() {
       `left:${left}%;top:-${h}px;height:${h}px;` +
       `animation-duration:${dur}s;animation-delay:${del}s;` +
       `--rx:${rx}px;--ro:${op.toFixed(2)};`;
-    wrap.appendChild(el);
+    frag.appendChild(el);
   }
+  wrap.innerHTML = '';
+  wrap.appendChild(frag);
 }
 
 function clearRain() {
@@ -5673,10 +5671,19 @@ function showSection(id) {
   if (id === 'desculpas') enterSadMode();
   else exitSadMode();
 
-  // Marca como lido ao abrir a aba
-  if (cachedData && (id === 'cartas' || id === 'desculpas')) {
-    if (id === 'cartas') renderCartas(cachedData);
-    if (id === 'desculpas') renderDesculpas(cachedData);
+  // Render tardio: se a seção ainda não foi renderizada, renderiza agora (lazy)
+  if (cachedData) {
+    const lazyMap = {
+      cartas: renderCartas, planos: renderPlanos, datas: renderDatas,
+      desculpas: renderDesculpas, segredo: renderSegredo, jogos: renderJogos,
+    };
+    const fn = lazyMap[id];
+    if (fn && !_renderHash['rendered-' + id]) {
+      fn(cachedData);
+      _renderHash['rendered-' + id] = 1;
+    }
+    // marca como lido (re-render rápido)
+    if (id === 'cartas' || id === 'desculpas') fn?.(cachedData);
   }
 
   // Perfil: renderiza ao abrir; para poll ao sair
@@ -5699,7 +5706,6 @@ function switchGame(g) {
   });
   const sec = document.getElementById('sec-jogos');
   if (sec) sec.classList.toggle('game-lol-active', g === 'lol');
-  // esconde/mostra aba monitor via inline style (mais confiável que só CSS)
   const monTab = document.getElementById('jtab-monitor');
   if (monTab) monTab.style.display = g === 'lol' ? '' : 'none';
   if (g !== 'lol') {
@@ -5710,6 +5716,8 @@ function switchGame(g) {
     document.getElementById('jtab-builds')?.classList.add('active');
     document.getElementById('jtab-monitor')?.classList.remove('active');
   }
+  // Render lazy do jogo recém-ativado
+  if (cachedData && !_renderHash['rendered-' + g]) renderJogos(cachedData);
 }
 
 // switchJogosTab: alterna entre BUILDS e MONITOR
@@ -5777,6 +5785,79 @@ function showSectionGame(game) {
 let realtimeListenerAtivo = false;
 let cachedData = null;
 
+// Hash leve por seção — pula re-renders de dados que não mudaram
+const _renderHash = {};
+
+// Helper: só anima na primeira render de cada seção (evita "piscar" em re-renders)
+function _firstRenderAnim(key, idx) {
+  if (_renderHash['anim-' + key]) return ''; // re-render: sem animação
+  return `animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${idx * 55}ms both`;
+}
+function _markAnimated(key) { _renderHash['anim-' + key] = 1; }
+function _hashStr(s) {
+  let h = 0; if (!s) return 0;
+  for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
+  return h;
+}
+function _shouldRender(key, dataObj) {
+  const h = _hashStr(JSON.stringify(dataObj || ''));
+  if (_renderHash[key] === h) return false;
+  _renderHash[key] = h;
+  return true;
+}
+
+// Mapa: id de seção → função render. Renderiza só se aba visível ou se for primeira vez.
+function _isSectionVisible(secId) {
+  const el = document.getElementById(secId);
+  return el && el.classList.contains('active');
+}
+
+// Debounce: coalesce múltiplos eventos do Firebase numa única passada
+let _renderDebounceTimer = null;
+function _scheduleRender(d) {
+  clearTimeout(_renderDebounceTimer);
+  _renderDebounceTimer = setTimeout(() => _renderFromCache(d), 60);
+}
+
+function _renderFromCache(d) {
+  if (!d || !currentUser) return;
+
+  // Sempre: estilo global e badges (leves)
+  if (_shouldRender('cfg-fontes', d.config && { f1: d.config.font_display, f2: d.config.font_body }))
+    aplicarFontes(d);
+  if (_shouldRender('cfg-bg', d.config && { b: d.config.background, c: d.config.bg_color }))
+    aplicarBackground(d);
+  if (_shouldRender('hdr-avatar', d.config && {
+    a1: d.config.avatar1, a2: d.config.avatar2, n1: d.config.name1, n2: d.config.name2
+  })) atualizarHeaderAvatar(d);
+  if (_shouldRender('cfg-fopts', d.config && { f1: d.config.font_display, f2: d.config.font_body }))
+    renderFontOpts(d);
+  if (_shouldRender('badges', { c: (d.cartas||[]).filter(x=>!x.lida&&x.para===currentUser).length, des: (d.desculpas||[]).filter(x=>!x.lida&&x.para===currentUser).length }))
+    atualizarBadges(d);
+
+  // Por seção: renderiza só se visível ou ainda não renderizada
+  // Trade-off: ao abrir uma seção pela 1ª vez, ela já renderiza dos dados em cache
+  const secs = [
+    ['sec-cartas',    'cartas',    () => renderCartas(d)],
+    ['sec-planos',    'planos',    () => renderPlanos(d)],
+    ['sec-datas',     'datas',     () => renderDatas(d)],
+    ['sec-jogos',     'jogos',     () => renderJogos(d)],
+    ['sec-desculpas', 'desculpas', () => renderDesculpas(d)],
+    ['sec-segredo',   'segredo',   () => renderSegredo(d)],
+  ];
+  for (const [secId, key, fn] of secs) {
+    if (!_isSectionVisible(secId) && _renderHash['rendered-' + key]) continue;
+    if (_shouldRender(key, d[key])) {
+      fn();
+      _renderHash['rendered-' + key] = 1;
+    }
+  }
+
+  if (document.getElementById('jpanel-monitor')?.style.display !== 'none') {
+    if (_shouldRender('monitor', d.monitor)) renderMonitor(d);
+  }
+}
+
 function ativarSyncTempoReal() {
   db.ref(STORAGE_KEY).off();
   realtimeListenerAtivo = true;
@@ -5785,31 +5866,18 @@ function ativarSyncTempoReal() {
     if (snapshot.exists()) {
       const d = normalizarDados(snapshot.val());
       cachedData = d;
-      aplicarFontes(d);
-      aplicarBackground(d);
-      atualizarHeaderAvatar(d);
-      renderFontOpts(d);
-      atualizarBadges(d);
-      renderCartas(d);
-      renderPlanos(d);
-      renderDatas(d);
-      renderJogos(d);
-      renderDesculpas(d);
-      renderSegredo(d);
-      if (document.getElementById('jpanel-monitor')?.style.display !== 'none') renderMonitor(d);
+      _scheduleRender(d);
     }
   });
 }
 
 // ─── Render All ─────────────────────────────────────────
+// Re-render explícito (usado em login etc.) — agora aceita d em cache para evitar Firebase round-trip
 async function renderAll(d) {
-  d = await loadData(); // sempre busca dados frescos do Firebase
-  renderCartas(d);
-  renderPlanos(d);
-  renderDatas(d);
-  renderJogos(d);
-  renderDesculpas(d);
-  renderSegredo(d);
+  if (!d) d = await loadData();
+  // limpa hash pra forçar render completo
+  Object.keys(_renderHash).forEach(k => delete _renderHash[k]);
+  _renderFromCache(d);
 }
 
 function fmt(iso) {
@@ -5887,8 +5955,8 @@ function renderCartas(d) {
     const avatarParaSrc = c.para === 'player1' ? d.config.avatar1 : c.para === 'player2' ? d.config.avatar2 : null;
     const avatarDe   = avatarDeSrc   ? `<img class="avatar-sm" src="${avatarDeSrc}">` : '';
     const avatarPara = (c.para !== 'ambos' && avatarParaSrc) ? `<img class="avatar-sm" src="${avatarParaSrc}">` : '';
-    const delay = idx * 55;
-    return `<div class="carta-envelope" style="${borderTopStyle}animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both" onclick="abrirCartaById(${c.id})">
+    const animStyle = _firstRenderAnim('cartas', idx);
+    return `<div class="carta-envelope" style="${borderTopStyle}${animStyle}" onclick="abrirCartaById(${c.id})">
       <div class="carta-env-head">
         <span class="carta-env-icon">✉</span>
         <span class="carta-env-time">${unreadDot}${timeAgo(c.ts)}</span>
@@ -5911,6 +5979,7 @@ function renderCartas(d) {
       <button class="btn" style="font-size:11px;padding:8px 20px" onclick="cartasPage+=5;renderCartas(cachedData)">mostrar mais ${Math.min(restantes,5)} cartas (${restantes} restantes)</button>
     </div>`;
   }
+  _markAnimated('cartas');
 }
 
 // ─── PLANOS ─────────────────────────────────────────────
@@ -6148,26 +6217,34 @@ function verificarFixados(d) {
 }
 
 function renderJogos(d) {
-  // LoL
-  const lolEl = document.getElementById('lol-list');
-  const filterBar = document.getElementById('lol-lane-filter');
-  if (filterBar) filterBar.style.display = d.jogos.lol.length ? 'flex' : 'none';
   verificarFixados(d);
 
-  const lolFiltrado = (lolLaneFiltro === 'all'
-    ? d.jogos.lol
-    : d.jogos.lol.filter(j => j.role && j.role.toLowerCase() === lolLaneFiltro)
-  ).slice().sort((a,b) => {
-    const aFix = a['fix_'+currentUser], bFix = b['fix_'+currentUser];
-    const aFav = a['fav_'+currentUser], bFav = b['fav_'+currentUser];
-    if (aFix && !bFix) return -1;
-    if (!aFix && bFix) return 1;
-    if (aFav && !bFav) return -1;
-    if (!aFav && bFav) return 1;
-    return 0;
-  });
+  // Helper: só renderiza o jogo ativo (display:block)
+  const isVisible = (id) => {
+    const el = document.getElementById(id);
+    return el && el.style.display !== 'none' && el.offsetParent !== null;
+  };
 
-  lolEl.innerHTML = !lolFiltrado.length
+  // LoL
+  if (isVisible('game-lol') || !_renderHash['rendered-lol']) {
+    const lolEl = document.getElementById('lol-list');
+    const filterBar = document.getElementById('lol-lane-filter');
+    if (filterBar) filterBar.style.display = d.jogos.lol.length ? 'flex' : 'none';
+
+    const lolFiltrado = (lolLaneFiltro === 'all'
+      ? d.jogos.lol
+      : d.jogos.lol.filter(j => j.role && j.role.toLowerCase() === lolLaneFiltro)
+    ).slice().sort((a,b) => {
+      const aFix = a['fix_'+currentUser], bFix = b['fix_'+currentUser];
+      const aFav = a['fav_'+currentUser], bFav = b['fav_'+currentUser];
+      if (aFix && !bFix) return -1;
+      if (!aFix && bFix) return 1;
+      if (aFav && !bFav) return -1;
+      if (!aFav && bFav) return 1;
+      return 0;
+    });
+
+    lolEl.innerHTML = !lolFiltrado.length
     ? (d.jogos.lol.length ? emptyState('nenhuma build nessa lane ainda') : emptyState('nenhuma build de LoL ainda'))
     : lolFiltrado.map(j => {
       const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
@@ -6206,46 +6283,54 @@ function renderJogos(d) {
           <button class="icon-btn del" onclick="deleteJogo('lol', ${j.id})">apagar</button>
         </div>
       </div>`;
-    }).join('');
+      }).join('');
+    _renderHash['rendered-lol'] = 1;
+  }
 
-  // MHW
-  const mhwEl = document.getElementById('mhw-list');
-  mhwEl.innerHTML = !d.jogos.mhw.length ? emptyState('nenhuma build de MHW ainda') :
-    d.jogos.mhw.map(j => {
-      const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
-      return `<div class="card">
-        <div class="card-header">
-          <div class="card-title">${esc(j.arma)} <span style="color:var(--text-muted);font-size:0.8rem">${j.tipoCaca}</span></div>
-          <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
-        </div>
-        ${j.armor ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">ARMADURA</span><br>${esc(j.armor)}</div>` : ''}
-        ${j.skills ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">SKILLS</span><br>${esc(j.skills)}</div>` : ''}
-        ${j.notas ? `<div class="card-body" style="margin-top:8px">${esc(j.notas)}</div>` : ''}
-        <div class="card-actions">
-          <button class="icon-btn" onclick="editarItem('jogo-mhw',${j.id})">editar</button>
-          <button class="icon-btn del" onclick="deleteJogo('mhw', ${j.id})">apagar</button>
-        </div>
-      </div>`;
-    }).join('');
+  // MHW (lazy: só renderiza se tab ativa ou primeira vez)
+  if (isVisible('game-mhw') || !_renderHash['rendered-mhw']) {
+    const mhwEl = document.getElementById('mhw-list');
+    mhwEl.innerHTML = !d.jogos.mhw.length ? emptyState('nenhuma build de MHW ainda') :
+      d.jogos.mhw.map(j => {
+        const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
+        return `<div class="card">
+          <div class="card-header">
+            <div class="card-title">${esc(j.arma)} <span style="color:var(--text-muted);font-size:0.8rem">${j.tipoCaca}</span></div>
+            <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
+          </div>
+          ${j.armor ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">ARMADURA</span><br>${esc(j.armor)}</div>` : ''}
+          ${j.skills ? `<div style="margin-bottom:8px"><span style="color:var(--text-muted);font-size:10px;letter-spacing:0.1em">SKILLS</span><br>${esc(j.skills)}</div>` : ''}
+          ${j.notas ? `<div class="card-body" style="margin-top:8px">${esc(j.notas)}</div>` : ''}
+          <div class="card-actions">
+            <button class="icon-btn" onclick="editarItem('jogo-mhw',${j.id})">editar</button>
+            <button class="icon-btn del" onclick="deleteJogo('mhw', ${j.id})">apagar</button>
+          </div>
+        </div>`;
+      }).join('');
+    _renderHash['rendered-mhw'] = 1;
+  }
 
-  // Outros
-  const outEl = document.getElementById('outros-list');
-  outEl.innerHTML = !d.jogos.outros.length ? emptyState('nenhuma anotação ainda') :
-    d.jogos.outros.map(j => {
-      const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
-      return `<div class="card">
-        <div class="card-header">
-          <div class="card-title">${esc(j.jogo ? j.jogo + ' — ' : '')}${esc(j.titulo)}</div>
-          <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
-        </div>
-        ${j.notas ? `<div class="card-body">${esc(j.notas)}</div>` : ''}
-        <span class="card-tag blue">${j.tipoNota}</span>
-        <div class="card-actions">
-          <button class="icon-btn" onclick="editarItem('jogo-outros',${j.id})">editar</button>
-          <button class="icon-btn del" onclick="deleteJogo('outros', ${j.id})">apagar</button>
-        </div>
-      </div>`;
-    }).join('');
+  // Outros (lazy)
+  if (isVisible('game-outros') || !_renderHash['rendered-outros']) {
+    const outEl = document.getElementById('outros-list');
+    outEl.innerHTML = !d.jogos.outros.length ? emptyState('nenhuma anotação ainda') :
+      d.jogos.outros.map(j => {
+        const deNome = j.de === 'player1' ? d.config.name1 : d.config.name2;
+        return `<div class="card">
+          <div class="card-header">
+            <div class="card-title">${esc(j.jogo ? j.jogo + ' — ' : '')}${esc(j.titulo)}</div>
+            <div class="card-meta">${deNome} · ${timeAgo(j.ts)}</div>
+          </div>
+          ${j.notas ? `<div class="card-body">${esc(j.notas)}</div>` : ''}
+          <span class="card-tag blue">${j.tipoNota}</span>
+          <div class="card-actions">
+            <button class="icon-btn" onclick="editarItem('jogo-outros',${j.id})">editar</button>
+            <button class="icon-btn del" onclick="deleteJogo('outros', ${j.id})">apagar</button>
+          </div>
+        </div>`;
+      }).join('');
+    _renderHash['rendered-outros'] = 1;
+  }
 }
 
 // ─── DESCULPAS ───────────────────────────────────────────
@@ -6450,8 +6535,8 @@ function renderDesculpas(d) {
     const canResponder = !mine && !x.resposta;
     const avatarSrc = x.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
     const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
-    const delay = idx * 55;
-    return `<div class="apology-card" style="animation:cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) ${delay}ms both;cursor:pointer" onclick="abrirDesculpaById(${x.id})">
+    const animStyle = _firstRenderAnim('desculpas', idx);
+    return `<div class="apology-card" style="${animStyle};cursor:pointer" onclick="abrirDesculpaById(${x.id})">
       <div class="apology-from" style="display:flex;align-items:center;gap:0">${avatarHtml}de ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
       ${x.titulo ? `<div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin:6px 0 4px">${esc(x.titulo)}</div>` : ''}
       <div class="apology-msg">${esc(x.msg)}</div>
@@ -6467,6 +6552,7 @@ function renderDesculpas(d) {
       </div>
     </div>`;
   }).join('');
+  _markAnimated('desculpas');
 }
 
 // ─── SEGREDO ─────────────────────────────────────────────
