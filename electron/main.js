@@ -5,9 +5,10 @@ const {
 const path  = require('path');
 const Store = require('electron-store');
 
-const store = new Store();
-const APP_URL = 'https://nosso-espaco-theta.vercel.app';
-const isDev   = process.argv.includes('--dev');
+const store   = new Store();
+const APP_URL  = 'https://nosso-espaco-theta.vercel.app'; // usado só para links externos
+const APP_FILE = path.join(__dirname, '..', 'index.html'); // carregado localmente
+const isDev    = process.argv.includes('--dev');
 
 let mainWindow = null;
 let tray       = null;
@@ -63,49 +64,24 @@ function createWindow() {
     },
   });
 
-  // User-Agent igual ao Chrome normal (evita bloqueio por User-Agent do Electron)
-  const ua = mainWindow.webContents.getUserAgent()
-    .replace(/Electron\/[\d.]+ /, '')
-    .replace(/ nosso-espaco\/[\d.]+/, '');
-  mainWindow.webContents.setUserAgent(ua);
+  // Carrega index.html empacotado localmente — sem depender de internet
+  mainWindow.loadFile(APP_FILE);
+  mainWindow.show();
 
-  // Carrega tela de loading local primeiro (aparece imediatamente, sem black screen)
-  mainWindow.loadFile(path.join(__dirname, 'loading.html'));
-  mainWindow.show(); // mostra imediatamente com a tela de loading
-
-  // Navega para o site real após 300ms (loading já está visível)
-  setTimeout(() => mainWindow?.loadURL(APP_URL), 300);
-
-  // Página real carregou → injeta titlebar
+  // Injeta titlebar quando a página carregar
   mainWindow.webContents.on('did-finish-load', () => {
-    const url = mainWindow?.webContents?.getURL() || '';
-    if (!url.startsWith(APP_URL)) return; // ignora did-finish-load da loading.html
     injetarTitlebar();
   });
 
-  // Página falhou ao carregar (sem internet, etc.)
-  mainWindow.webContents.on('did-fail-load', (_, errCode, errDesc) => {
-    if (errCode === -3) return; // ERR_ABORTED — ignorar
-    clearTimeout(showTimer);
-    // Mostra a janela mesmo assim (vai aparecer a tela de erro do Chromium)
-    if (mainWindow && !mainWindow.isVisible()) mainWindow.show();
-    // Tenta recarregar em 8s
-    setTimeout(() => mainWindow?.loadURL(APP_URL), 8000);
-  });
-
-  // Renderer crashou → reload automático
+  // Renderer crashou → recarrega o arquivo local
   mainWindow.webContents.on('render-process-gone', (_, details) => {
     if (details.reason === 'clean-exit') return;
-    setTimeout(() => {
-      if (!mainWindow) return;
-      mainWindow.loadURL(APP_URL);
-      if (!mainWindow.isVisible()) mainWindow.show();
-    }, 1000);
+    setTimeout(() => mainWindow?.loadFile(APP_FILE), 1000);
   });
 
-  // Previne navegação fora do app (links externos → browser)
+  // Links externos (http/https) → abre no browser, não navega dentro do app
   mainWindow.webContents.on('will-navigate', (e, url) => {
-    if (!url.startsWith(APP_URL)) {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
       e.preventDefault();
       shell.openExternal(url);
     }
