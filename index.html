@@ -6311,15 +6311,17 @@ function renderPerfilContent() {
   const spotify  = d.config['spotify_url' + idx] || '';
   const discord  = d.config['discord_tag' + idx] || '';
 
-  // Stats
+  // Stats — campo correto: p.vitoria (bool) e p.mortes (não p.deaths)
   const partidas = d.monitor?.partidas || [];
   const userPartidas = partidas.filter(p => p.jogador === user || (idx === '1' ? !p.jogador || p.jogador === 'player1' : p.jogador === 'player2'));
-  const total  = userPartidas.length;
-  const vits   = userPartidas.filter(p => p.resultado === 'vitoria').length;
-  const wrPct  = total > 0 ? Math.round((vits / total) * 100) : 0;
-  const kda    = total > 0
-    ? ((userPartidas.reduce((s,p) => s + (p.kills||0) + (p.assists||0), 0) /
-        Math.max(1, userPartidas.reduce((s,p) => s + (p.deaths||0), 0))).toFixed(1))
+  const total        = userPartidas.length;
+  const vits         = userPartidas.filter(p => !!p.vitoria).length;
+  const wrPct        = total > 0 ? Math.round((vits / total) * 100) : 0;
+  const totalK       = userPartidas.reduce((s,p) => s + (p.kills  || 0), 0);
+  const totalA       = userPartidas.reduce((s,p) => s + (p.assists|| 0), 0);
+  const totalM       = userPartidas.reduce((s,p) => s + (p.mortes || 0), 0);
+  const kda          = total > 0
+    ? (totalM === 0 ? 'Perfect' : ((totalK + totalA) / totalM).toFixed(2))
     : '—';
 
   // Badges de conexões
