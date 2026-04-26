@@ -1,2 +1,9 @@
 .vercel
 .env*.local
+
+# Electron
+node_modules/
+dist/
+out/
+*.log
+
