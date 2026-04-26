@@ -2980,6 +2980,11 @@
           <div id="mpanel-analise" class="mpanel" style="display:none">
             <!-- Campeão ativo -->
             <div class="mon-analise-header" id="mon-analise-header"></div>
+            <!-- Riot sync bar -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+              <button class="btn secondary" id="btn-riot-sync" onclick="sincronizarPartida()" style="font-size:11px;padding:8px 16px;letter-spacing:0.08em">↻ sincronizar última partida</button>
+              <div id="riot-sync-status" style="font-size:10px;color:var(--text-muted)"></div>
+            </div>
             <div class="form-panel">
               <div class="form-grid">
                 <div class="field-label" style="font-size:11px;color:var(--text-muted);letter-spacing:0.18em">registrar partida</div>
@@ -3167,7 +3172,26 @@
             </div>
           </div>
 
-          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:-4px">background personalizado</div>
+          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:20px;margin-bottom:4px">⚡ league of legends — riot api</div>
+          <div class="form-group">
+            <div class="field-label">API key <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.08em">developer.riotgames.com · expira em 24h</span></div>
+            <input type="text" id="cfg-riot-key" placeholder="RGAPI-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" style="font-size:11px;letter-spacing:0.04em">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <div class="field-label">seu Riot ID (player 1)</div>
+              <input type="text" id="cfg-riot-id-p1" placeholder="Nome#TAG">
+            </div>
+            <div class="form-group">
+              <div class="field-label">Riot ID parceiro(a) (player 2)</div>
+              <input type="text" id="cfg-riot-id-p2" placeholder="Nome#TAG">
+            </div>
+          </div>
+          <div class="form-actions" style="margin-top:0">
+            <button class="btn secondary" onclick="saveRiotConfig()" style="font-size:11px">salvar configuração Riot</button>
+          </div>
+
+          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:20px;margin-bottom:-4px">background personalizado</div>
           <div class="form-group">
             <label class="img-upload-label">
               ＋ escolher imagem
@@ -3933,6 +3957,9 @@ const defaultData = {
     avatar1: '', avatar2: '',
     fontDisplay1: '', fontDisplay2: '', fontBody1: '', fontBody2: '',
     bg1: '', bg2: '',
+    riot_key: '', riot_id_p1: 'Pujin#20cm', riot_id_p2: 'Ignacarious#Fogo',
+    riot_puuid_p1: '', riot_puuid_p2: '',
+    riot_last_p1: '', riot_last_p2: '',
 },
   cartas: [],
   planos: [],
@@ -3973,6 +4000,14 @@ function normSegredo(s) {
 
 function normalizarDados(d) {
   if (!d.config) d.config = { ...defaultData.config };
+  // init riot fields se não existirem
+  if (!d.config.riot_id_p1) d.config.riot_id_p1 = 'Pujin#20cm';
+  if (!d.config.riot_id_p2) d.config.riot_id_p2 = 'Ignacarious#Fogo';
+  if (d.config.riot_key === undefined) d.config.riot_key = '';
+  if (!d.config.riot_puuid_p1) d.config.riot_puuid_p1 = '';
+  if (!d.config.riot_puuid_p2) d.config.riot_puuid_p2 = '';
+  if (!d.config.riot_last_p1) d.config.riot_last_p1 = '';
+  if (!d.config.riot_last_p2) d.config.riot_last_p2 = '';
   if (!d.jogos) d.jogos = { lol: [], mhw: [], outros: [] };
   d.segredo1 = normSegredo(d.segredo1);
   d.segredo2 = normSegredo(d.segredo2);
@@ -4205,6 +4240,14 @@ async function doLogin(player) {
     currentUser === 'player1' ? 'jogador 1 — nome' : 'jogador 2 — nome';
   document.getElementById('cfg-name').value =
     currentUser === 'player1' ? d.config.name1 : d.config.name2;
+
+  // popula campos Riot
+  const rkEl = document.getElementById('cfg-riot-key');
+  if (rkEl) rkEl.value = d.config.riot_key || '';
+  const rp1El = document.getElementById('cfg-riot-id-p1');
+  if (rp1El) rp1El.value = d.config.riot_id_p1 || '';
+  const rp2El = document.getElementById('cfg-riot-id-p2');
+  if (rp2El) rp2El.value = d.config.riot_id_p2 || '';
 
   aplicarFontes(d);
   aplicarBackground(d);
@@ -5201,6 +5244,227 @@ function renderSegredo(d) {
     <div class="segredo-vault-title">▪ cofre pessoal — ${lista.length} registro${lista.length !== 1 ? 's' : ''} ▪</div>
     ${items}
   </div>`;
+}
+
+// ─── Riot API Integration ────────────────────────────────
+const RIOT_BASE = 'https://americas.api.riotgames.com';
+let riotPendingEntrada = null;
+let riotPendingMatchId = null;
+let riotPendingLastKey = null;
+
+async function riotFetch(url) {
+  const r = await fetch(url);
+  if (r.status === 401) throw new Error('API key inválida ou expirada — atualize nas configurações');
+  if (r.status === 403) throw new Error('API key sem permissão — verifique se está correta');
+  if (r.status === 404) throw new Error('jogador não encontrado — verifique o Riot ID');
+  if (r.status === 429) throw new Error('limite de requests atingido — aguarde 1 minuto');
+  if (!r.ok) throw new Error(`erro ${r.status} na API Riot`);
+  return r.json();
+}
+
+async function saveRiotConfig() {
+  const key   = document.getElementById('cfg-riot-key')?.value.trim()    || '';
+  const idP1  = document.getElementById('cfg-riot-id-p1')?.value.trim()  || '';
+  const idP2  = document.getElementById('cfg-riot-id-p2')?.value.trim()  || '';
+  const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
+  // se Riot ID mudou, limpa PUUID cached para forçar re-fetch
+  const resetP1 = idP1 !== d.config.riot_id_p1;
+  const resetP2 = idP2 !== d.config.riot_id_p2;
+  const updates = {
+    riot_key: key, riot_id_p1: idP1, riot_id_p2: idP2,
+    riot_puuid_p1: resetP1 ? '' : (d.config.riot_puuid_p1 || ''),
+    riot_puuid_p2: resetP2 ? '' : (d.config.riot_puuid_p2 || ''),
+  };
+  await db.ref(STORAGE_KEY + '/config').update(updates);
+  if (cachedData) Object.assign(cachedData.config, updates);
+  toast('configuração Riot salva ⚡');
+}
+
+function setSyncStatus(msg, color) {
+  const el = document.getElementById('riot-sync-status');
+  if (el) { el.textContent = msg; el.style.color = color || 'var(--text-muted)'; }
+}
+
+async function sincronizarPartida() {
+  const d = cachedData || await loadData();
+  const apiKey = d.config.riot_key || '';
+  if (!apiKey) { toast('configure a API key da Riot nas configurações'); showSection('config'); return; }
+
+  const puuidKey = currentUser === 'player1' ? 'riot_puuid_p1' : 'riot_puuid_p2';
+  const riotIdKey = currentUser === 'player1' ? 'riot_id_p1'   : 'riot_id_p2';
+  const lastKey   = currentUser === 'player1' ? 'riot_last_p1' : 'riot_last_p2';
+  const riotId    = d.config[riotIdKey] || '';
+  if (!riotId) { toast('configure seu Riot ID nas configurações'); showSection('config'); return; }
+
+  const btn = document.getElementById('btn-riot-sync');
+  if (btn) { btn.disabled = true; btn.textContent = '⌛ buscando...'; }
+  setSyncStatus('', '');
+
+  try {
+    // 1. PUUID (cache ou API)
+    let puuid = d.config[puuidKey] || '';
+    if (!puuid) {
+      setSyncStatus('buscando perfil Riot...', '');
+      const [gameName, tagLine] = riotId.split('#');
+      if (!gameName || !tagLine) throw new Error('Riot ID inválido — use Nome#TAG');
+      const acct = await riotFetch(`${RIOT_BASE}/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}?api_key=${apiKey}`);
+      puuid = acct.puuid;
+      await db.ref(`${STORAGE_KEY}/config/${puuidKey}`).set(puuid);
+      if (cachedData) cachedData.config[puuidKey] = puuid;
+      d.config[puuidKey] = puuid;
+    }
+
+    // 2. Últimas partidas (ignora bots/tutoriais — queue != 0 e != 2000)
+    setSyncStatus('buscando partidas...', '');
+    const matchIds = await riotFetch(
+      `${RIOT_BASE}/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10&api_key=${apiKey}`
+    );
+    if (!matchIds || !matchIds.length) throw new Error('nenhuma partida encontrada');
+
+    const lastReg = d.config[lastKey] || '';
+    // Pega a mais recente que ainda não foi registrada
+    const toSync = matchIds.find(id => id !== lastReg) || matchIds[0];
+    const alreadySynced = toSync === lastReg;
+
+    // 3. Detalhes da partida
+    setSyncStatus('carregando partida...', '');
+    const match = await riotFetch(`${RIOT_BASE}/lol/match/v5/matches/${toSync}?api_key=${apiKey}`);
+
+    const part = match.info.participants.find(p => p.puuid === puuid);
+    if (!part) throw new Error('jogador não encontrado na partida');
+
+    // ignora modos inválidos silenciosamente (ARAM, TFT etc. são válidos, mas TFT não tem K/D/A)
+    if (match.info.gameType === 'TUTORIAL_GAME') throw new Error('última partida é um tutorial — jogue uma partida normal');
+
+    // 4. Mapear campeão → imagem
+    if (!lolCampeoes.length) await carregarDDragon();
+    const apiChamp = part.championName; // ex: "Ahri", "MonkeyKing"
+    const found = lolCampeoes.find(c =>
+      c.id.toLowerCase()   === apiChamp.toLowerCase() ||
+      c.name.toLowerCase() === apiChamp.toLowerCase()
+    );
+    const champImg         = found ? found.img : `${DDBase}/img/champion/${apiChamp}.png`;
+    const champDisplayName = found ? found.name : apiChamp;
+
+    const durSec = match.info.gameDuration;
+    const durStr = `${Math.floor(durSec/60)}:${String(durSec%60).padStart(2,'0')}`;
+    const gameEndTs = match.info.gameEndTimestamp || (match.info.gameCreation + durSec * 1000);
+    const queueId   = match.info.queueId;
+    const modeLabel = {400:'Normal',420:'Ranqueada Solo',430:'Normal',440:'Ranqueada Flex',450:'ARAM',900:'URF',1020:'One for All'}[queueId] || `modo ${queueId}`;
+
+    const entrada = {
+      id: Date.now(), jogador: currentUser,
+      champ: champDisplayName, champImg,
+      vitoria: part.win,
+      kills: part.kills, mortes: part.deaths, assists: part.assists,
+      visao: part.visionScore,
+      data: new Date(gameEndTs).toISOString(),
+      matchId: toSync
+    };
+    entrada.analise = gerarAnaliseIA(entrada, d);
+
+    setSyncStatus('', '');
+    mostrarPreviewRiot(entrada, toSync, lastKey, alreadySynced, durStr, modeLabel);
+
+  } catch(e) {
+    setSyncStatus('✗ ' + e.message, 'var(--red)');
+    toast('erro: ' + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '↻ sincronizar última partida'; }
+  }
+}
+
+function mostrarPreviewRiot(entrada, matchId, lastKey, alreadySynced, durStr, modeLabel) {
+  riotPendingEntrada = entrada;
+  riotPendingMatchId = matchId;
+  riotPendingLastKey = lastKey;
+
+  const res = entrada.vitoria
+    ? `<span style="color:var(--green);font-weight:400">✓ vitória</span>`
+    : `<span style="color:var(--red);font-weight:400">✗ derrota</span>`;
+  const kda  = entrada.mortes === 0 ? 'Perfect KDA' : ((entrada.kills + entrada.assists) / entrada.mortes).toFixed(2) + ' KDA';
+  const warn = alreadySynced
+    ? `<div style="background:rgba(200,184,122,0.1);border:1px solid var(--accent);padding:8px 12px;font-size:11px;margin-bottom:12px;border-radius:3px">⚠ esta é a última partida já registrada — você quer registrá-la novamente?</div>`
+    : '';
+  const closeBtn = `<button class="btn secondary" onclick="document.getElementById('modal-overlay').classList.remove('open')" style="margin-top:0">cancelar</button>`;
+
+  const html = `
+    ${warn}
+    <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--surface2);border-radius:4px;margin-bottom:14px">
+      <img src="${entrada.champImg}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);flex-shrink:0" onerror="this.style.opacity='0.4'">
+      <div>
+        <div style="font-family:var(--font-display);font-style:italic;font-size:1.3rem;color:var(--accent);line-height:1.1">${esc(entrada.champ)}</div>
+        <div style="margin-top:5px;font-size:11px">${res} · ${modeLabel} · ${durStr}</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">${kda}</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin-bottom:16px">
+      <div style="background:var(--surface2);padding:12px 4px;border-radius:4px;border:1px solid var(--border)">
+        <div style="font-size:1.6rem;color:var(--green);font-family:var(--font-display);line-height:1">${entrada.kills}</div>
+        <div style="font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.2em;margin-top:4px">abates</div>
+      </div>
+      <div style="background:var(--surface2);padding:12px 4px;border-radius:4px;border:1px solid var(--border)">
+        <div style="font-size:1.6rem;color:var(--red);font-family:var(--font-display);line-height:1">${entrada.mortes}</div>
+        <div style="font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.2em;margin-top:4px">mortes</div>
+      </div>
+      <div style="background:var(--surface2);padding:12px 4px;border-radius:4px;border:1px solid var(--border)">
+        <div style="font-size:1.6rem;font-family:var(--font-display);line-height:1">${entrada.assists}</div>
+        <div style="font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.2em;margin-top:4px">assists</div>
+      </div>
+      <div style="background:var(--surface2);padding:12px 4px;border-radius:4px;border:1px solid var(--border)">
+        <div style="font-size:1.6rem;font-family:var(--font-display);line-height:1">${entrada.visao}</div>
+        <div style="font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.2em;margin-top:4px">visão 👁</div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn gold" onclick="confirmarRegistroRiot()">✦ registrar partida</button>
+      ${closeBtn}
+    </div>`;
+
+  document.getElementById('modal-title').textContent = '↻ partida encontrada';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+async function confirmarRegistroRiot() {
+  const entrada  = riotPendingEntrada;
+  const matchId  = riotPendingMatchId;
+  const lastKey  = riotPendingLastKey;
+  if (!entrada) return;
+
+  document.getElementById('modal-overlay').classList.remove('open');
+  const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
+
+  // Lógica de meta (confetti)
+  const meta      = getMetaHoje(d);
+  const feito     = getPartidaseHoje(d);
+  const novoFeito = feito + 1;
+  const metaBatida = meta > 0 && novoFeito === meta;
+
+  d.monitor.partidas.push(entrada);
+
+  if (metaBatida) {
+    const evKey = currentUser === 'player1' ? 'eventos_p1' : 'eventos_p2';
+    const ev = { id: Date.now()+1, data: new Date().toISOString(), tipo: 'meta_batida',
+      msg: `Meta de ${meta} partidas batida! ${novoFeito}/${meta} atingido. 🏆`, jogador: currentUser };
+    d.monitor[evKey].push(ev);
+    await db.ref(STORAGE_KEY + '/monitor/' + evKey).set(d.monitor[evKey]);
+    if (cachedData) cachedData.monitor[evKey] = d.monitor[evKey];
+    launchConfetti();
+    playVictoryFanfare();
+  }
+
+  await db.ref(STORAGE_KEY + '/monitor/partidas').set(d.monitor.partidas);
+  // salva o matchId como último sincronizado (evita duplicata)
+  await db.ref(`${STORAGE_KEY}/config/${lastKey}`).set(matchId);
+  if (cachedData) {
+    cachedData.monitor.partidas = d.monitor.partidas;
+    cachedData.config[lastKey]  = matchId;
+  }
+
+  riotPendingEntrada = riotPendingMatchId = riotPendingLastKey = null;
+  renderMonitor(cachedData);
+  toast(metaBatida ? '🏆 meta batida! parabéns!' : 'partida registrada via Riot API ⚡');
 }
 
 // ─── CONFIG ──────────────────────────────────────────────
