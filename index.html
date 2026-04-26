@@ -1997,8 +1997,8 @@
   body.sad-mode #sec-desculpas .form-panel,
   body.sad-mode #sec-desculpas .apology-card {
     border-color: rgba(100,140,190,0.25) !important;
-    background: rgba(5,12,28,0.72) !important;
-    backdrop-filter: blur(8px) !important;
+    background: rgba(5,12,28,0.88) !important;
+    /* backdrop-filter removido: causa crash de GPU no Electron */
   }
   body.sad-mode #sec-desculpas .btn.gold,
   body.sad-mode #sec-desculpas .btn.secondary,
@@ -5604,7 +5604,9 @@ function logout() {
 }
 
 // ─── Tema triste (desculpas) ──────────────────────────────
-const SAD_BG = 'https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1920&q=80';
+// Gradiente CSS puro — sem imagem externa (evita crash no Electron)
+const SAD_BG_GRADIENT =
+  'linear-gradient(160deg, #020810 0%, #060e24 35%, #03080f 65%, #010508 100%)';
 let _sadSavedBg = null;
 let _sadHadCustomBg = false;
 
@@ -5612,9 +5614,7 @@ function enterSadMode() {
   if (document.body.classList.contains('sad-mode')) return;
   _sadSavedBg      = document.body.style.backgroundImage;
   _sadHadCustomBg  = document.body.classList.contains('custom-bg');
-  // Fundo melancólico com overlay escuro azulado, direto no backgroundImage
-  document.body.style.backgroundImage =
-    `linear-gradient(rgba(4,9,22,0.74), rgba(4,9,22,0.74)), url('${SAD_BG}')`;
+  document.body.style.backgroundImage = SAD_BG_GRADIENT;
   document.body.classList.add('custom-bg', 'sad-mode');
   spawnRain();
 }

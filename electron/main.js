@@ -51,6 +51,35 @@ function createWindow() {
     if (!mainWindow.isVisible()) mainWindow.show();
   });
 
+  // Página falhou ao carregar (sem internet, etc.) → tenta de novo em 5s
+  mainWindow.webContents.on('did-fail-load', (_, errCode, errDesc) => {
+    if (errCode === -3) return; // ERR_ABORTED (navegação cancelada) — ignorar
+    console.log('did-fail-load:', errCode, errDesc);
+    setTimeout(() => mainWindow?.loadURL(APP_URL), 5000);
+  });
+
+  // Renderer travou ou crashou → reload automático
+  mainWindow.webContents.on('render-process-gone', (_, details) => {
+    console.log('render-process-gone:', details.reason);
+    if (details.reason !== 'clean-exit') {
+      setTimeout(() => mainWindow?.loadURL(APP_URL), 1000);
+    }
+  });
+
+  // Previne navegação para URLs fora do app (ex.: links externos)
+  mainWindow.webContents.on('will-navigate', (e, url) => {
+    if (!url.startsWith(APP_URL)) {
+      e.preventDefault();
+      shell.openExternal(url);
+    }
+  });
+
+  // Abre links target="_blank" no navegador padrão em vez de nova janela Electron
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
   // Salva posição/tamanho ao fechar
   mainWindow.on('close', e => {
     store.set('windowBounds', mainWindow.getBounds());
