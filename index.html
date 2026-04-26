@@ -2932,6 +2932,156 @@
   }
   .perfil-toggle-btn:last-child { border-right: none; }
   .perfil-toggle-btn.active { background: var(--accent-dim); color: var(--accent); }
+  /* ─── DOWNLOAD / INSTALAR ───────────────────────────── */
+  #sec-download {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .dl-hero {
+    text-align: center;
+    padding: 32px 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .dl-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,184,122,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .dl-hero-icon {
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 14px;
+    display: block;
+    filter: drop-shadow(0 0 18px rgba(200,184,122,0.2));
+  }
+  .dl-hero-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .dl-hero-sub {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .dl-install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #0a0a0a;
+    border: none;
+    padding: 14px 28px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    font-weight: 400;
+  }
+  .dl-install-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .dl-install-btn:active { transform: translateY(0); }
+  .dl-install-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+  .dl-installed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 10px 20px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .dl-status {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    min-height: 16px;
+    letter-spacing: 0.06em;
+  }
+  .dl-steps {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .dl-steps-title {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dl-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .dl-step:last-child { margin-bottom: 0; }
+  .dl-step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid rgba(200,184,122,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--accent);
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 13px;
+  }
+  .dl-step-text {
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.55;
+    padding-top: 3px;
+  }
+  .dl-step-text span {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    font-size: 10px;
+    border-radius: 2px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .dl-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .dl-feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .dl-feature-icon { font-size: 18px; line-height: 1; }
+  .dl-feature-title { font-size: 10px; color: var(--text); letter-spacing: 0.04em; }
+  .dl-feature-desc { font-size: 9px; color: var(--text-muted); line-height: 1.4; }
+
   .perfil-section-label {
     font-size: 9px;
     letter-spacing: 0.16em;
@@ -3195,6 +3345,7 @@
     <div id="nav-jogos" class="nav-item has-drop" onclick="showSection('jogos')">⌗ jogos ▾</div>
     <button id="nav-desculpas" class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
     <button id="nav-segredo"   class="nav-item" onclick="showSection('segredo')">🔒 segredo</button>
+    <button id="nav-download"  class="nav-item" onclick="showSection('download')" style="color:var(--accent);opacity:0.75" title="instalar como app">⬇ instalar</button>
   </nav>
 
   <main>
@@ -3724,6 +3875,69 @@
       </div>
     </section>
 
+    <!-- ─── DOWNLOAD / INSTALAR ─── -->
+    <section id="sec-download" class="section">
+      <div class="section-title">instalar app</div>
+
+      <div class="dl-hero">
+        <span class="dl-hero-icon">✦</span>
+        <div class="dl-hero-title">nosso espaço</div>
+        <div class="dl-hero-sub">instale como programa no PC ou celular</div>
+
+        <div id="dl-btn-wrap">
+          <button class="dl-install-btn" id="dl-install-btn" onclick="dlInstalar()" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            instalar agora
+          </button>
+          <div class="dl-status" id="dl-status">verificando compatibilidade...</div>
+        </div>
+      </div>
+
+      <div class="dl-features">
+        <div class="dl-feature">
+          <div class="dl-feature-icon">🖥</div>
+          <div class="dl-feature-title">janela própria</div>
+          <div class="dl-feature-desc">sem barra do navegador, igual a um programa</div>
+        </div>
+        <div class="dl-feature">
+          <div class="dl-feature-icon">⚡</div>
+          <div class="dl-feature-title">mais rápido</div>
+          <div class="dl-feature-desc">abre instantaneamente, dados em cache local</div>
+        </div>
+        <div class="dl-feature">
+          <div class="dl-feature-icon">📌</div>
+          <div class="dl-feature-title">fixado no PC</div>
+          <div class="dl-feature-desc">ícone na barra de tarefas e menu Iniciar</div>
+        </div>
+        <div class="dl-feature">
+          <div class="dl-feature-icon">📶</div>
+          <div class="dl-feature-title">funciona offline</div>
+          <div class="dl-feature-desc">acessa mesmo sem internet</div>
+        </div>
+      </div>
+
+      <div class="dl-steps" id="dl-manual-steps" style="display:none">
+        <div class="dl-steps-title">instalação manual (Chrome / Edge)</div>
+        <div class="dl-step">
+          <div class="dl-step-num">1</div>
+          <div class="dl-step-text">Abra o site no <b>Chrome</b> ou <b>Edge</b> e clique na barra de endereço</div>
+        </div>
+        <div class="dl-step">
+          <div class="dl-step-num">2</div>
+          <div class="dl-step-text">Procure o ícone <span>⊕</span> ou <span>⋮</span> → <b>Instalar nosso espaço...</b></div>
+        </div>
+        <div class="dl-step">
+          <div class="dl-step-num">3</div>
+          <div class="dl-step-text">Clique em <span>Instalar</span> na janela que aparece — pronto!</div>
+        </div>
+        <div class="dl-step">
+          <div class="dl-step-num">4</div>
+          <div class="dl-step-text">O app aparece no <b>menu Iniciar</b> e na <b>barra de tarefas</b> como qualquer programa</div>
+        </div>
+      </div>
+
+    </section>
+
     <!-- ─── PERFIL ─── -->
     <section id="sec-perfil" class="section">
       <div class="section-title" id="perfil-section-title">meu perfil</div>
@@ -4143,6 +4357,65 @@ const db = firebase.database();
 let currentUser = null;
 let apoTarget = 'player1';
 let perfilViewingUser = null;
+
+// ─── PWA Install Prompt ──────────────────────────────────
+let dlDeferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  dlDeferredPrompt = e;
+  dlAtualizarBotao();
+});
+
+window.addEventListener('appinstalled', () => {
+  dlDeferredPrompt = null;
+  dlAtualizarBotao();
+  toast('app instalado com sucesso ✦');
+});
+
+function dlAtualizarBotao() {
+  const btn    = document.getElementById('dl-install-btn');
+  const status = document.getElementById('dl-status');
+  const manual = document.getElementById('dl-manual-steps');
+  const wrap   = document.getElementById('dl-btn-wrap');
+  if (!btn) return;
+
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+
+  if (isStandalone) {
+    // Já instalado e rodando como app
+    btn.style.display = 'none';
+    if (status) {
+      status.innerHTML = '<div class="dl-installed-badge">✓ app instalado e em execução</div>';
+    }
+    if (manual) manual.style.display = 'none';
+    return;
+  }
+
+  if (dlDeferredPrompt) {
+    // Prompt disponível — botão ativo
+    btn.disabled = false;
+    if (status) status.textContent = 'Chrome ou Edge detectado — clique para instalar';
+    if (manual) manual.style.display = 'none';
+  } else {
+    // Sem prompt — mostrar instruções manuais
+    btn.disabled = true;
+    btn.style.display = 'none';
+    if (status) status.textContent = '';
+    if (manual) manual.style.display = 'block';
+  }
+}
+
+async function dlInstalar() {
+  if (!dlDeferredPrompt) return;
+  dlDeferredPrompt.prompt();
+  const { outcome } = await dlDeferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    dlDeferredPrompt = null;
+    dlAtualizarBotao();
+  }
+}
 
 // ─── LoL Data Dragon ─────────────────────────────────────
 const DDV = '16.8.1';
@@ -5254,6 +5527,9 @@ function showSection(id) {
   } else {
     spStopNowPlaying();
   }
+
+  // Download: atualiza estado do botão ao abrir
+  if (id === 'download') dlAtualizarBotao();
 }
 
 // switchGame: controla qual jogo aparece no painel BUILDS
