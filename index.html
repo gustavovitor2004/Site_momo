@@ -6583,19 +6583,36 @@ function setSyncStatus(msg, color) {
   if (el) { el.textContent = msg; el.style.color = color || 'var(--text-muted)'; }
 }
 
-async function sincronizarPartida() {
+async function sincronizarPartida(opts = {}) {
+  const silent = !!opts.silent; // não mostra toasts em auto-sync
   const d = cachedData || await loadData();
   const apiKey = d.config.riot_key || '';
-  if (!apiKey) { toast('configure a API key da Riot nas configurações'); showSection('config'); return; }
+  if (!apiKey) {
+    if (!silent) { toast('configure a API key da Riot nas configurações'); showSection('config'); }
+    return;
+  }
 
-  const puuidKey = currentUser === 'player1' ? 'riot_puuid_p1' : 'riot_puuid_p2';
-  const riotIdKey = currentUser === 'player1' ? 'riot_id_p1'   : 'riot_id_p2';
-  const lastKey   = currentUser === 'player1' ? 'riot_last_p1' : 'riot_last_p2';
+  const puuidKey  = currentUser === 'player1' ? 'riot_puuid_p1' : 'riot_puuid_p2';
+  const riotIdKey = currentUser === 'player1' ? 'riot_id_p1'    : 'riot_id_p2';
+  const lastKey   = currentUser === 'player1' ? 'riot_last_p1'  : 'riot_last_p2';
+  const mainKey   = currentUser === 'player1' ? 'main_p1'       : 'main_p2';
   const riotId    = d.config[riotIdKey] || '';
-  if (!riotId) { toast('configure seu Riot ID nas configurações'); showSection('config'); return; }
+  if (!riotId) {
+    if (!silent) { toast('configure seu Riot ID nas configurações'); showSection('config'); }
+    return;
+  }
+
+  // Main champion — se definido, busca partida desse campeão
+  const mainChamp = d.monitor && d.monitor[mainKey] ? d.monitor[mainKey] : null;
+  const mainNome  = mainChamp ? (mainChamp.nome || '').toLowerCase() : '';
 
   const btn = document.getElementById('btn-riot-sync');
-  if (btn) { btn.disabled = true; btn.textContent = '⌛ buscando...'; }
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = mainChamp
+      ? `⌛ buscando ${mainChamp.nome}...`
+      : '⌛ buscando...';
+  }
   setSyncStatus('', '');
 
   try {
@@ -6612,31 +6629,67 @@ async function sincronizarPartida() {
       d.config[puuidKey] = puuid;
     }
 
-    // 2. Últimas partidas (ignora bots/tutoriais — queue != 0 e != 2000)
-    setSyncStatus('buscando partidas...', '');
+    // 2. Últimas partidas — busca 20 para ter onde filtrar pelo main
+    setSyncStatus(mainChamp ? `procurando partida de ${mainChamp.nome}...` : 'buscando partidas...', '');
     const matchIds = await riotFetch(
-      `${RIOT_BASE}/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10&api_key=${apiKey}`
+      `${RIOT_BASE}/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&api_key=${apiKey}`
     );
     if (!matchIds || !matchIds.length) throw new Error('nenhuma partida encontrada');
 
     const lastReg = d.config[lastKey] || '';
-    // Pega a mais recente que ainda não foi registrada
-    const toSync = matchIds.find(id => id !== lastReg) || matchIds[0];
+
+    // Carrega ddragon antes para mapear nomes
+    if (!lolCampeoes.length) await carregarDDragon();
+
+    // Helper: pega detalhes da partida
+    const buscarMatch = async (id) => riotFetch(`${RIOT_BASE}/lol/match/v5/matches/${id}?api_key=${apiKey}`);
+    const matchChampMatchesMain = (m) => {
+      if (!mainNome) return false;
+      const part = m.info.participants.find(p => p.puuid === puuid);
+      if (!part) return false;
+      const apiChamp = (part.championName || '').toLowerCase();
+      const found = lolCampeoes.find(c =>
+        c.id.toLowerCase() === apiChamp || c.name.toLowerCase() === apiChamp);
+      const displayName = found ? found.name.toLowerCase() : apiChamp;
+      return displayName === mainNome || apiChamp === mainNome;
+    };
+
+    let toSync = null;
+    let match  = null;
+    let foundComMain = false;
+
+    if (mainChamp) {
+      // Procura a mais recente com o main champion (limita a 5 chamadas pra não estourar rate limit)
+      const candidates = matchIds.slice(0, 10);
+      for (const id of candidates) {
+        if (id === lastReg) continue; // pula a já registrada
+        try {
+          const m = await buscarMatch(id);
+          if (matchChampMatchesMain(m)) {
+            toSync = id;
+            match  = m;
+            foundComMain = true;
+            break;
+          }
+        } catch(_) { /* ignora erros pontuais */ }
+      }
+    }
+
+    // Fallback: se não achou com main (ou main não definido), pega a mais recente não registrada
+    if (!toSync) {
+      toSync = matchIds.find(id => id !== lastReg) || matchIds[0];
+      setSyncStatus('carregando partida...', '');
+      match = await buscarMatch(toSync);
+    }
+
     const alreadySynced = toSync === lastReg;
-
-    // 3. Detalhes da partida
-    setSyncStatus('carregando partida...', '');
-    const match = await riotFetch(`${RIOT_BASE}/lol/match/v5/matches/${toSync}?api_key=${apiKey}`);
-
     const part = match.info.participants.find(p => p.puuid === puuid);
     if (!part) throw new Error('jogador não encontrado na partida');
 
-    // ignora modos inválidos silenciosamente (ARAM, TFT etc. são válidos, mas TFT não tem K/D/A)
     if (match.info.gameType === 'TUTORIAL_GAME') throw new Error('última partida é um tutorial — jogue uma partida normal');
 
-    // 4. Mapear campeão → imagem
-    if (!lolCampeoes.length) await carregarDDragon();
-    const apiChamp = part.championName; // ex: "Ahri", "MonkeyKing"
+    // 3. Mapear campeão → imagem
+    const apiChamp = part.championName;
     const found = lolCampeoes.find(c =>
       c.id.toLowerCase()   === apiChamp.toLowerCase() ||
       c.name.toLowerCase() === apiChamp.toLowerCase()
@@ -6661,12 +6714,20 @@ async function sincronizarPartida() {
     };
     entrada.analise = gerarAnaliseIA(entrada, d);
 
-    setSyncStatus('', '');
+    // Status final
+    if (mainChamp && !foundComMain) {
+      setSyncStatus(`⚠ não achei ${mainChamp.nome} nas últimas 10 — mostrando a última`, 'var(--accent)');
+    } else if (foundComMain) {
+      setSyncStatus(`✓ encontrada partida de ${mainChamp.nome}`, 'var(--green)');
+    } else {
+      setSyncStatus('', '');
+    }
+
     mostrarPreviewRiot(entrada, toSync, lastKey, alreadySynced, durStr, modeLabel);
 
   } catch(e) {
     setSyncStatus('✗ ' + e.message, 'var(--red)');
-    toast('erro: ' + e.message);
+    if (!silent) toast('erro: ' + e.message);
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '↻ sincronizar última partida'; }
   }
@@ -7631,12 +7692,38 @@ function playVictoryFanfare() {
 
 // ─── Sub-nav ─────────────────────────────────────────────
 const monPanels = ['home','analise','sinergia','celebracoes'];
+// flag por sessão para auto-sync (evita estourar rate limit da Riot)
+let _autoSyncedAnalise = false;
+
 function switchMonitor(p) {
   monPanels.forEach(k => {
     document.getElementById('mpanel-' + k).style.display = k === p ? '' : 'none';
     document.getElementById('mtab-' + k).classList.toggle('active', k === p);
   });
-  if (p === 'analise') renderMonAnalise(cachedData);
+  if (p === 'analise') {
+    renderMonAnalise(cachedData);
+    autoSyncAnaliseSeNecessario();
+  }
+}
+
+// Auto-busca a última partida do main champion ao abrir ANÁLISE
+async function autoSyncAnaliseSeNecessario() {
+  if (_autoSyncedAnalise) return;
+  const d = cachedData;
+  if (!d || !d.monitor || !d.config) return;
+
+  const mainKey  = currentUser === 'player1' ? 'main_p1'      : 'main_p2';
+  const riotKey  = currentUser === 'player1' ? 'riot_id_p1'   : 'riot_id_p2';
+  const main     = d.monitor[mainKey];
+  const apiKey   = d.config.riot_key || '';
+  const riotId   = d.config[riotKey] || '';
+
+  // só auto-sync se: tem main definido + tem credenciais Riot
+  if (!main || !apiKey || !riotId) return;
+
+  _autoSyncedAnalise = true;
+  // delay pequeno pra UI carregar antes
+  setTimeout(() => sincronizarPartida({ silent: true }), 400);
 }
 
 // ─── Set main champion ───────────────────────────────────
