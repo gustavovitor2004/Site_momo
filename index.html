@@ -2486,6 +2486,453 @@
     main { padding: 20px 16px; }
     header { padding: 0 16px; }
     nav { padding: 0 16px; }
+    .conexoes-grid { grid-template-columns: repeat(3,1fr); }
+    .perfil-stats { grid-template-columns: repeat(3,1fr); }
+  }
+
+  /* ─── CONFIG TABS ────────────────────────────────────── */
+  .cfg-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin: -4px 0 20px;
+  }
+  .cfg-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 18px;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .cfg-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .cfg-tab:hover:not(.active) { color: var(--text); }
+  .cfg-panel { display: none; }
+  .cfg-panel.active { display: block; }
+
+  /* Avatar clickable */
+  .cfg-photos-row {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 4px;
+  }
+  .cfg-avatar-wrap {
+    position: relative;
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .cfg-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+    display: block;
+  }
+  .cfg-avatar-ph {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px dashed rgba(200,184,122,0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: var(--text-muted);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    transition: border-color 0.2s;
+  }
+  .cfg-avatar-wrap:hover .cfg-avatar-ph { border-color: var(--accent); }
+  .cfg-avatar-ph svg { width: 22px; height: 22px; opacity: 0.55; }
+  .cfg-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.52);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .cfg-avatar-overlay svg { width: 20px; height: 20px; fill: white; }
+  .cfg-avatar-wrap:hover .cfg-avatar-overlay { opacity: 1; }
+  .cfg-avatar-remove {
+    position: absolute;
+    top: -2px; right: -2px;
+    background: var(--red);
+    border: 2px solid var(--surface);
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 8px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 0;
+    line-height: 1;
+  }
+
+  /* Banner clickable */
+  .cfg-banner-wrap {
+    position: relative;
+    flex: 1;
+    height: 82px;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .cfg-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cfg-banner-ph {
+    width: 100%;
+    height: 100%;
+    background: var(--surface2);
+    border: 2px dashed rgba(200,184,122,0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--text-muted);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: border-color 0.2s;
+    border-radius: 4px;
+  }
+  .cfg-banner-ph svg { width: 20px; height: 20px; opacity: 0.5; }
+  .cfg-banner-wrap:hover .cfg-banner-ph { border-color: var(--accent); }
+  .cfg-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .cfg-banner-overlay svg { width: 22px; height: 22px; fill: white; }
+  .cfg-banner-wrap:hover .cfg-banner-overlay { opacity: 1; }
+  .cfg-banner-remove {
+    position: absolute;
+    top: 5px; right: 5px;
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 9px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 0;
+    transition: background 0.15s;
+  }
+  .cfg-banner-remove:hover { background: var(--red); }
+
+  /* Bg upload (same style as banner) */
+  .cfg-bg-wrap {
+    position: relative;
+    width: 100%;
+    height: 90px;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .cfg-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cfg-bg-ph {
+    width: 100%;
+    height: 100%;
+    background: var(--surface2);
+    border: 2px dashed rgba(200,184,122,0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--text-muted);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: border-color 0.2s;
+    border-radius: 4px;
+  }
+  .cfg-bg-ph svg { width: 20px; height: 20px; opacity: 0.5; }
+  .cfg-bg-wrap:hover .cfg-bg-ph { border-color: var(--accent); }
+  .cfg-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .cfg-bg-overlay svg { width: 22px; height: 22px; fill: white; }
+  .cfg-bg-wrap:hover .cfg-bg-overlay { opacity: 1; }
+  .cfg-bg-remove {
+    position: absolute;
+    top: 5px; right: 5px;
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 9px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 0;
+    transition: background 0.15s;
+  }
+  .cfg-bg-remove:hover { background: var(--red); }
+  .cfg-photo-labels {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .cfg-photo-label {
+    font-size: 9px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .cfg-photo-label.avatar-lbl { width: 82px; flex-shrink: 0; }
+  .cfg-photo-label.banner-lbl { flex: 1; }
+
+  /* Conexões tab */
+  .conexoes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .conexao-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 10px 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .conexao-btn:hover { border-color: rgba(200,184,122,0.4); }
+  .conexao-btn.ativo { border-color: var(--accent); background: var(--accent-dim); }
+  .conexao-logo { width: 30px; height: 30px; object-fit: contain; }
+  .conexao-nome {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .conexao-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    margin-top: 2px;
+  }
+  .conexao-dot.ok { background: var(--green); }
+  .conexao-panel {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 14px;
+    display: none;
+    background: var(--surface2);
+    animation: fadeIn 0.18s ease;
+  }
+  .conexao-panel.aberto { display: block; }
+  .conexao-panel-title {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ─── PERFIL PAGE/MODAL ──────────────────────────────── */
+  #sec-perfil {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .perfil-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .perfil-banner-area {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, var(--surface2) 0%, rgba(200,184,122,0.08) 100%);
+  }
+  .perfil-avatar-row {
+    padding: 0 20px;
+    margin-top: -44px;
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .perfil-avatar-big {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--surface);
+    flex-shrink: 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+    background: var(--surface2);
+  }
+  .perfil-avatar-ph {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 3px solid var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 2.4rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+  }
+  .perfil-body {
+    padding: 6px 20px 24px;
+  }
+  .perfil-name {
+    font-family: var(--font-display);
+    font-size: 1.85rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .perfil-sub {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+  .perfil-badges {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin: 14px 0 10px;
+  }
+  .perfil-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface2);
+  }
+  .perfil-badge.con { border-color: rgba(200,184,122,0.3); color: var(--accent); }
+  .perfil-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+  .perfil-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 10px 0 0;
+  }
+  .perfil-stat {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .perfil-stat-val {
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .perfil-stat-label {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 5px;
+  }
+  .perfil-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .perfil-toggle-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    border-right: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .perfil-toggle-btn:last-child { border-right: none; }
+  .perfil-toggle-btn.active { background: var(--accent-dim); color: var(--accent); }
+  .perfil-section-label {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
   }
 </style>
 </head>
@@ -2574,6 +3021,9 @@
 
         <div class="profile-dropdown" id="profile-dropdown">
           <div class="profile-dropdown-inner">
+            <button class="profile-dropdown-item" onclick="abrirPerfil('eu');closeProfileDropdown()">
+              <span class="di-icon">◈</span> meu perfil
+            </button>
             <button class="profile-dropdown-item" onclick="showSection('config');closeProfileDropdown()">
               <span class="di-icon">⚙</span> configurações
             </button>
@@ -3125,86 +3575,201 @@
       </div>
     </section>
 
+    <!-- ─── PERFIL ─── -->
+    <section id="sec-perfil" class="section">
+      <div class="section-title" id="perfil-section-title">meu perfil</div>
+
+      <!-- Toggle meu/parceiro -->
+      <div class="perfil-toggle" id="perfil-toggle">
+        <button class="perfil-toggle-btn active" id="ptoggle-eu" onclick="switchPerfil('eu')">◈ meu perfil</button>
+        <button class="perfil-toggle-btn" id="ptoggle-parceiro" onclick="switchPerfil('parceiro')">♡ parceiro(a)</button>
+      </div>
+
+      <div id="perfil-content"></div>
+    </section>
+
     <!-- ─── CONFIG ─── -->
     <section id="sec-config" class="section">
       <div class="section-title">configurações</div>
 
-      <div class="form-panel">
-        <div class="form-grid">
+      <!-- Tabs -->
+      <div class="cfg-tabs">
+        <button class="cfg-tab active" id="cfgtab-geral" onclick="switchCfgTab('geral')">geral</button>
+        <button class="cfg-tab" id="cfgtab-conexoes" onclick="switchCfgTab('conexoes')">conexões</button>
+      </div>
 
-          <div class="field-label" style="font-size:12px;color:var(--text);margin-bottom:-4px">foto de perfil</div>
-          <div class="form-group">
-            <label class="img-upload-label">
-              ＋ escolher foto
-              <input type="file" id="avatar-input" accept="image/*" onchange="previewAvatar(this)">
-            </label>
-            <div id="avatar-preview" style="display:none;margin-top:8px;position:relative;width:fit-content">
-              <img id="avatar-thumb" src="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid var(--border)">
-              <button class="img-remove" onclick="removeAvatar()" style="top:-4px;right:-4px">✕</button>
-            </div>
-          </div>
+      <!-- GERAL panel -->
+      <div class="cfg-panel active" id="cfgpanel-geral">
+        <div class="form-panel">
+          <div class="form-grid">
 
-          <div class="field-label" style="font-size:12px;color:var(--text);margin-bottom:-4px">nome de exibição</div>
-          <div class="form-group">
-            <div class="field-label" id="cfg-name-label">seu nome ou apelido</div>
-            <input type="text" id="cfg-name" placeholder="seu nome ou apelido" onchange="saveConfig()">
-          </div>
+            <!-- Fotos -->
+            <div class="field-label" style="font-size:11px;color:var(--text);margin-bottom:8px">foto & banner</div>
+            <div class="cfg-photos-row">
+              <!-- Avatar circle -->
+              <div class="cfg-avatar-wrap" id="cfg-avatar-wrap" onclick="document.getElementById('avatar-input').click()">
+                <img class="cfg-avatar-img" id="avatar-thumb" src="" style="display:none">
+                <div class="cfg-avatar-ph" id="cfg-avatar-ph">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  foto
+                </div>
+                <div class="cfg-avatar-overlay">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>
+                <button class="cfg-avatar-remove" id="cfg-avatar-remove" onclick="removeAvatar();event.stopPropagation()">✕</button>
+                <input type="file" id="avatar-input" accept="image/*" onchange="previewAvatar(this)" style="display:none">
+              </div>
+              <!-- Banner rect -->
+              <div class="cfg-banner-wrap" id="cfg-banner-wrap" onclick="document.getElementById('banner-input').click()">
+                <img class="cfg-banner-img" id="banner-thumb" src="" style="display:none">
+                <div class="cfg-banner-ph" id="cfg-banner-ph">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  banner
+                </div>
+                <div class="cfg-banner-overlay">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>
+                <button class="cfg-banner-remove" id="cfg-banner-remove" onclick="removeBanner();event.stopPropagation()">✕</button>
+                <input type="file" id="banner-input" accept="image/*" onchange="previewBanner(this)" style="display:none">
+              </div>
+            </div>
+            <div class="cfg-photo-labels">
+              <div class="cfg-photo-label avatar-lbl">perfil</div>
+              <div class="cfg-photo-label banner-lbl">banner</div>
+            </div>
 
-          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:16px;margin-bottom:7px">fonte do site</div>
-          <div class="font-drawer" id="font-drawer-display">
-            <div class="font-drawer-trigger" onclick="toggleFontDrawer('display')">
-              <span class="font-drawer-label">títulos e destaques</span>
-              <span class="font-drawer-current" id="font-drawer-cur-display">—</span>
-              <span class="font-drawer-arrow">▾</span>
-            </div>
-            <div class="font-drawer-panel">
-              <div class="font-picker-wrap" id="font-display-opts"></div>
-            </div>
-          </div>
-          <div class="font-drawer" id="font-drawer-body">
-            <div class="font-drawer-trigger" onclick="toggleFontDrawer('body')">
-              <span class="font-drawer-label">texto do corpo</span>
-              <span class="font-drawer-current" id="font-drawer-cur-body">—</span>
-              <span class="font-drawer-arrow">▾</span>
-            </div>
-            <div class="font-drawer-panel">
-              <div class="font-picker-wrap" id="font-body-opts"></div>
-            </div>
-          </div>
-
-          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:20px;margin-bottom:4px">⚡ league of legends — riot api</div>
-          <div class="form-group">
-            <div class="field-label">API key <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.08em">developer.riotgames.com · expira em 24h</span></div>
-            <input type="text" id="cfg-riot-key" placeholder="RGAPI-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" style="font-size:11px;letter-spacing:0.04em">
-          </div>
-          <div class="form-row">
+            <!-- Nome -->
+            <div class="field-label" style="font-size:11px;color:var(--text);margin-bottom:-2px">nome de exibição</div>
             <div class="form-group">
-              <div class="field-label">seu Riot ID (player 1)</div>
-              <input type="text" id="cfg-riot-id-p1" placeholder="Nome#TAG">
+              <div class="field-label" id="cfg-name-label">seu nome ou apelido</div>
+              <input type="text" id="cfg-name" placeholder="seu nome ou apelido" onchange="saveConfig()">
             </div>
-            <div class="form-group">
-              <div class="field-label">Riot ID parceiro(a) (player 2)</div>
-              <input type="text" id="cfg-riot-id-p2" placeholder="Nome#TAG">
+
+            <!-- Fonte -->
+            <div class="field-label" style="font-size:11px;color:var(--text);margin-top:16px;margin-bottom:7px">fonte do site</div>
+            <div class="font-drawer" id="font-drawer-display">
+              <div class="font-drawer-trigger" onclick="toggleFontDrawer('display')">
+                <span class="font-drawer-label">títulos e destaques</span>
+                <span class="font-drawer-current" id="font-drawer-cur-display">—</span>
+                <span class="font-drawer-arrow">▾</span>
+              </div>
+              <div class="font-drawer-panel">
+                <div class="font-picker-wrap" id="font-display-opts"></div>
+              </div>
             </div>
+            <div class="font-drawer" id="font-drawer-body">
+              <div class="font-drawer-trigger" onclick="toggleFontDrawer('body')">
+                <span class="font-drawer-label">texto do corpo</span>
+                <span class="font-drawer-current" id="font-drawer-cur-body">—</span>
+                <span class="font-drawer-arrow">▾</span>
+              </div>
+              <div class="font-drawer-panel">
+                <div class="font-picker-wrap" id="font-body-opts"></div>
+              </div>
+            </div>
+
+            <!-- Background -->
+            <div class="field-label" style="font-size:11px;color:var(--text);margin-top:20px;margin-bottom:8px">background personalizado</div>
+            <div class="cfg-bg-wrap" id="cfg-bg-wrap" onclick="document.getElementById('bg-img-input').click()">
+              <img class="cfg-bg-img" id="bg-img-thumb" src="" style="display:none">
+              <div class="cfg-bg-ph" id="cfg-bg-ph">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><circle cx="7.5" cy="6" r="0.5" fill="currentColor"/><circle cx="10.5" cy="6" r="0.5" fill="currentColor"/></svg>
+                clique para escolher imagem de fundo
+              </div>
+              <div class="cfg-bg-overlay">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              </div>
+              <button class="cfg-bg-remove" id="cfg-bg-remove" onclick="removeBgImg();event.stopPropagation()">✕</button>
+              <input type="file" id="bg-img-input" accept="image/*" onchange="previewBgImg(this)" style="display:none">
+            </div>
+
           </div>
-          <div class="form-actions" style="margin-top:0">
-            <button class="btn secondary" onclick="saveRiotConfig()" style="font-size:11px">salvar configuração Riot</button>
+        </div>
+      </div>
+
+      <!-- CONEXÕES panel -->
+      <div class="cfg-panel" id="cfgpanel-conexoes">
+        <div class="form-panel">
+
+          <div class="conexoes-grid">
+            <!-- Riot -->
+            <button class="conexao-btn" id="cbtn-riot" onclick="toggleConexao('riot')">
+              <img class="conexao-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/League_of_Legends_2019_vector.svg/120px-League_of_Legends_2019_vector.svg.png" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+              <span style="display:none;font-size:18px">⚡</span>
+              <span class="conexao-nome">Riot</span>
+              <div class="conexao-dot" id="cdot-riot"></div>
+            </button>
+            <!-- Spotify -->
+            <button class="conexao-btn" id="cbtn-spotify" onclick="toggleConexao('spotify')">
+              <svg class="conexao-logo" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+              <span class="conexao-nome">Spotify</span>
+              <div class="conexao-dot" id="cdot-spotify"></div>
+            </button>
+            <!-- Discord -->
+            <button class="conexao-btn" id="cbtn-discord" onclick="toggleConexao('discord')">
+              <svg class="conexao-logo" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+              <span class="conexao-nome">Discord</span>
+              <div class="conexao-dot" id="cdot-discord"></div>
+            </button>
           </div>
 
-          <div class="field-label" style="font-size:12px;color:var(--text);margin-top:20px;margin-bottom:-4px">background personalizado</div>
-          <div class="form-group">
-            <label class="img-upload-label">
-              ＋ escolher imagem
-              <input type="file" id="bg-img-input" accept="image/*" onchange="previewBgImg(this)">
-            </label>
-            <div id="bg-img-preview" style="display:none;margin-top:8px;position:relative">
-              <img id="bg-img-thumb" src="" style="width:100%;max-height:120px;object-fit:cover;border:1px solid var(--border)">
-              <button class="img-remove" onclick="removeBgImg()">✕</button>
+          <!-- Riot panel -->
+          <div class="conexao-panel" id="cpanel-riot">
+            <div class="conexao-panel-title">⚡ League of Legends — Riot API</div>
+            <div class="form-group" style="margin-bottom:10px">
+              <div class="field-label">API key <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.08em">developer.riotgames.com · expira em 24h</span></div>
+              <input type="text" id="cfg-riot-key" placeholder="RGAPI-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" style="font-size:11px;letter-spacing:0.04em">
+            </div>
+            <div class="form-row" style="margin-bottom:10px">
+              <div class="form-group">
+                <div class="field-label">Riot ID — player 1</div>
+                <input type="text" id="cfg-riot-id-p1" placeholder="Nome#TAG">
+              </div>
+              <div class="form-group">
+                <div class="field-label">Riot ID — player 2</div>
+                <input type="text" id="cfg-riot-id-p2" placeholder="Nome#TAG">
+              </div>
+            </div>
+            <div class="form-actions" style="margin-top:0">
+              <button class="btn secondary" onclick="saveRiotConfig()" style="font-size:11px">salvar configuração Riot</button>
+            </div>
+          </div>
+
+          <!-- Spotify panel -->
+          <div class="conexao-panel" id="cpanel-spotify">
+            <div class="conexao-panel-title" style="color:#1DB954">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+              Spotify
+            </div>
+            <div class="field-label" style="margin-bottom:10px;color:var(--text-muted)">conecte sua conta Spotify para exibir músicas no seu perfil</div>
+            <div class="form-group" style="margin-bottom:10px">
+              <div class="field-label">URL do perfil Spotify (opcional)</div>
+              <input type="text" id="cfg-spotify-url" placeholder="https://open.spotify.com/user/...">
+            </div>
+            <div class="form-actions" style="margin-top:0">
+              <button class="btn secondary" onclick="saveSpotifyConfig()" style="font-size:11px">salvar</button>
+            </div>
+          </div>
+
+          <!-- Discord panel -->
+          <div class="conexao-panel" id="cpanel-discord">
+            <div class="conexao-panel-title" style="color:#5865F2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+              Discord
+            </div>
+            <div class="field-label" style="margin-bottom:10px;color:var(--text-muted)">adicione seu usuário Discord para exibir no perfil</div>
+            <div class="form-group" style="margin-bottom:10px">
+              <div class="field-label">usuário Discord</div>
+              <input type="text" id="cfg-discord-tag" placeholder="usuario#0000 ou @usuario">
+            </div>
+            <div class="form-actions" style="margin-top:0">
+              <button class="btn secondary" onclick="saveDiscordConfig()" style="font-size:11px">salvar</button>
             </div>
           </div>
 
         </div>
       </div>
+
     </section>
 
   </main>
@@ -3406,6 +3971,7 @@ const db = firebase.database();
 // ═══ STATE ════════════════════════════════════════════
 let currentUser = null;
 let apoTarget = 'player1';
+let perfilViewingUser = null;
 
 // ─── LoL Data Dragon ─────────────────────────────────────
 const DDV = '16.8.1';
@@ -3851,16 +4417,21 @@ function aplicarFontes(d) {
 function aplicarBackground(d) {
   if (!d || !d.config) return;
   const saved = currentUser === 'player1' ? d.config.bg1 : d.config.bg2;
+  const bgImg = document.getElementById('bg-img-thumb');
+  const bgPh  = document.getElementById('cfg-bg-ph');
+  const bgRem = document.getElementById('cfg-bg-remove');
   if (saved) {
     document.body.style.backgroundImage = `url(${saved})`;
     document.body.classList.add('custom-bg');
-    document.getElementById('bg-img-thumb').src = saved;
-    document.getElementById('bg-img-preview').style.display = 'block';
+    if (bgImg) { bgImg.src = saved; bgImg.style.display = 'block'; }
+    if (bgPh)  bgPh.style.display = 'none';
+    if (bgRem) bgRem.style.display = 'flex';
   } else {
     document.body.style.backgroundImage = '';
     document.body.classList.remove('custom-bg');
-    document.getElementById('bg-img-preview').style.display = 'none';
-    document.getElementById('bg-img-thumb').src = '';
+    if (bgImg) { bgImg.src = ''; bgImg.style.display = 'none'; }
+    if (bgPh)  bgPh.style.display = 'flex';
+    if (bgRem) bgRem.style.display = 'none';
   }
 }
 
@@ -3870,24 +4441,34 @@ function previewBgImg(input) {
   reader.onload = async e => {
     let data = e.target.result;
     if (data.length > 300000) data = await comprimirBase64(data, 1280, 0.6);
-    document.getElementById('bg-img-thumb').src = data;
-    document.getElementById('bg-img-preview').style.display = 'block';
+    const img = document.getElementById('bg-img-thumb');
+    if (img) { img.src = data; img.style.display = 'block'; }
+    const ph = document.getElementById('cfg-bg-ph');
+    if (ph) ph.style.display = 'none';
+    const rem = document.getElementById('cfg-bg-remove');
+    if (rem) rem.style.display = 'flex';
     document.body.style.backgroundImage = `url(${data})`;
     document.body.classList.add('custom-bg');
     const configKey = currentUser === 'player1' ? 'bg1' : 'bg2';
     db.ref(STORAGE_KEY + '/config').update({ [configKey]: data });
+    if (cachedData && cachedData.config) cachedData.config[configKey] = data;
   };
   reader.readAsDataURL(file);
 }
 
 function removeBgImg() {
   document.getElementById('bg-img-input').value = '';
-  document.getElementById('bg-img-preview').style.display = 'none';
-  document.getElementById('bg-img-thumb').src = '';
+  const img = document.getElementById('bg-img-thumb');
+  if (img) { img.src = ''; img.style.display = 'none'; }
+  const ph = document.getElementById('cfg-bg-ph');
+  if (ph) ph.style.display = 'flex';
+  const rem = document.getElementById('cfg-bg-remove');
+  if (rem) rem.style.display = 'none';
   document.body.style.backgroundImage = '';
   document.body.classList.remove('custom-bg');
   const configKey = currentUser === 'player1' ? 'bg1' : 'bg2';
   db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
+  if (cachedData && cachedData.config) cachedData.config[configKey] = '';
 }
 
 // ─── Background tela de login ────────────────────────
@@ -3955,11 +4536,14 @@ setTimeout(initLoginBg, 0);
 const defaultData = {
   config: { name1: 'Jogador 1', name2: 'Jogador 2', pass1: '1234', pass2: '1234',
     avatar1: '', avatar2: '',
+    banner1: '', banner2: '',
     fontDisplay1: '', fontDisplay2: '', fontBody1: '', fontBody2: '',
     bg1: '', bg2: '',
     riot_key: '', riot_id_p1: 'Pujin#20cm', riot_id_p2: 'Ignacarious#Fogo',
     riot_puuid_p1: '', riot_puuid_p2: '',
     riot_last_p1: '', riot_last_p2: '',
+    spotify_url1: '', spotify_url2: '',
+    discord_tag1: '', discord_tag2: '',
 },
   cartas: [],
   planos: [],
@@ -4008,6 +4592,12 @@ function normalizarDados(d) {
   if (!d.config.riot_puuid_p2) d.config.riot_puuid_p2 = '';
   if (!d.config.riot_last_p1) d.config.riot_last_p1 = '';
   if (!d.config.riot_last_p2) d.config.riot_last_p2 = '';
+  if (d.config.banner1 === undefined) d.config.banner1 = '';
+  if (d.config.banner2 === undefined) d.config.banner2 = '';
+  if (d.config.spotify_url1 === undefined) d.config.spotify_url1 = '';
+  if (d.config.spotify_url2 === undefined) d.config.spotify_url2 = '';
+  if (d.config.discord_tag1 === undefined) d.config.discord_tag1 = '';
+  if (d.config.discord_tag2 === undefined) d.config.discord_tag2 = '';
   if (!d.jogos) d.jogos = { lol: [], mhw: [], outros: [] };
   d.segredo1 = normSegredo(d.segredo1);
   d.segredo2 = normSegredo(d.segredo2);
@@ -4253,14 +4843,67 @@ async function doLogin(player) {
   aplicarBackground(d);
   renderFontOpts(d);
   atualizarHeaderAvatar(d);
+
+  // Avatar novo UI
   const av = currentUser === 'player1' ? d.config.avatar1 : d.config.avatar2;
-  if (av) {
-    document.getElementById('avatar-thumb').src = av;
-    document.getElementById('avatar-preview').style.display = 'block';
-  } else {
-    document.getElementById('avatar-preview').style.display = 'none';
+  const avImg = document.getElementById('avatar-thumb');
+  const avPh  = document.getElementById('cfg-avatar-ph');
+  const avRem = document.getElementById('cfg-avatar-remove');
+  if (av && avImg) {
+    avImg.src = av; avImg.style.display = 'block';
+    if (avPh)  avPh.style.display  = 'none';
+    if (avRem) avRem.style.display = 'flex';
+  } else if (avImg) {
+    avImg.src = ''; avImg.style.display = 'none';
+    if (avPh)  avPh.style.display  = 'flex';
+    if (avRem) avRem.style.display = 'none';
   }
-  // preenche preview do bg de login no config
+
+  // Banner novo UI
+  const bn = currentUser === 'player1' ? d.config.banner1 : d.config.banner2;
+  const bnImg = document.getElementById('banner-thumb');
+  const bnPh  = document.getElementById('cfg-banner-ph');
+  const bnRem = document.getElementById('cfg-banner-remove');
+  if (bn && bnImg) {
+    bnImg.src = bn; bnImg.style.display = 'block';
+    if (bnPh)  bnPh.style.display  = 'none';
+    if (bnRem) bnRem.style.display = 'flex';
+  } else if (bnImg) {
+    bnImg.src = ''; bnImg.style.display = 'none';
+    if (bnPh)  bnPh.style.display  = 'flex';
+    if (bnRem) bnRem.style.display = 'none';
+  }
+
+  // Background novo UI
+  const bgSrc = currentUser === 'player1' ? d.config.bg1 : d.config.bg2;
+  const bgImg = document.getElementById('bg-img-thumb');
+  const bgPh  = document.getElementById('cfg-bg-ph');
+  const bgRem = document.getElementById('cfg-bg-remove');
+  if (bgSrc && bgImg) {
+    bgImg.src = bgSrc; bgImg.style.display = 'block';
+    if (bgPh)  bgPh.style.display  = 'none';
+    if (bgRem) bgRem.style.display = 'flex';
+  } else if (bgImg) {
+    bgImg.src = ''; bgImg.style.display = 'none';
+    if (bgPh)  bgPh.style.display  = 'flex';
+    if (bgRem) bgRem.style.display = 'none';
+  }
+
+  // Conexões
+  const idx = currentUser === 'player1' ? '1' : '2';
+  const spEl = document.getElementById('cfg-spotify-url');
+  if (spEl) spEl.value = d.config['spotify_url' + idx] || '';
+  const dcEl = document.getElementById('cfg-discord-tag');
+  if (dcEl) dcEl.value = d.config['discord_tag' + idx] || '';
+  // dots
+  const riotKey = d.config.riot_key || '';
+  const dotRiot = document.getElementById('cdot-riot');
+  if (dotRiot) dotRiot.classList.toggle('ok', !!riotKey);
+  const dotSp = document.getElementById('cdot-spotify');
+  if (dotSp) dotSp.classList.toggle('ok', !!(d.config['spotify_url' + idx]));
+  const dotDc = document.getElementById('cdot-discord');
+  if (dotDc) dotDc.classList.toggle('ok', !!(d.config['discord_tag' + idx]));
+
   ativarSyncTempoReal();
   renderAll();
 }
@@ -4376,10 +5019,15 @@ function clearRain() {
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  event.target.classList.add('active');
-  const badge = event.target.querySelector('.nav-badge');
-  if (badge) badge.remove();
+  const sec = document.getElementById('sec-' + id);
+  if (sec) sec.classList.add('active');
+  const navBtn = document.getElementById('nav-' + id);
+  if (navBtn) navBtn.classList.add('active');
+  if (typeof event !== 'undefined' && event && event.target && event.target.classList) {
+    event.target.classList.add('active');
+    const badge = event.target.querySelector('.nav-badge');
+    if (badge) badge.remove();
+  }
 
   // Tema triste ao entrar/sair da aba de desculpas
   if (id === 'desculpas') enterSadMode();
@@ -4389,6 +5037,12 @@ function showSection(id) {
   if (cachedData && (id === 'cartas' || id === 'desculpas')) {
     if (id === 'cartas') renderCartas(cachedData);
     if (id === 'desculpas') renderDesculpas(cachedData);
+  }
+
+  // Perfil: renderiza ao abrir
+  if (id === 'perfil' && cachedData) {
+    if (!perfilViewingUser) perfilViewingUser = 'eu';
+    renderPerfilContent();
   }
 }
 
@@ -5519,22 +6173,209 @@ function previewAvatar(input) {
   reader.onload = async e => {
     let data = e.target.result;
     data = await comprimirBase64(data, 200, 0.85);
-    document.getElementById('avatar-thumb').src = data;
-    document.getElementById('avatar-preview').style.display = 'block';
+    const img = document.getElementById('avatar-thumb');
+    img.src = data; img.style.display = 'block';
+    const ph = document.getElementById('cfg-avatar-ph');
+    if (ph) ph.style.display = 'none';
+    const rem = document.getElementById('cfg-avatar-remove');
+    if (rem) rem.style.display = 'flex';
     const configKey = currentUser === 'player1' ? 'avatar1' : 'avatar2';
     db.ref(STORAGE_KEY + '/config').update({ [configKey]: data });
+    if (cachedData && cachedData.config) cachedData.config[configKey] = data;
+    atualizarHeaderAvatar(cachedData || { config: { [configKey]: data } });
   };
   reader.readAsDataURL(file);
 }
 
 function removeAvatar() {
   document.getElementById('avatar-input').value = '';
-  document.getElementById('avatar-preview').style.display = 'none';
-  document.getElementById('avatar-thumb').src = '';
+  const img = document.getElementById('avatar-thumb');
+  img.src = ''; img.style.display = 'none';
+  const ph = document.getElementById('cfg-avatar-ph');
+  if (ph) ph.style.display = 'flex';
+  const rem = document.getElementById('cfg-avatar-remove');
+  if (rem) rem.style.display = 'none';
   const el = document.getElementById('header-avatar');
   el.src = ''; el.style.display = 'none';
+  const init = document.getElementById('header-avatar-init');
+  if (init) { init.style.display = 'flex'; }
   const configKey = currentUser === 'player1' ? 'avatar1' : 'avatar2';
   db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
+  if (cachedData && cachedData.config) cachedData.config[configKey] = '';
+}
+
+// ─── Banner upload ────────────────────────────────────────
+function previewBanner(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    let data = e.target.result;
+    if (data.length > 300000) data = await comprimirBase64(data, 1200, 0.65);
+    const img = document.getElementById('banner-thumb');
+    img.src = data; img.style.display = 'block';
+    const ph = document.getElementById('cfg-banner-ph');
+    if (ph) ph.style.display = 'none';
+    const rem = document.getElementById('cfg-banner-remove');
+    if (rem) rem.style.display = 'flex';
+    const configKey = currentUser === 'player1' ? 'banner1' : 'banner2';
+    db.ref(STORAGE_KEY + '/config').update({ [configKey]: data });
+    if (cachedData && cachedData.config) cachedData.config[configKey] = data;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeBanner() {
+  document.getElementById('banner-input').value = '';
+  const img = document.getElementById('banner-thumb');
+  img.src = ''; img.style.display = 'none';
+  const ph = document.getElementById('cfg-banner-ph');
+  if (ph) ph.style.display = 'flex';
+  const rem = document.getElementById('cfg-banner-remove');
+  if (rem) rem.style.display = 'none';
+  const configKey = currentUser === 'player1' ? 'banner1' : 'banner2';
+  db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
+  if (cachedData && cachedData.config) cachedData.config[configKey] = '';
+}
+
+// ─── Config tabs ──────────────────────────────────────────
+function switchCfgTab(tab) {
+  ['geral','conexoes'].forEach(t => {
+    document.getElementById('cfgtab-' + t)?.classList.toggle('active', t === tab);
+    document.getElementById('cfgpanel-' + t)?.classList.toggle('active', t === tab);
+  });
+}
+
+// ─── Conexões toggle ──────────────────────────────────────
+let conexaoAberta = null;
+function toggleConexao(name) {
+  const panel = document.getElementById('cpanel-' + name);
+  const btn   = document.getElementById('cbtn-' + name);
+  if (!panel) return;
+  const abrindo = !panel.classList.contains('aberto');
+  // fecha tudo
+  ['riot','spotify','discord'].forEach(n => {
+    document.getElementById('cpanel-' + n)?.classList.remove('aberto');
+    document.getElementById('cbtn-' + n)?.classList.remove('ativo');
+  });
+  if (abrindo) {
+    panel.classList.add('aberto');
+    btn?.classList.add('ativo');
+  }
+}
+
+// ─── Spotify / Discord config ─────────────────────────────
+async function saveSpotifyConfig() {
+  const url = document.getElementById('cfg-spotify-url')?.value.trim() || '';
+  const key = currentUser === 'player1' ? 'spotify_url1' : 'spotify_url2';
+  await db.ref(STORAGE_KEY + '/config').update({ [key]: url });
+  if (cachedData && cachedData.config) cachedData.config[key] = url;
+  const dot = document.getElementById('cdot-spotify');
+  if (dot) { dot.classList.toggle('ok', !!url); }
+  toast('Spotify salvo ♪');
+}
+
+async function saveDiscordConfig() {
+  const tag = document.getElementById('cfg-discord-tag')?.value.trim() || '';
+  const key = currentUser === 'player1' ? 'discord_tag1' : 'discord_tag2';
+  await db.ref(STORAGE_KEY + '/config').update({ [key]: tag });
+  if (cachedData && cachedData.config) cachedData.config[key] = tag;
+  const dot = document.getElementById('cdot-discord');
+  if (dot) { dot.classList.toggle('ok', !!tag); }
+  toast('Discord salvo');
+}
+
+// ─── Perfil ───────────────────────────────────────────────
+function abrirPerfil(quem) {
+  showSection('perfil');
+  switchPerfil(quem || 'eu');
+}
+
+function switchPerfil(quem) {
+  perfilViewingUser = quem;
+  ['eu','parceiro'].forEach(q => {
+    document.getElementById('ptoggle-' + q)?.classList.toggle('active', q === quem);
+  });
+  renderPerfilContent();
+}
+
+function renderPerfilContent() {
+  const d = cachedData; if (!d) return;
+  const isEu = (perfilViewingUser !== 'parceiro');
+  const user = isEu ? currentUser : (currentUser === 'player1' ? 'player2' : 'player1');
+  const idx  = user === 'player1' ? '1' : '2';
+
+  const name     = d.config['name' + idx]      || (user === 'player1' ? 'Jogador 1' : 'Jogador 2');
+  const avatar   = d.config['avatar' + idx]    || '';
+  const banner   = d.config['banner' + idx]    || '';
+  const riotId   = (user === 'player1' ? d.config.riot_id_p1 : d.config.riot_id_p2) || '';
+  const spotify  = d.config['spotify_url' + idx] || '';
+  const discord  = d.config['discord_tag' + idx] || '';
+
+  // Stats
+  const partidas = d.monitor?.partidas || [];
+  const userPartidas = partidas.filter(p => p.jogador === user || (idx === '1' ? !p.jogador || p.jogador === 'player1' : p.jogador === 'player2'));
+  const total  = userPartidas.length;
+  const vits   = userPartidas.filter(p => p.resultado === 'vitoria').length;
+  const wrPct  = total > 0 ? Math.round((vits / total) * 100) : 0;
+  const kda    = total > 0
+    ? ((userPartidas.reduce((s,p) => s + (p.kills||0) + (p.assists||0), 0) /
+        Math.max(1, userPartidas.reduce((s,p) => s + (p.deaths||0), 0))).toFixed(1))
+    : '—';
+
+  // Badges de conexões
+  let badges = '';
+  if (riotId)  badges += `<div class="perfil-badge con">⚡ ${esc(riotId)}</div>`;
+  if (discord) badges += `<div class="perfil-badge con"><svg width="11" height="11" viewBox="0 0 24 24" fill="#5865F2" style="flex-shrink:0"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg> ${esc(discord)}</div>`;
+  if (spotify) badges += `<div class="perfil-badge con"><svg width="11" height="11" viewBox="0 0 24 24" fill="#1DB954" style="flex-shrink:0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> Spotify</div>`;
+  if (!badges) badges = `<div class="perfil-badge" style="opacity:0.5">sem conexões</div>`;
+
+  const avatarHtml = avatar
+    ? `<img class="perfil-avatar-big" src="${avatar}" onerror="this.style.opacity='0.4'">`
+    : `<div class="perfil-avatar-ph">${name.charAt(0).toUpperCase()}</div>`;
+
+  const bannerHtml = banner
+    ? `<img class="perfil-banner-area" src="${banner}" onerror="this.style.background='var(--surface2)'">`
+    : `<div class="perfil-banner-area"></div>`;
+
+  const spotifyLink = spotify
+    ? `<a href="${esc(spotify)}" target="_blank" rel="noopener" style="color:#1DB954;font-size:9px;letter-spacing:0.1em;text-decoration:none">▶ abrir no Spotify</a>`
+    : '';
+
+  document.getElementById('perfil-content').innerHTML = `
+    <div class="perfil-card">
+      ${bannerHtml}
+      <div class="perfil-avatar-row">
+        ${avatarHtml}
+      </div>
+      <div class="perfil-body">
+        <div class="perfil-name">${esc(name)}</div>
+        <div class="perfil-sub">${user === 'player1' ? 'player 1' : 'player 2'}${isEu ? ' — você' : ''}</div>
+        <div class="perfil-badges">${badges}</div>
+        ${spotifyLink}
+        <hr class="perfil-divider">
+        <div class="perfil-section-label">estatísticas LoL</div>
+        <div class="perfil-stats">
+          <div class="perfil-stat">
+            <div class="perfil-stat-val">${total}</div>
+            <div class="perfil-stat-label">partidas</div>
+          </div>
+          <div class="perfil-stat">
+            <div class="perfil-stat-val">${wrPct}%</div>
+            <div class="perfil-stat-label">win rate</div>
+          </div>
+          <div class="perfil-stat">
+            <div class="perfil-stat-val">${kda}</div>
+            <div class="perfil-stat-label">KDA médio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Label do toggle
+  const other = isEu ? (currentUser === 'player1' ? d.config.name2 : d.config.name1) : '';
+  const ptBtn = document.getElementById('ptoggle-parceiro');
+  if (ptBtn && other) ptBtn.textContent = '♡ ' + (other || 'parceiro(a)');
 }
 
 // ─── abrirCartaById ──────────────────────────────────────
