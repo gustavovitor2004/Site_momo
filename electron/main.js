@@ -56,10 +56,12 @@ function createWindow() {
     icon: iconPath(),
     show: false,                     // mostra só após carregar
     webPreferences: {
-      preload:          path.join(__dirname, 'preload.js'),
-      nodeIntegration:  false,
-      contextIsolation: true,
-      spellcheck:       false,
+      preload:             path.join(__dirname, 'preload.js'),
+      nodeIntegration:     false,
+      contextIsolation:    true,
+      spellcheck:          false,
+      // Desabilita aceleração de hardware no renderer também
+      offscreen:           false,
     },
   });
 
@@ -304,6 +306,15 @@ function iconPath() {
 
 // ─── App lifecycle ────────────────────────────────────────
 app.setName('nosso espaço');
+
+// ─── Fix tela preta: desabilita GPU compositing ───────────
+// Chromium/Electron em algumas GPUs/drivers Windows causa tela preta
+// com aceleração de hardware habilitada. Este app não precisa de GPU.
+app.disableHardwareAcceleration();
+app.commandLine.appendSwitch('disable-gpu');
+app.commandLine.appendSwitch('disable-gpu-compositing');
+app.commandLine.appendSwitch('disable-software-rasterizer');
+app.commandLine.appendSwitch('disable-gpu-sandbox');
 
 // Impede múltiplas instâncias
 const gotLock = app.requestSingleInstanceLock();
