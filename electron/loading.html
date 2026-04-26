@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nosso espaço</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, serif;
+    color: #e8e8e8;
+    user-select: none;
+    overflow: hidden;
+  }
+  .gem {
+    font-size: 2rem;
+    color: #c8b87a;
+    letter-spacing: 0.3em;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease 0.2s forwards;
+  }
+  .title {
+    font-size: 2.4rem;
+    font-style: italic;
+    font-weight: 300;
+    color: #e8e8e8;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease 0.4s forwards;
+  }
+  .sub {
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #444;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease 0.6s forwards;
+  }
+  /* Dots loader */
+  .dots {
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 0.9s forwards;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #c8b87a;
+    opacity: 0.3;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50%       { opacity: 0.9; transform: scale(1.1); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  /* Borda dourada sutil */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    border: 1px solid rgba(200,184,122,0.12);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="gem">✦✦✦</div>
+  <div class="title">nosso espaço</div>
+  <div class="sub">carregando...</div>
+  <div class="dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</body>
+</html>

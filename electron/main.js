@@ -54,33 +54,33 @@ function createWindow() {
     backgroundColor: '#0a0a0a',
     title: 'nosso espaço',
     icon: iconPath(),
-    show: false,                     // mostra só após carregar
+    show: false,
     webPreferences: {
-      preload:             path.join(__dirname, 'preload.js'),
-      nodeIntegration:     false,
-      contextIsolation:    true,
-      spellcheck:          false,
-      // Desabilita aceleração de hardware no renderer também
-      offscreen:           false,
+      preload:          path.join(__dirname, 'preload.js'),
+      nodeIntegration:  false,
+      contextIsolation: true,
+      spellcheck:       false,
     },
   });
 
-  // Carrega o site remoto
-  mainWindow.loadURL(APP_URL);
+  // User-Agent igual ao Chrome normal (evita bloqueio por User-Agent do Electron)
+  const ua = mainWindow.webContents.getUserAgent()
+    .replace(/Electron\/[\d.]+ /, '')
+    .replace(/ nosso-espaco\/[\d.]+/, '');
+  mainWindow.webContents.setUserAgent(ua);
 
-  // ── Fallback: mostra a janela depois de 6s mesmo sem did-finish-load
-  //    (garante que o usuário não fique com a janela invisível)
-  showTimer = setTimeout(() => {
-    if (mainWindow && !mainWindow.isVisible()) {
-      mainWindow.show();
-    }
-  }, 6000);
+  // Carrega tela de loading local primeiro (aparece imediatamente, sem black screen)
+  mainWindow.loadFile(path.join(__dirname, 'loading.html'));
+  mainWindow.show(); // mostra imediatamente com a tela de loading
 
-  // Página carregou → injeta titlebar e mostra
+  // Navega para o site real após 300ms (loading já está visível)
+  setTimeout(() => mainWindow?.loadURL(APP_URL), 300);
+
+  // Página real carregou → injeta titlebar
   mainWindow.webContents.on('did-finish-load', () => {
-    clearTimeout(showTimer);
+    const url = mainWindow?.webContents?.getURL() || '';
+    if (!url.startsWith(APP_URL)) return; // ignora did-finish-load da loading.html
     injetarTitlebar();
-    if (mainWindow && !mainWindow.isVisible()) mainWindow.show();
   });
 
   // Página falhou ao carregar (sem internet, etc.)
