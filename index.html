@@ -2028,9 +2028,21 @@
     background-position: center;
   }
 
+  /* overlay escuro suave sobre a imagem de fundo para melhor legibilidade */
+  body.custom-bg::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.38);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   body.custom-bg #login-screen,
   body.custom-bg #app {
     background: transparent;
+    position: relative;
+    z-index: 1;
   }
 
   body.custom-bg header,
@@ -3306,8 +3318,15 @@
         <div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">o que eu amo em você</div>
         <div id="dm-amor-text" style="font-size:13px;line-height:1.7"></div>
       </div>
+      <div id="dm-promessa" style="display:none;margin-top:12px">
+        <div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">promessa</div>
+        <div id="dm-promessa-text" style="font-size:13px;line-height:1.7"></div>
+      </div>
       <div id="dm-resposta-wrap" style="display:none;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
-        <div style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">↩ resposta</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted)">↩ resposta</div>
+          <div id="dm-resposta-acoes" style="display:none;gap:8px;display:flex"></div>
+        </div>
         <div id="dm-resposta-msg" style="font-family:var(--font-display);font-style:italic;font-size:1.1rem;line-height:1.7"></div>
         <img id="dm-resposta-img" src="" style="display:none;width:100%;max-height:200px;object-fit:contain;margin-top:10px;border:1px solid var(--border)">
         <div id="dm-resposta-meta" style="font-size:10px;color:var(--text-muted);margin-top:8px"></div>
@@ -4930,12 +4949,22 @@ function abrirDesculpaModal(x, d) {
   else { imgEl.style.display = 'none'; imgEl.src = ''; }
   const amorEl = document.getElementById('dm-amor');
   if (x.amor) { document.getElementById('dm-amor-text').textContent = x.amor; amorEl.style.display = 'block'; } else { amorEl.style.display = 'none'; }
+  // exibe campo promessa de entradas antigas (backward compat)
+  const promEl = document.getElementById('dm-promessa');
+  if (x.promessa) { document.getElementById('dm-promessa-text').textContent = x.promessa; promEl.style.display = 'block'; } else { promEl.style.display = 'none'; }
   const respostaWrap = document.getElementById('dm-resposta-wrap');
+  const isRecipient = x.para === currentUser;
   if (x.resposta) {
     document.getElementById('dm-resposta-msg').textContent = x.resposta.msg;
     const rImg = document.getElementById('dm-resposta-img');
     if (x.resposta.img) { rImg.src = x.resposta.img; rImg.style.display = 'block'; } else { rImg.style.display = 'none'; }
     document.getElementById('dm-resposta-meta').textContent = fmt(x.resposta.ts);
+    // botões editar/apagar resposta (só para quem escreveu)
+    const acoesEl = document.getElementById('dm-resposta-acoes');
+    if (isRecipient) {
+      acoesEl.style.display = 'flex';
+      acoesEl.innerHTML = `<button class="icon-btn" style="font-size:10px" onclick="editarResposta(${x.id})">✎ editar</button><button class="icon-btn del" style="font-size:10px" onclick="deletarResposta(${x.id})">✕ apagar</button>`;
+    } else { acoesEl.style.display = 'none'; }
     respostaWrap.style.display = 'block';
   } else { respostaWrap.style.display = 'none'; }
   document.getElementById('dm-meta').textContent = fmt(x.ts);
@@ -5007,12 +5036,52 @@ async function salvarResposta(id) {
   const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
   const item = d.desculpas.find(x => x.id === id);
   if (!item) return;
-  item.resposta = { msg, img: apoRespostaImgBase64, ts: new Date().toISOString() };
+  const existingTs = item.resposta ? item.resposta.ts : new Date().toISOString();
+  item.resposta = { msg, img: apoRespostaImgBase64, ts: existingTs };
   await saveData(d);
   if (cachedData) cachedData.desculpas = d.desculpas;
   document.getElementById('modal-overlay').classList.remove('open');
+  document.getElementById('desculpa-modal-overlay').classList.remove('open');
   renderDesculpas(d);
-  toast('resposta enviada ♡');
+  toast('resposta salva ♡');
+}
+
+function editarResposta(id) {
+  const d = cachedData;
+  if (!d) return;
+  const item = d.desculpas.find(x => x.id === id);
+  if (!item || !item.resposta) return;
+  apoRespostaImgBase64 = item.resposta.img || '';
+  const closeBtn = `<button class="btn secondary" onclick="document.getElementById('modal-overlay').classList.remove('open')" style="margin-top:0">cancelar</button>`;
+  const html = `<div class="form-grid">
+    <div class="form-group"><div class="field-label">sua resposta</div>
+      <textarea id="resp-msg" rows="4">${esc(item.resposta.msg)}</textarea></div>
+    <div class="form-group">
+      <div class="field-label">imagem (opcional)</div>
+      <label class="img-upload-label">＋ ${item.resposta.img ? 'trocar imagem' : 'adicionar imagem'}
+        <input type="file" id="resp-img-input" accept="image/*" onchange="previewRespostaImg(this)">
+      </label>
+      ${item.resposta.img ? `<div class="img-preview" id="resp-img-preview" style="display:block"><img id="resp-img-thumb" src="${item.resposta.img}"><button class="img-remove" onclick="removeRespostaImg()">✕</button></div>` : `<div class="img-preview" id="resp-img-preview" style="display:none"><img id="resp-img-thumb" src=""><button class="img-remove" onclick="removeRespostaImg()">✕</button></div>`}
+    </div>
+    <div class="form-actions">
+      <button class="btn gold" onclick="salvarResposta(${id})">salvar</button>${closeBtn}
+    </div>
+  </div>`;
+  document.getElementById('modal-title').textContent = '✎ editar resposta';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+async function deletarResposta(id) {
+  const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
+  const item = d.desculpas.find(x => x.id === id);
+  if (!item) return;
+  item.resposta = null;
+  await saveData(d);
+  if (cachedData) cachedData.desculpas = d.desculpas;
+  document.getElementById('desculpa-modal-overlay').classList.remove('open');
+  renderDesculpas(d);
+  toast('resposta apagada');
 }
 
 async function abrirDesculpaById(id) {
@@ -5045,10 +5114,12 @@ function renderDesculpas(d) {
       ${x.titulo ? `<div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin:6px 0 4px">${esc(x.titulo)}</div>` : ''}
       <div class="apology-msg">${esc(x.msg)}</div>
       ${x.img ? `<img src="${x.img}" style="width:100%;max-height:280px;object-fit:contain;margin:12px 0;border:1px solid var(--border)">` : ''}
+      ${x.promessa ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">promessa</span><br>${esc(x.promessa)}</div>` : ''}
       ${x.amor ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">o que eu amo em você</span><br>${esc(x.amor)}</div>` : ''}
       ${x.resposta ? `<div class="apology-extra" style="border-left-color:var(--green)"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">↩ resposta</span><br>${esc(x.resposta.msg)}</div>` : ''}
       <div class="card-actions" onclick="event.stopPropagation()">
         ${canResponder ? `<button class="icon-btn" onclick="abrirRespostaModal(${x.id})">↩ responder</button>` : ''}
+        ${!mine && x.resposta ? `<button class="icon-btn" onclick="editarResposta(${x.id})">✎ editar resposta</button><button class="icon-btn del" onclick="deletarResposta(${x.id})">✕ apagar resposta</button>` : ''}
         ${mine ? `<button class="icon-btn" onclick="editarItem('desculpa',${x.id})">editar</button>
         <button class="icon-btn del" onclick="deleteDesculpa(${x.id})">apagar</button>` : ''}
       </div>
