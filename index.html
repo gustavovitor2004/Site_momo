@@ -2934,81 +2934,203 @@
   .perfil-toggle-btn.active { background: var(--accent-dim); color: var(--accent); }
   /* ─── DOWNLOAD / INSTALAR ───────────────────────────── */
   #sec-download {
-    max-width: 480px;
+    max-width: 520px;
     margin: 0 auto;
   }
-  .dl-hero {
-    text-align: center;
-    padding: 32px 20px 24px;
+  /* Card principal Windows */
+  .dl-win-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    margin-bottom: 16px;
+    padding: 32px 28px 28px;
+    margin-bottom: 12px;
     position: relative;
     overflow: hidden;
+    text-align: center;
   }
-  .dl-hero::before {
+  .dl-win-card::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(200,184,122,0.08) 0%, transparent 70%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,184,122,0.09) 0%, transparent 65%);
     pointer-events: none;
   }
-  .dl-hero-icon {
-    font-size: 48px;
-    line-height: 1;
-    margin-bottom: 14px;
-    display: block;
-    filter: drop-shadow(0 0 18px rgba(200,184,122,0.2));
+  .dl-win-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(200,184,122,0.3);
+    padding: 4px 12px;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
   }
-  .dl-hero-title {
+  .dl-win-title {
     font-family: var(--font-display);
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-style: italic;
     color: var(--text);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
-  .dl-hero-sub {
+  .dl-win-sub {
     font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--text-muted);
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
-  .dl-install-btn {
+  /* Botão de download principal */
+  .dl-win-btn {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     background: var(--accent);
     color: #0a0a0a;
     border: none;
-    padding: 14px 28px;
+    padding: 15px 32px;
     font-family: var(--font-body);
     font-size: 11px;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s;
+    text-decoration: none;
+    transition: opacity 0.18s, transform 0.15s;
     font-weight: 400;
+    margin-bottom: 12px;
   }
-  .dl-install-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-  .dl-install-btn:active { transform: translateY(0); }
-  .dl-install-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+  .dl-win-btn:hover  { opacity: 0.86; transform: translateY(-1px); }
+  .dl-win-btn:active { transform: translateY(0); }
+  .dl-win-btn svg { flex-shrink: 0; }
+  /* Linha de meta abaixo do botão */
+  .dl-win-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .dl-win-meta-item {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .dl-win-meta-item svg { opacity: 0.5; }
+  /* Link versão portátil */
+  .dl-portable-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    padding-bottom: 1px;
+  }
+  .dl-portable-link:hover { color: var(--text); border-bottom-color: var(--border); }
+  /* Separador "ou" */
+  .dl-or {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 14px 0;
+    color: var(--text-muted);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .dl-or::before, .dl-or::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  /* Features grid */
+  .dl-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .dl-feature {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 12px 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .dl-feature-icon { font-size: 16px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+  .dl-feature-body { display: flex; flex-direction: column; gap: 3px; }
+  .dl-feature-title { font-size: 10px; color: var(--text); letter-spacing: 0.04em; }
+  .dl-feature-desc  { font-size: 9px; color: var(--text-muted); line-height: 1.4; }
+  /* Card PWA (alternativa mobile) */
+  .dl-pwa-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .dl-pwa-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .dl-pwa-body { flex: 1; min-width: 0; }
+  .dl-pwa-title {
+    font-size: 11px;
+    color: var(--text);
+    letter-spacing: 0.06em;
+    margin-bottom: 3px;
+  }
+  .dl-pwa-desc {
+    font-size: 9px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .dl-install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid rgba(200,184,122,0.4);
+    padding: 9px 16px;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    font-weight: 400;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .dl-install-btn:hover { background: var(--accent-dim); border-color: var(--accent); }
+  .dl-install-btn:disabled { opacity: 0.35; cursor: default; }
   .dl-installed-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     border: 1px solid var(--green);
     color: var(--green);
-    padding: 10px 20px;
+    padding: 9px 16px;
     font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .dl-status {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--text-muted);
-    margin-top: 12px;
-    min-height: 16px;
+    margin-top: 4px;
     letter-spacing: 0.06em;
   }
   .dl-steps {
@@ -3042,7 +3164,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
     color: var(--accent);
     flex-shrink: 0;
     font-family: var(--font-display);
@@ -3064,23 +3185,6 @@
     color: var(--accent);
     white-space: nowrap;
   }
-  .dl-features {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .dl-feature {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 14px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .dl-feature-icon { font-size: 18px; line-height: 1; }
-  .dl-feature-title { font-size: 10px; color: var(--text); letter-spacing: 0.04em; }
-  .dl-feature-desc { font-size: 9px; color: var(--text-muted); line-height: 1.4; }
 
   .perfil-section-label {
     font-size: 9px;
@@ -3879,45 +3983,103 @@
     <section id="sec-download" class="section">
       <div class="section-title">instalar app</div>
 
-      <div class="dl-hero">
-        <span class="dl-hero-icon">✦</span>
-        <div class="dl-hero-title">nosso espaço</div>
-        <div class="dl-hero-sub">instale como programa no PC ou celular</div>
-
-        <div id="dl-btn-wrap">
-          <button class="dl-install-btn" id="dl-install-btn" onclick="dlInstalar()" disabled>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            instalar agora
-          </button>
-          <div class="dl-status" id="dl-status">verificando compatibilidade...</div>
+      <!-- ── Card Windows (Electron) ── -->
+      <div class="dl-win-card">
+        <div class="dl-win-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+          programa para windows
         </div>
+        <div class="dl-win-title">nosso espaço</div>
+        <div class="dl-win-sub">app desktop completo — bandeja, atalho global, sem navegador</div>
+
+        <div>
+          <a class="dl-win-btn"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.0/nosso-espaco-Setup-1.0.0.exe"
+             download>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            baixar instalador — windows
+          </a>
+        </div>
+
+        <div class="dl-win-meta">
+          <span class="dl-win-meta-item">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            versão 1.0.0
+          </span>
+          <span class="dl-win-meta-item">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            ~74 MB · Windows 10+
+          </span>
+          <span class="dl-win-meta-item">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            instalador com desinstalador
+          </span>
+        </div>
+
+        <a class="dl-portable-link"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.0/nosso-espaco-1.0.0-portable.exe"
+           download>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          versão portátil (sem instalar)
+        </a>
       </div>
 
+      <!-- Features -->
       <div class="dl-features">
         <div class="dl-feature">
-          <div class="dl-feature-icon">🖥</div>
-          <div class="dl-feature-title">janela própria</div>
-          <div class="dl-feature-desc">sem barra do navegador, igual a um programa</div>
-        </div>
-        <div class="dl-feature">
-          <div class="dl-feature-icon">⚡</div>
-          <div class="dl-feature-title">mais rápido</div>
-          <div class="dl-feature-desc">abre instantaneamente, dados em cache local</div>
+          <div class="dl-feature-icon">🪟</div>
+          <div class="dl-feature-body">
+            <div class="dl-feature-title">janela própria</div>
+            <div class="dl-feature-desc">titlebar personalizada, sem barra do Chrome</div>
+          </div>
         </div>
         <div class="dl-feature">
           <div class="dl-feature-icon">📌</div>
-          <div class="dl-feature-title">fixado no PC</div>
-          <div class="dl-feature-desc">ícone na barra de tarefas e menu Iniciar</div>
+          <div class="dl-feature-body">
+            <div class="dl-feature-title">bandeja do sistema</div>
+            <div class="dl-feature-desc">continua rodando ao minimizar, ícone na bandeja</div>
+          </div>
         </div>
         <div class="dl-feature">
-          <div class="dl-feature-icon">📶</div>
-          <div class="dl-feature-title">funciona offline</div>
-          <div class="dl-feature-desc">acessa mesmo sem internet</div>
+          <div class="dl-feature-icon">⌨️</div>
+          <div class="dl-feature-body">
+            <div class="dl-feature-title">Ctrl+Shift+N</div>
+            <div class="dl-feature-desc">abre e fecha de qualquer lugar do Windows</div>
+          </div>
+        </div>
+        <div class="dl-feature">
+          <div class="dl-feature-icon">🚀</div>
+          <div class="dl-feature-body">
+            <div class="dl-feature-title">iniciar com Windows</div>
+            <div class="dl-feature-desc">opção para abrir automaticamente ao ligar o PC</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-or">ou</div>
+
+      <!-- Card PWA (mobile / alternativa) -->
+      <div class="dl-pwa-card">
+        <div class="dl-pwa-icon">📱</div>
+        <div class="dl-pwa-body">
+          <div class="dl-pwa-title">instalar como PWA</div>
+          <div class="dl-pwa-desc">para celular ou como alternativa no navegador (Chrome / Edge)</div>
+          <div class="dl-status" id="dl-status"></div>
+        </div>
+        <div id="dl-btn-wrap">
+          <button class="dl-install-btn" id="dl-install-btn" onclick="dlInstalar()" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            instalar
+          </button>
         </div>
       </div>
 
       <div class="dl-steps" id="dl-manual-steps" style="display:none">
-        <div class="dl-steps-title">instalação manual (Chrome / Edge)</div>
+        <div class="dl-steps-title">instalação manual do PWA (Chrome / Edge)</div>
         <div class="dl-step">
           <div class="dl-step-num">1</div>
           <div class="dl-step-text">Abra o site no <b>Chrome</b> ou <b>Edge</b> e clique na barra de endereço</div>
@@ -3929,10 +4091,6 @@
         <div class="dl-step">
           <div class="dl-step-num">3</div>
           <div class="dl-step-text">Clique em <span>Instalar</span> na janela que aparece — pronto!</div>
-        </div>
-        <div class="dl-step">
-          <div class="dl-step-num">4</div>
-          <div class="dl-step-text">O app aparece no <b>menu Iniciar</b> e na <b>barra de tarefas</b> como qualquer programa</div>
         </div>
       </div>
 
