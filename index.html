@@ -801,8 +801,7 @@
     transition: transform 0.22s ease;
     line-height: 1;
   }
-  .profile-pill:hover .profile-caret,
-  .profile-pill.open  .profile-caret { transform: rotate(180deg); color: var(--accent); }
+  .profile-pill.open .profile-caret { transform: rotate(180deg); color: var(--accent); }
 
   /* Dropdown */
   .profile-dropdown {
@@ -825,8 +824,7 @@
     border: 1px solid var(--border);
     box-shadow: 0 10px 36px rgba(0,0,0,0.38), 0 0 0 1px rgba(200,184,122,0.06);
   }
-  .profile-pill:hover .profile-dropdown,
-  .profile-pill.open  .profile-dropdown {
+  .profile-pill.open .profile-dropdown {
     opacity: 1;
     pointer-events: all;
     transform: translateY(0);
@@ -3416,7 +3414,10 @@
     <div class="header-user">
       <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="alternar tema">◐</button>
 
-      <div class="profile-pill" id="profile-pill" onclick="toggleProfileDropdown(event)">
+      <div class="profile-pill" id="profile-pill"
+           onclick="toggleProfileDropdown(event)"
+           onmouseenter="profilePillEnter()"
+           onmouseleave="profilePillLeave()">
         <img  class="profile-avatar-img"  id="header-avatar"      src="">
         <div  class="profile-avatar-init" id="header-avatar-init">—</div>
         <span class="profile-name"        id="header-username">—</span>
@@ -6860,13 +6861,29 @@ function atualizarHeaderAvatar(d) {
 }
 
 // ─── Profile dropdown ─────────────────────────────────
+let _profileCloseTimer = null;
+
 function toggleProfileDropdown(e) {
   if (e) e.stopPropagation();
   document.getElementById('profile-pill').classList.toggle('open');
 }
 function closeProfileDropdown() {
+  clearTimeout(_profileCloseTimer);
   const pill = document.getElementById('profile-pill');
   if (pill) pill.classList.remove('open');
+}
+function profilePillEnter() {
+  clearTimeout(_profileCloseTimer);
+  const pill = document.getElementById('profile-pill');
+  if (pill) pill.classList.add('open');
+}
+function profilePillLeave() {
+  clearTimeout(_profileCloseTimer);
+  // Delay de 220ms — dá tempo do mouse cruzar o gap entre pill e dropdown
+  _profileCloseTimer = setTimeout(() => {
+    const pill = document.getElementById('profile-pill');
+    if (pill) pill.classList.remove('open');
+  }, 220);
 }
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#profile-pill')) closeProfileDropdown();
