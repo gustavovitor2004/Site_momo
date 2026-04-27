@@ -1023,9 +1023,9 @@
   .section.active {
     display: block;
     animation: sectionIn 0.18s ease both;
-    /* Chromium pula paint/layout fora da viewport — ganho enorme em sec ativa longa */
-    content-visibility: auto;
-    contain-intrinsic-size: 1000px;
+    /* contain layout/style: isola reflow — sem causar snap no scroll
+       (content-visibility:auto causava jank ao entrar na viewport) */
+    contain: layout style;
   }
 
   .section-title {
@@ -1973,20 +1973,31 @@
   body.sad-mode #sec-desculpas .apology-card .apo-header { color: #8ab0d0; }
 
   /* ─── BACKGROUND PERSONALIZADO ───────────────────────── */
+  /* Em vez de background-attachment: fixed (causa jank no scroll),
+     usamos um pseudo-elemento position:fixed que recebe a imagem.
+     O fundo do body fica neutro; o ::before fica colado na viewport. */
   body.custom-bg {
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center;
+    background-image: none !important; /* anula o que o JS setou no body */
   }
-
-  /* overlay escuro suave sobre a imagem de fundo para melhor legibilidade */
   body.custom-bg::before {
     content: '';
     position: fixed;
     inset: 0;
+    z-index: -2;
+    background-image: var(--custom-bg-img, none);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    will-change: transform; /* layer separado, scroll não força repaint */
+  }
+  body.custom-bg::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
     background: rgba(0,0,0,0.38);
     pointer-events: none;
-    z-index: 0;
   }
 
   body.custom-bg #login-screen,
@@ -3940,7 +3951,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.9/nosso-espaco-setup-1.0.9.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.10/nosso-espaco-setup-1.0.10.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -3954,7 +3965,7 @@
         <div class="dl-win-meta">
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            versão 1.0.9
+            versão 1.0.10
           </span>
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -3967,7 +3978,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.9/nosso-espaco-1.0.9-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.10/nosso-espaco-1.0.10-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           versão portátil (sem instalar)
@@ -4969,13 +4980,14 @@ function aplicarBackground(d) {
   const bgPh  = document.getElementById('cfg-bg-ph');
   const bgRem = document.getElementById('cfg-bg-remove');
   if (saved) {
-    document.body.style.backgroundImage = `url(${saved})`;
+    // Aplica via CSS variable no pseudo-elemento ::before (sem scroll jank)
+    document.documentElement.style.setProperty('--custom-bg-img', `url(${saved})`);
     document.body.classList.add('custom-bg');
     if (bgImg) { bgImg.src = saved; bgImg.style.display = 'block'; }
     if (bgPh)  bgPh.style.display = 'none';
     if (bgRem) bgRem.style.display = 'flex';
   } else {
-    document.body.style.backgroundImage = '';
+    document.documentElement.style.removeProperty('--custom-bg-img');
     document.body.classList.remove('custom-bg');
     if (bgImg) { bgImg.src = ''; bgImg.style.display = 'none'; }
     if (bgPh)  bgPh.style.display = 'flex';
@@ -4995,7 +5007,7 @@ function previewBgImg(input) {
     if (ph) ph.style.display = 'none';
     const rem = document.getElementById('cfg-bg-remove');
     if (rem) rem.style.display = 'flex';
-    document.body.style.backgroundImage = `url(${data})`;
+    document.documentElement.style.setProperty('--custom-bg-img', `url(${data})`);
     document.body.classList.add('custom-bg');
     const configKey = currentUser === 'player1' ? 'bg1' : 'bg2';
     db.ref(STORAGE_KEY + '/config').update({ [configKey]: data });
@@ -5012,7 +5024,7 @@ function removeBgImg() {
   if (ph) ph.style.display = 'flex';
   const rem = document.getElementById('cfg-bg-remove');
   if (rem) rem.style.display = 'none';
-  document.body.style.backgroundImage = '';
+  document.documentElement.style.removeProperty('--custom-bg-img');
   document.body.classList.remove('custom-bg');
   const configKey = currentUser === 'player1' ? 'bg1' : 'bg2';
   db.ref(STORAGE_KEY + '/config').update({ [configKey]: '' });
@@ -5518,7 +5530,7 @@ function logout() {
     if (havInit) { havInit.style.display = 'flex'; havInit.textContent = '—'; }
     document.getElementById('header-username').textContent = '—';
     closeProfileDropdown();
-    document.body.style.backgroundImage = '';
+    document.documentElement.style.removeProperty('--custom-bg-img');
     document.body.classList.remove('custom-bg', 'sad-mode');
     document.documentElement.style.removeProperty('--font-display');
     document.documentElement.style.removeProperty('--font-body');
@@ -5557,15 +5569,19 @@ let _sadHadCustomBg = false;
 
 function enterSadMode() {
   if (document.body.classList.contains('sad-mode')) return;
-  _sadSavedBg      = document.body.style.backgroundImage;
+  _sadSavedBg      = document.documentElement.style.getPropertyValue('--custom-bg-img') || '';
   _sadHadCustomBg  = document.body.classList.contains('custom-bg');
-  document.body.style.backgroundImage = SAD_BG_GRADIENT;
+  document.documentElement.style.setProperty('--custom-bg-img', SAD_BG_GRADIENT);
   document.body.classList.add('custom-bg', 'sad-mode');
 }
 
 function exitSadMode() {
   if (!document.body.classList.contains('sad-mode')) return;
-  document.body.style.backgroundImage = _sadSavedBg || '';
+  if (_sadSavedBg) {
+    document.documentElement.style.setProperty('--custom-bg-img', _sadSavedBg);
+  } else {
+    document.documentElement.style.removeProperty('--custom-bg-img');
+  }
   if (!_sadHadCustomBg) document.body.classList.remove('custom-bg');
   document.body.classList.remove('sad-mode');
 }
@@ -8642,7 +8658,7 @@ function switchUser() {
     cachedData = null;
     cartasPage = 5;
     db.ref(STORAGE_KEY).off();
-    document.body.style.backgroundImage = '';
+    document.documentElement.style.removeProperty('--custom-bg-img');
     document.body.classList.remove('custom-bg', 'sad-mode');
     document.documentElement.style.removeProperty('--font-display');
     document.documentElement.style.removeProperty('--font-body');
