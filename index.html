@@ -2007,6 +2007,7 @@
     z-index: 1;
   }
 
+  /* Custom bg: cards com fundo mais opaco em vez de backdrop-filter (que mata FPS) */
   body.custom-bg header,
   body.custom-bg .form-panel,
   body.custom-bg .card,
@@ -2015,15 +2016,14 @@
   body.custom-bg .date-card,
   body.custom-bg .carta-modal,
   body.custom-bg .modal {
-    backdrop-filter: blur(4px);
-    background: rgba(0,0,0,0.6) !important;
+    background: rgba(15,15,15,0.92) !important;
   }
 
   :root.light body.custom-bg header,
   :root.light body.custom-bg .form-panel,
   :root.light body.custom-bg .card,
   :root.light body.custom-bg .carta-envelope {
-    background: rgba(255,255,255,0.65) !important;
+    background: rgba(245,242,236,0.95) !important;
   }
 
   /* ─── RUNA PANEL ─────────────────────────────────────── */
@@ -3951,7 +3951,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.10/nosso-espaco-setup-1.0.10.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.11/nosso-espaco-setup-1.0.11.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -3965,7 +3965,7 @@
         <div class="dl-win-meta">
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            versão 1.0.10
+            versão 1.0.11
           </span>
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -3978,7 +3978,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.10/nosso-espaco-1.0.10-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.11/nosso-espaco-1.0.11-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           versão portátil (sem instalar)
@@ -5914,8 +5914,8 @@ function renderCartas(d) {
     const unreadDot = (!c.lida && c.para === currentUser) ? '<span class="carta-env-unread-dot"></span>' : '';
     const avatarDeSrc   = c.de   === 'player1' ? d.config.avatar1 : d.config.avatar2;
     const avatarParaSrc = c.para === 'player1' ? d.config.avatar1 : c.para === 'player2' ? d.config.avatar2 : null;
-    const avatarDe   = avatarDeSrc   ? `<img class="avatar-sm" src="${avatarDeSrc}">` : '';
-    const avatarPara = (c.para !== 'ambos' && avatarParaSrc) ? `<img class="avatar-sm" src="${avatarParaSrc}">` : '';
+    const avatarDe   = avatarDeSrc   ? `<img class="avatar-sm" src="${avatarDeSrc}" loading="lazy" decoding="async">` : '';
+    const avatarPara = (c.para !== 'ambos' && avatarParaSrc) ? `<img class="avatar-sm" src="${avatarParaSrc}" loading="lazy" decoding="async">` : '';
     const animStyle = _firstRenderAnim('cartas', idx);
     return `<div class="carta-envelope" style="${borderTopStyle}${animStyle}" onclick="abrirCartaById(${c.id})">
       <div class="carta-env-head">
@@ -6495,13 +6495,17 @@ function renderDesculpas(d) {
     const mine = x.de === currentUser;
     const canResponder = !mine && !x.resposta;
     const avatarSrc = x.de === 'player1' ? d.config.avatar1 : d.config.avatar2;
-    const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}">` : '';
+    const avatarHtml = avatarSrc ? `<img class="avatar-sm" src="${avatarSrc}" loading="lazy" decoding="async">` : '';
     const animStyle = _firstRenderAnim('desculpas', idx);
+    // Imagens: lazy + async decoding + sem força-decode síncrona
+    const imgHtml = x.img
+      ? `<img src="${x.img}" loading="lazy" decoding="async" style="width:100%;max-height:280px;object-fit:contain;margin:12px 0;border:1px solid var(--border);content-visibility:auto;contain-intrinsic-size:600px 280px">`
+      : '';
     return `<div class="apology-card" style="${animStyle};cursor:pointer" onclick="abrirDesculpaById(${x.id})">
       <div class="apology-from" style="display:flex;align-items:center;gap:0">${avatarHtml}de ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
       ${x.titulo ? `<div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin:6px 0 4px">${esc(x.titulo)}</div>` : ''}
       <div class="apology-msg">${esc(x.msg)}</div>
-      ${x.img ? `<img src="${x.img}" style="width:100%;max-height:280px;object-fit:contain;margin:12px 0;border:1px solid var(--border)">` : ''}
+      ${imgHtml}
       ${x.promessa ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">promessa</span><br>${esc(x.promessa)}</div>` : ''}
       ${x.amor ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">o que eu amo em você</span><br>${esc(x.amor)}</div>` : ''}
       ${x.resposta ? `<div class="apology-extra" style="border-left-color:var(--green)"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">↩ resposta</span><br>${esc(x.resposta.msg)}</div>` : ''}
