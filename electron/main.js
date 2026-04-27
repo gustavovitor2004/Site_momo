@@ -64,7 +64,10 @@ function createWindow() {
     },
   });
 
-  // Carrega index.html empacotado localmente — sem depender de internet
+  // Maximiza por padrão (usuário pode restaurar se quiser)
+  mainWindow.maximize();
+
+  // Carrega index.html empacotado localmente
   mainWindow.loadFile(APP_FILE);
   mainWindow.show();
 
@@ -140,34 +143,45 @@ function injetarTitlebar() {
     header .theme-toggle,
     nav { -webkit-app-region: no-drag !important; }
 
-    /* Titlebar overlay de controles */
+    /* Titlebar overlay de controles — discretos, tema do site */
     #electron-controls {
       position: fixed;
       top: 0; right: 0;
-      width: 130px;
-      height: 46px;
+      height: 56px; /* alinha com altura do header */
       display: flex;
-      align-items: stretch;
+      align-items: center;
+      gap: 2px;
+      padding: 0 14px;
       z-index: 9999;
       -webkit-app-region: no-drag;
+      opacity: 0.35;
+      transition: opacity 0.18s ease;
     }
+    #electron-controls:hover { opacity: 1; }
+    body.window-blurred #electron-controls { opacity: 0.18; }
     .ec-btn {
-      flex: 1;
+      width: 26px; height: 26px;
       background: transparent;
-      border: none;
-      color: rgba(255,255,255,0.45);
-      font-size: 13px;
+      border: 1px solid transparent;
+      color: rgba(200,184,122,0.55);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.14s, color 0.14s, border-color 0.14s;
       -webkit-app-region: no-drag;
       padding: 0;
+      border-radius: 2px;
     }
-    .ec-btn:hover            { background: rgba(255,255,255,0.08); color: #fff; }
-    .ec-btn.ec-close:hover   { background: #e81123 !important; color: #fff; }
-    .ec-btn.ec-min svg,
-    .ec-btn.ec-max svg,
-    .ec-btn.ec-close svg { pointer-events: none; }
+    .ec-btn:hover {
+      background: rgba(200,184,122,0.1);
+      color: rgba(200,184,122,1);
+      border-color: rgba(200,184,122,0.35);
+    }
+    .ec-btn.ec-close:hover {
+      background: rgba(232,17,35,0.12);
+      color: #ff5060;
+      border-color: rgba(232,17,35,0.45);
+    }
+    .ec-btn svg { pointer-events: none; }
     body.window-blurred header { opacity: 0.7; }
   `);
 
@@ -309,9 +323,6 @@ if (!gotLock) {
 
     createWindow();
     createTray();
-
-    // Atalho global Ctrl+Shift+N para toggle
-    globalShortcut.register('CommandOrControl+Shift+N', toggleWindow);
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
