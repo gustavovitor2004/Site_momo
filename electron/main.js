@@ -1,9 +1,10 @@
 const {
   app, BrowserWindow, Tray, Menu, nativeImage,
-  ipcMain, shell, globalShortcut, screen
+  ipcMain, shell, globalShortcut, screen, dialog
 } = require('electron');
 const path  = require('path');
 const Store = require('electron-store');
+const { autoUpdater } = require('electron-updater');
 
 const store   = new Store();
 const APP_URL  = 'https://nosso-espaco-theta.vercel.app'; // usado só para links externos
@@ -159,6 +160,10 @@ function injetarTitlebar() {
     }
     #electron-controls:hover { opacity: 1; }
     body.window-blurred #electron-controls { opacity: 0.18; }
+
+    /* Empurra os botões da tela de login pra esquerda dos controles do Electron */
+    .login-controls { right: 130px !important; -webkit-app-region: no-drag !important; }
+    .login-ctrl-btn { -webkit-app-region: no-drag !important; }
     .ec-btn {
       width: 26px; height: 26px;
       background: transparent;
@@ -247,11 +252,25 @@ function createTray() {
 function atualizarMenuTray() {
   if (!tray) return;
   const menu = Menu.buildFromTemplate([
-    { label: '✦ nosso espaço', enabled: false },
+    { label: `✦ nosso espaço · v${app.getVersion()}`, enabled: false },
     { type:  'separator' },
     { label: 'Abrir',    click: () => { mainWindow?.show(); mainWindow?.focus(); } },
     { label: 'Minimizar', click: () => mainWindow?.hide() },
     { type:  'separator' },
+    {
+      label: 'Verificar atualização',
+      click: () => {
+        if (isDev) return;
+        autoUpdater.checkForUpdates().then(result => {
+          if (!result || !result.updateInfo || result.updateInfo.version === app.getVersion()) {
+            tray && tray.displayBalloon({
+              iconType: 'info', title: 'nosso espaço',
+              content: `Você já está na última versão (${app.getVersion()}).`,
+            });
+          }
+        }).catch(() => {});
+      }
+    },
     {
       label:   'Iniciar com o Windows',
       type:    'checkbox',
@@ -294,6 +313,65 @@ function iconPath() {
   return candidates.find(p => fs.existsSync(p)) || null;
 }
 
+// ─── Auto-update via GitHub Releases ─────────────────────
+function setupAutoUpdate() {
+  if (isDev) return; // não checa em dev
+
+  autoUpdater.autoDownload = true;        // baixa automaticamente
+  autoUpdater.autoInstallOnAppQuit = true; // instala ao sair
+  autoUpdater.allowDowngrade = false;
+
+  autoUpdater.on('error', (err) => {
+    console.log('[updater] erro:', err && err.message);
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    console.log('[updater] versão disponível:', info.version);
+    // notifica usuário discretamente via balão da bandeja
+    tray && tray.displayBalloon({
+      iconType: 'info',
+      title: 'nosso espaço — atualização disponível',
+      content: `Versão ${info.version} está sendo baixada em segundo plano.`,
+    });
+  });
+
+  autoUpdater.on('update-not-available', () => {
+    console.log('[updater] já está na última versão');
+  });
+
+  autoUpdater.on('download-progress', (p) => {
+    console.log(`[updater] download: ${Math.round(p.percent)}%`);
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    console.log('[updater] update baixado:', info.version);
+    // pergunta se quer instalar agora ou ao fechar
+    if (!mainWindow) return;
+    dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      buttons: ['Reiniciar agora', 'Mais tarde'],
+      defaultId: 0,
+      cancelId: 1,
+      title: 'Atualização pronta',
+      message: `Versão ${info.version} baixada.`,
+      detail: 'Quer reiniciar agora para aplicar a atualização?',
+      noLink: true,
+    }).then(result => {
+      if (result.response === 0) {
+        isQuitting = true;
+        autoUpdater.quitAndInstall();
+      }
+      // se "Mais tarde", instala automaticamente ao fechar (autoInstallOnAppQuit)
+    });
+  });
+
+  // Checagem inicial após 4s (deixa o app abrir bem antes)
+  setTimeout(() => autoUpdater.checkForUpdates().catch(() => {}), 4000);
+
+  // Re-checa a cada 2 horas (caso o app fique aberto por dias)
+  setInterval(() => autoUpdater.checkForUpdates().catch(() => {}), 2 * 60 * 60 * 1000);
+}
+
 // ─── App lifecycle ────────────────────────────────────────
 app.setName('nosso espaço');
 
@@ -323,6 +401,7 @@ if (!gotLock) {
 
     createWindow();
     createTray();
+    setupAutoUpdate();
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();

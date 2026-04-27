@@ -1,11 +1,11 @@
 {
   "name": "nosso-espaco",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "nosso espaço — app do casal",
   "main": "electron/main.js",
   "scripts": {
     "start": "electron .",
-    "dev":   "electron . --dev",
+    "dev": "electron . --dev",
     "build": "electron-builder --win --publish never",
     "build:mac": "electron-builder --mac --publish never"
   },
@@ -24,10 +24,27 @@
       "manifest.json"
     ],
     "extraResources": [],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "gustavovitor2004",
+        "repo": "Site_momo"
+      }
+    ],
     "win": {
       "target": [
-        { "target": "nsis",     "arch": ["x64"] },
-        { "target": "portable", "arch": ["x64"] }
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
       ],
       "icon": "electron/assets/icon.ico",
       "requestedExecutionLevel": "asInvoker",
@@ -55,6 +72,7 @@
     "electron-builder": "^24.9.1"
   },
   "dependencies": {
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.8.3"
   }
 }
