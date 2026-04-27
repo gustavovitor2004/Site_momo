@@ -1022,7 +1022,10 @@
   .section { display: none; }
   .section.active {
     display: block;
-    animation: sectionIn 0.18s ease both; /* mais snappy */
+    animation: sectionIn 0.18s ease both;
+    /* Chromium pula paint/layout fora da viewport — ganho enorme em sec ativa longa */
+    content-visibility: auto;
+    contain-intrinsic-size: 1000px;
   }
 
   .section-title {
@@ -1156,7 +1159,7 @@
     padding: 6px 12px;
     font-family: var(--font-body);
     letter-spacing: 0.08em;
-    transition: all 0.2s;
+    transition: border-color 0.15s, color 0.15s;
   }
 
   .icon-btn:hover { border-color: var(--text-muted); color: var(--text); }
@@ -1952,84 +1955,22 @@
     letter-spacing: 0.1em;
   }
 
-  /* ─── TEMA TRISTE (desculpas) ───────────────────────── */
-  @keyframes rainFall {
-    0%   { transform: translateY(-8vh) translateX(0);              opacity: 0; }
-    6%   { opacity: var(--ro, 0.55); }
-    92%  { opacity: var(--ro, 0.35); }
-    100% { transform: translateY(112vh) translateX(var(--rx,18px)); opacity: 0; }
-  }
-
-  #rain-wrap {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9;
-    display: none;
-  }
-  body.sad-mode #rain-wrap { display: block; }
-
-  .rain-drop {
-    position: absolute;
-    width: 1px;
-    border-radius: 1px;
-    background: linear-gradient(to bottom,
-      transparent 0%,
-      rgba(140,170,210,0.55) 40%,
-      rgba(140,170,210,0.15) 100%);
-    animation: rainFall linear infinite;
-  }
-
-  /* Overrides visuais no sad-mode */
-  body.sad-mode { transition: background-image 0.9s ease; }
-
-  body.sad-mode #sec-desculpas .section-title {
-    color: #8ab0d0 !important;
-    text-shadow:
-      0 1px 5px rgba(0,0,0,0.98) !important,
-      0 4px 30px rgba(0,0,0,0.88) !important,
-      0 0 80px rgba(100,150,200,0.52) !important;
-  }
-  body.sad-mode #sec-desculpas .section-title::after {
-    background: linear-gradient(90deg, #8ab0d0 0%, rgba(100,150,200,0.35) 45%, transparent 72%) !important;
-  }
-  body.sad-mode #sec-desculpas .section-desc {
-    color: #6688aa !important;
-    letter-spacing: 0.22em;
-  }
+  /* ─── TEMA TRISTE (desculpas) — só tons azulados, sem chuva ─── */
+  body.sad-mode .sec-desculpas-only .section-title { color: #8ab0d0; }
+  body.sad-mode .sec-desculpas-only .section-desc { color: #6688aa; }
   body.sad-mode #sec-desculpas .form-panel,
   body.sad-mode #sec-desculpas .apology-card {
-    border-color: rgba(100,140,190,0.25) !important;
-    background: rgba(5,12,28,0.88) !important;
-    /* backdrop-filter removido: causa crash de GPU no Electron */
+    border-color: rgba(100,140,190,0.25);
+    background: rgba(5,12,28,0.88);
   }
-  body.sad-mode #sec-desculpas .btn.gold,
-  body.sad-mode #sec-desculpas .btn.secondary,
-  body.sad-mode #sec-desculpas .btn {
-    background: rgba(80,110,160,0.85) !important;
-    color: #c8d8f0 !important;
-    border-color: rgba(100,140,200,0.4) !important;
-  }
-  body.sad-mode #sec-desculpas .btn:hover {
-    background: rgba(100,130,185,0.95) !important;
-  }
-  body.sad-mode #sec-desculpas .field-label {
-    color: #7090b8 !important;
-  }
+  body.sad-mode #sec-desculpas .field-label { color: #7090b8; }
   body.sad-mode #sec-desculpas input,
   body.sad-mode #sec-desculpas textarea {
-    background: rgba(8,15,35,0.7) !important;
-    border-color: rgba(80,120,180,0.3) !important;
-    color: #b8cce0 !important;
+    background: rgba(8,15,35,0.7);
+    border-color: rgba(80,120,180,0.3);
+    color: #b8cce0;
   }
-  body.sad-mode #sec-desculpas input:focus,
-  body.sad-mode #sec-desculpas textarea:focus {
-    border-color: rgba(100,150,220,0.6) !important;
-    box-shadow: 0 0 0 3px rgba(80,130,200,0.12) !important;
-  }
-  body.sad-mode #sec-desculpas .apology-card .apo-header {
-    color: #8ab0d0 !important;
-  }
+  body.sad-mode #sec-desculpas .apology-card .apo-header { color: #8ab0d0; }
 
   /* ─── BACKGROUND PERSONALIZADO ───────────────────────── */
   body.custom-bg {
@@ -3409,7 +3350,6 @@
 
 <!-- ═══════════════ APP ═══════════════ -->
 <div id="app">
-  <div id="rain-wrap"></div>
   <header>
     <div class="header-logo">
       <span class="header-logo-gem">✦✦✦</span>
@@ -4000,7 +3940,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.8/nosso-espaco-setup-1.0.8.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.9/nosso-espaco-setup-1.0.9.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -4014,7 +3954,7 @@
         <div class="dl-win-meta">
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            versão 1.0.8
+            versão 1.0.9
           </span>
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -4027,7 +3967,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.8/nosso-espaco-1.0.8-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.9/nosso-espaco-1.0.9-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           versão portátil (sem instalar)
@@ -5580,7 +5520,6 @@ function logout() {
     closeProfileDropdown();
     document.body.style.backgroundImage = '';
     document.body.classList.remove('custom-bg', 'sad-mode');
-    clearRain();
     document.documentElement.style.removeProperty('--font-display');
     document.documentElement.style.removeProperty('--font-body');
 
@@ -5610,7 +5549,7 @@ function logout() {
 }
 
 // ─── Tema triste (desculpas) ──────────────────────────────
-// Gradiente CSS puro — sem imagem externa (evita crash no Electron)
+// Gradiente CSS puro, sem chuva — leve e sem GPU
 const SAD_BG_GRADIENT =
   'linear-gradient(160deg, #020810 0%, #060e24 35%, #03080f 65%, #010508 100%)';
 let _sadSavedBg = null;
@@ -5622,7 +5561,6 @@ function enterSadMode() {
   _sadHadCustomBg  = document.body.classList.contains('custom-bg');
   document.body.style.backgroundImage = SAD_BG_GRADIENT;
   document.body.classList.add('custom-bg', 'sad-mode');
-  spawnRain();
 }
 
 function exitSadMode() {
@@ -5630,37 +5568,6 @@ function exitSadMode() {
   document.body.style.backgroundImage = _sadSavedBg || '';
   if (!_sadHadCustomBg) document.body.classList.remove('custom-bg');
   document.body.classList.remove('sad-mode');
-  clearRain();
-}
-
-function spawnRain() {
-  const wrap = document.getElementById('rain-wrap');
-  if (!wrap) return;
-  // Usa DocumentFragment + reduz contagem (40 → menos pintura, mesma sensação)
-  const frag = document.createDocumentFragment();
-  const count = 40;
-  for (let i = 0; i < count; i++) {
-    const el   = document.createElement('div');
-    const left = Math.random() * 100;
-    const dur  = 0.7 + Math.random() * 0.9;
-    const del  = -(Math.random() * 3);
-    const h    = 14 + Math.random() * 22;
-    const op   = 0.25 + Math.random() * 0.45;
-    const rx   = 10 + Math.random() * 30;
-    el.className = 'rain-drop';
-    el.style.cssText =
-      `left:${left}%;top:-${h}px;height:${h}px;` +
-      `animation-duration:${dur}s;animation-delay:${del}s;` +
-      `--rx:${rx}px;--ro:${op.toFixed(2)};`;
-    frag.appendChild(el);
-  }
-  wrap.innerHTML = '';
-  wrap.appendChild(frag);
-}
-
-function clearRain() {
-  const wrap = document.getElementById('rain-wrap');
-  if (wrap) wrap.innerHTML = '';
 }
 
 // ─── Navigation ─────────────────────────────────────────
@@ -5806,15 +5713,33 @@ function _firstRenderAnim(key, idx) {
   return `animation:cardIn 0.22s ease ${cappedIdx * 22}ms both`;
 }
 function _markAnimated(key) { _renderHash['anim-' + key] = 1; }
-function _hashStr(s) {
-  let h = 0; if (!s) return 0;
-  for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
-  return h;
+// Assinatura O(1) para arrays — não percorre lista inteira. Captura mudanças
+// de tamanho/inserção/remoção/edição com 3 amostras + length.
+function _signature(data) {
+  if (data == null) return '0';
+  if (Array.isArray(data)) {
+    if (!data.length) return 'a0';
+    const first = data[0], mid = data[(data.length / 2) | 0], last = data[data.length - 1];
+    return 'a' + data.length +
+      '|' + (first?.id || '') + ':' + (first?.ts || '') + ':' + (first?.lida ? 1 : 0) +
+      '|' + (mid?.id   || '') + ':' + (mid?.ts   || '') + ':' + (mid?.lida   ? 1 : 0) +
+      '|' + (last?.id  || '') + ':' + (last?.ts  || '') + ':' + (last?.lida  ? 1 : 0);
+  }
+  if (typeof data === 'object') {
+    let sig = 'o';
+    for (const k in data) {
+      const v = data[k];
+      if (v == null) continue;
+      sig += k + (typeof v === 'object' ? '#' + (Array.isArray(v) ? v.length : Object.keys(v).length) : v) + '|';
+    }
+    return sig;
+  }
+  return String(data);
 }
 function _shouldRender(key, dataObj) {
-  const h = _hashStr(JSON.stringify(dataObj || ''));
-  if (_renderHash[key] === h) return false;
-  _renderHash[key] = h;
+  const sig = _signature(dataObj);
+  if (_renderHash[key] === sig) return false;
+  _renderHash[key] = sig;
   return true;
 }
 
@@ -5824,11 +5749,19 @@ function _isSectionVisible(secId) {
   return el && el.classList.contains('active');
 }
 
-// Debounce: coalesce múltiplos eventos do Firebase numa única passada
+// Debounce + RAF: coalesce eventos do Firebase E sincroniza com paint do browser.
+// Resultado: zero "jank" durante updates rápidos, render ocorre no momento ideal.
 let _renderDebounceTimer = null;
+let _renderRAF = null;
 function _scheduleRender(d) {
   clearTimeout(_renderDebounceTimer);
-  _renderDebounceTimer = setTimeout(() => _renderFromCache(d), 60);
+  _renderDebounceTimer = setTimeout(() => {
+    if (_renderRAF) cancelAnimationFrame(_renderRAF);
+    _renderRAF = requestAnimationFrame(() => {
+      _renderRAF = null;
+      _renderFromCache(d);
+    });
+  }, 60);
 }
 
 function _renderFromCache(d) {
@@ -8711,7 +8644,6 @@ function switchUser() {
     db.ref(STORAGE_KEY).off();
     document.body.style.backgroundImage = '';
     document.body.classList.remove('custom-bg', 'sad-mode');
-    clearRain();
     document.documentElement.style.removeProperty('--font-display');
     document.documentElement.style.removeProperty('--font-body');
 
