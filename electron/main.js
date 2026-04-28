@@ -374,6 +374,11 @@ ipcMain.handle('get-app-version', () => app.getVersion());
 
 // ─── App lifecycle ────────────────────────────────────────
 app.setName('nosso espaço');
+// AppUserModelID: garante que Windows agrupe corretamente na taskbar
+// e use o icone embutido do .exe ao invés do generico do Electron
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.nossoespaco.app');
+}
 
 // ─── Fix tela preta: desabilita GPU compositing ───────────
 // Chromium/Electron em algumas GPUs/drivers Windows causa tela preta
