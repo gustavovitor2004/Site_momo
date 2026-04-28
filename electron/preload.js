@@ -9,4 +9,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onFocused:    (cb) => ipcRenderer.on('focused',    (_, v) => cb(v)),
   openExternal: (url) => ipcRenderer.send('open-external', url),
   isElectron:   true,
+
+  // ─── Auto-update events (UI customizada no renderer) ───
+  onUpdateAvailable:  (cb) => ipcRenderer.on('update:available',  (_, info) => cb(info)),
+  onUpdateProgress:   (cb) => ipcRenderer.on('update:progress',   (_, p)    => cb(p)),
+  onUpdateDownloaded: (cb) => ipcRenderer.on('update:downloaded', (_, info) => cb(info)),
+  onUpdateError:      (cb) => ipcRenderer.on('update:error',      (_, msg)  => cb(msg)),
+  installUpdate:      () => ipcRenderer.send('update:install'),
+  dismissUpdate:      () => ipcRenderer.send('update:dismiss'),
+  getAppVersion:      () => ipcRenderer.invoke('get-app-version'),
 });

@@ -313,26 +313,28 @@ function iconPath() {
   return candidates.find(p => fs.existsSync(p)) || null;
 }
 
-// ─── Auto-update via GitHub Releases ─────────────────────
+// ─── Auto-update via GitHub Releases (UI custom no renderer) ─────
+function _send(channel, payload) {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send(channel, payload);
+  }
+}
+
 function setupAutoUpdate() {
   if (isDev) return; // não checa em dev
 
-  autoUpdater.autoDownload = true;        // baixa automaticamente
-  autoUpdater.autoInstallOnAppQuit = true; // instala ao sair
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
   autoUpdater.allowDowngrade = false;
 
   autoUpdater.on('error', (err) => {
     console.log('[updater] erro:', err && err.message);
+    _send('update:error', err && err.message);
   });
 
   autoUpdater.on('update-available', (info) => {
     console.log('[updater] versão disponível:', info.version);
-    // notifica usuário discretamente via balão da bandeja
-    tray && tray.displayBalloon({
-      iconType: 'info',
-      title: 'nosso espaço — atualização disponível',
-      content: `Versão ${info.version} está sendo baixada em segundo plano.`,
-    });
+    _send('update:available', { version: info.version, releaseNotes: info.releaseNotes || '' });
   });
 
   autoUpdater.on('update-not-available', () => {
@@ -340,37 +342,35 @@ function setupAutoUpdate() {
   });
 
   autoUpdater.on('download-progress', (p) => {
-    console.log(`[updater] download: ${Math.round(p.percent)}%`);
+    _send('update:progress', {
+      percent: p.percent,
+      bytesPerSecond: p.bytesPerSecond,
+      transferred: p.transferred,
+      total: p.total,
+    });
   });
 
   autoUpdater.on('update-downloaded', (info) => {
     console.log('[updater] update baixado:', info.version);
-    // pergunta se quer instalar agora ou ao fechar
-    if (!mainWindow) return;
-    dialog.showMessageBox(mainWindow, {
-      type: 'info',
-      buttons: ['Reiniciar agora', 'Mais tarde'],
-      defaultId: 0,
-      cancelId: 1,
-      title: 'Atualização pronta',
-      message: `Versão ${info.version} baixada.`,
-      detail: 'Quer reiniciar agora para aplicar a atualização?',
-      noLink: true,
-    }).then(result => {
-      if (result.response === 0) {
-        isQuitting = true;
-        autoUpdater.quitAndInstall();
-      }
-      // se "Mais tarde", instala automaticamente ao fechar (autoInstallOnAppQuit)
-    });
+    _send('update:downloaded', { version: info.version, releaseNotes: info.releaseNotes || '' });
   });
 
-  // Checagem inicial após 4s (deixa o app abrir bem antes)
+  // Checagem inicial após 4s
   setTimeout(() => autoUpdater.checkForUpdates().catch(() => {}), 4000);
 
-  // Re-checa a cada 2 horas (caso o app fique aberto por dias)
+  // Re-checa a cada 2h
   setInterval(() => autoUpdater.checkForUpdates().catch(() => {}), 2 * 60 * 60 * 1000);
 }
+
+// IPC: usuário clicou "instalar agora" no modal customizado
+ipcMain.on('update:install', () => {
+  isQuitting = true;
+  autoUpdater.quitAndInstall();
+});
+ipcMain.on('update:dismiss', () => {
+  // só fecha o modal — instala automaticamente ao sair (autoInstallOnAppQuit)
+});
+ipcMain.handle('get-app-version', () => app.getVersion());
 
 // ─── App lifecycle ────────────────────────────────────────
 app.setName('nosso espaço');
