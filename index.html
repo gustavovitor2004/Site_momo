@@ -2477,6 +2477,64 @@
   .cfg-panel { display: none; }
   .cfg-panel.active { display: block; }
 
+  /* ─── Idioma cards ──────────────────────────────────── */
+  .lang-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  @media (max-width: 720px) { .lang-grid { grid-template-columns: 1fr; } }
+  .lang-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-body);
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+    contain: layout style;
+  }
+  .lang-card:hover {
+    border-color: rgba(200,184,122,0.45);
+    background: rgba(200,184,122,0.06);
+  }
+  .lang-card.active {
+    border-color: var(--accent);
+    background: rgba(200,184,122,0.1);
+  }
+  .lang-flag {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .lang-info { flex: 1; min-width: 0; }
+  .lang-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .lang-sub {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .lang-check {
+    font-size: 14px;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+  .lang-card.active .lang-check { opacity: 1; }
+
   /* Avatar clickable */
   .cfg-photos-row {
     display: flex;
@@ -3592,16 +3650,16 @@
         <div class="profile-dropdown" id="profile-dropdown">
           <div class="profile-dropdown-inner">
             <button class="profile-dropdown-item" onclick="abrirPerfil('eu');closeProfileDropdown()">
-              <span class="di-icon">◈</span> meu perfil
+              <span class="di-icon">◈</span> <span data-i18n="hdr.profile.short">meu perfil</span>
             </button>
             <button class="profile-dropdown-item" onclick="showSection('config');closeProfileDropdown()">
-              <span class="di-icon">⚙</span> configurações
+              <span class="di-icon">⚙</span> <span data-i18n="hdr.settings.short">configurações</span>
             </button>
             <button class="profile-dropdown-item" onclick="switchUser()">
-              <span class="di-icon">⇄</span> trocar usuário
+              <span class="di-icon">⇄</span> <span data-i18n="hdr.switchUser.short">trocar usuário</span>
             </button>
             <button class="profile-dropdown-item danger" onclick="logout()">
-              <span class="di-icon">↩</span> sair
+              <span class="di-icon">↩</span> <span data-i18n="hdr.logout.short">sair</span>
             </button>
           </div>
         </div>
@@ -3610,20 +3668,20 @@
   </header>
 
   <nav>
-    <button id="nav-cartas"   class="nav-item active" onclick="showSection('cartas')">✉ cartas</button>
-    <button id="nav-planos"   class="nav-item"        onclick="showSection('planos')">✦ planos</button>
-    <button id="nav-datas"    class="nav-item"        onclick="showSection('datas')">◎ datas</button>
-    <div id="nav-jogos" class="nav-item has-drop" onclick="showSection('jogos')">⌗ jogos ▾</div>
-    <button id="nav-desculpas" class="nav-item" onclick="showSection('desculpas')">♡ pedido de desculpas</button>
-    <button id="nav-segredo"   class="nav-item" onclick="showSection('segredo')">🔒 segredo</button>
-    <button id="nav-download"  class="nav-item" onclick="showSection('download')" style="color:var(--accent);opacity:0.75" title="instalar como app">⬇ instalar</button>
+    <button id="nav-cartas"    class="nav-item active" onclick="showSection('cartas')"    data-i18n="nav.cartas">✉ cartas</button>
+    <button id="nav-planos"    class="nav-item"        onclick="showSection('planos')"    data-i18n="nav.planos">✦ planos</button>
+    <button id="nav-datas"     class="nav-item"        onclick="showSection('datas')"     data-i18n="nav.datas">◎ datas</button>
+    <div    id="nav-jogos"     class="nav-item has-drop" onclick="showSection('jogos')"   data-i18n="nav.jogos">⌗ jogos ▾</div>
+    <button id="nav-desculpas" class="nav-item"        onclick="showSection('desculpas')" data-i18n="nav.desculpas">♡ pedido de desculpas</button>
+    <button id="nav-segredo"   class="nav-item"        onclick="showSection('segredo')"   data-i18n="nav.segredo">🔒 segredo</button>
+    <button id="nav-download"  class="nav-item"        onclick="showSection('download')"  data-i18n="nav.download" style="color:var(--accent);opacity:0.75" title="instalar como app">⬇ instalar</button>
   </nav>
 
   <main>
 
     <!-- ─── CARTAS ─── -->
     <section id="sec-cartas" class="section active">
-      <div class="section-title">cartas</div>
+      <div class="section-title" data-i18n="sec.cartas">cartas</div>
 
       <div class="form-panel">
         <div class="form-grid">
@@ -3681,7 +3739,7 @@
 
     <!-- ─── PLANOS ─── -->
     <section id="sec-planos" class="section">
-      <div class="section-title">planos & sonhos</div>
+      <div class="section-title" data-i18n="sec.planos">planos & sonhos</div>
 
       <div class="form-panel">
         <div class="form-grid">
@@ -3715,7 +3773,7 @@
 
     <!-- ─── DATAS ─── -->
     <section id="sec-datas" class="section">
-      <div class="section-title">datas especiais</div>
+      <div class="section-title" data-i18n="sec.datas">datas especiais</div>
 
       <div id="next-dates" class="dates-grid"></div>
 
@@ -3771,7 +3829,7 @@
 
     <!-- ─── JOGOS ─── -->
     <section id="sec-jogos" class="section game-lol-active">
-      <div class="section-title">jogos</div>
+      <div class="section-title" data-i18n="sec.jogos">jogos</div>
 
       <!-- Duas tabs principais: Builds | Monitor -->
       <div class="game-tabs">
@@ -4091,7 +4149,7 @@
 
     <!-- ─── DESCULPAS ─── -->
     <section id="sec-desculpas" class="section">
-      <div class="section-title">pedido de desculpas</div>
+      <div class="section-title" data-i18n="sec.desculpas">pedido de desculpas</div>
 
       <div class="form-panel">
         <div class="form-grid">
@@ -4129,7 +4187,7 @@
 
     <!-- ─── SEGREDO ─── -->
     <section id="sec-segredo" class="section">
-      <div class="section-title">segredo</div>
+      <div class="section-title" data-i18n="sec.segredo">segredo</div>
 
       <div id="segredo-display"></div>
 
@@ -4148,7 +4206,7 @@
 
     <!-- ─── DOWNLOAD / INSTALAR ─── -->
     <section id="sec-download" class="section">
-      <div class="section-title">instalar app</div>
+      <div class="section-title" data-i18n="sec.download">instalar app</div>
 
       <!-- ── Card Windows (Electron) ── -->
       <div class="dl-win-card">
@@ -4161,7 +4219,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.14/nosso-espaco-setup-1.0.14.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.15/nosso-espaco-setup-1.0.15.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -4175,7 +4233,7 @@
         <div class="dl-win-meta">
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            versão 1.0.14
+            versão 1.0.15
           </span>
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -4188,7 +4246,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.14/nosso-espaco-1.0.14-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.15/nosso-espaco-1.0.15-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           versão portátil (sem instalar)
@@ -4278,12 +4336,13 @@
 
     <!-- ─── CONFIG ─── -->
     <section id="sec-config" class="section">
-      <div class="section-title">configurações</div>
+      <div class="section-title" data-i18n="sec.config">configurações</div>
 
       <!-- Tabs -->
       <div class="cfg-tabs">
-        <button class="cfg-tab active" id="cfgtab-geral" onclick="switchCfgTab('geral')">geral</button>
-        <button class="cfg-tab" id="cfgtab-conexoes" onclick="switchCfgTab('conexoes')">conexões</button>
+        <button class="cfg-tab active" id="cfgtab-geral"    onclick="switchCfgTab('geral')"    data-i18n="cfg.tab.geral">geral</button>
+        <button class="cfg-tab"        id="cfgtab-conexoes" onclick="switchCfgTab('conexoes')" data-i18n="cfg.tab.connections">conexões</button>
+        <button class="cfg-tab"        id="cfgtab-idioma"   onclick="switchCfgTab('idioma')"   data-i18n="cfg.tab.language">idioma</button>
       </div>
 
       <!-- GERAL panel -->
@@ -4473,10 +4532,37 @@
               <input type="text" id="cfg-discord-tag" placeholder="usuario#0000 ou @usuario">
             </div>
             <div class="form-actions" style="margin-top:0">
-              <button class="btn secondary" onclick="saveDiscordConfig()" style="font-size:11px">salvar</button>
+              <button class="btn secondary" onclick="saveDiscordConfig()" style="font-size:11px" data-i18n="common.save">salvar</button>
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- IDIOMA panel -->
+      <div class="cfg-panel" id="cfgpanel-idioma">
+        <div class="form-panel">
+          <div class="field-label" style="font-size:11px;color:var(--text);margin-bottom:14px" data-i18n="cfg.lang.title">idioma do app</div>
+          <div class="field-label" style="margin-bottom:14px;color:var(--text-muted);font-size:10px" data-i18n="cfg.lang.desc">escolha o idioma da interface — sua escolha é salva neste dispositivo</div>
+
+          <div class="lang-grid">
+            <button class="lang-card" id="lang-pt-BR" onclick="setLanguage('pt-BR')">
+              <div class="lang-flag">🇧🇷</div>
+              <div class="lang-info">
+                <div class="lang-name">Português</div>
+                <div class="lang-sub">Brasil — pt-BR</div>
+              </div>
+              <div class="lang-check">✓</div>
+            </button>
+            <button class="lang-card" id="lang-en-US" onclick="setLanguage('en-US')">
+              <div class="lang-flag">🇺🇸</div>
+              <div class="lang-info">
+                <div class="lang-name">English</div>
+                <div class="lang-sub">United States — en-US</div>
+              </div>
+              <div class="lang-check">✓</div>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -7220,12 +7306,159 @@ function removeBanner() {
   if (cachedData && cachedData.config) cachedData.config[configKey] = '';
 }
 
+// ─── i18n: dicionário e funções ───────────────────────────
+const I18N = {
+  'pt-BR': {
+    // Common
+    'common.save':       'salvar',
+    'common.cancel':     'cancelar',
+    'common.delete':     'apagar',
+    'common.edit':       'editar',
+    'common.close':      'fechar',
+    'common.confirm':    'confirmar',
+    'common.loading':    'carregando...',
+    'common.search':     'buscar',
+    'common.empty':      'vazio',
+
+    // Nav
+    'nav.cartas':     '✦ cartas',
+    'nav.planos':     '◇ planos',
+    'nav.datas':      '◎ datas',
+    'nav.jogos':      '⌗ jogos ▾',
+    'nav.desculpas':  '♡ pedido de desculpas',
+    'nav.segredo':    '🔒 segredo',
+    'nav.download':   '⬇ instalar',
+
+    // Header dropdown
+    'hdr.profile':       '◈ meu perfil',
+    'hdr.settings':      '⚙ configurações',
+    'hdr.switchUser':    '⇄ trocar usuário',
+    'hdr.logout':        '↩ sair',
+    'hdr.profile.short':    'meu perfil',
+    'hdr.settings.short':   'configurações',
+    'hdr.switchUser.short': 'trocar usuário',
+    'hdr.logout.short':     'sair',
+
+    // Section titles
+    'sec.cartas':        'cartas',
+    'sec.planos':        'planos & sonhos',
+    'sec.datas':         'datas especiais',
+    'sec.jogos':         'jogos',
+    'sec.desculpas':     'pedido de desculpas',
+    'sec.segredo':       'segredo',
+    'sec.config':        'configurações',
+    'sec.download':      'instalar app',
+    'sec.perfil':        'meu perfil',
+
+    // Config tabs
+    'cfg.tab.geral':         'geral',
+    'cfg.tab.connections':   'conexões',
+    'cfg.tab.language':      'idioma',
+    'cfg.lang.title':        'idioma do app',
+    'cfg.lang.desc':         'escolha o idioma da interface — sua escolha é salva neste dispositivo',
+    'cfg.lang.changed':      'idioma alterado ✦',
+
+    // Common phrases
+    'phrase.profile':         '◈ meu perfil',
+    'phrase.profile.partner': '♡ parceiro(a)',
+  },
+
+  'en-US': {
+    'common.save':       'save',
+    'common.cancel':     'cancel',
+    'common.delete':     'delete',
+    'common.edit':       'edit',
+    'common.close':      'close',
+    'common.confirm':    'confirm',
+    'common.loading':    'loading...',
+    'common.search':     'search',
+    'common.empty':      'empty',
+
+    'nav.cartas':     '✦ letters',
+    'nav.planos':     '◇ plans',
+    'nav.datas':      '◎ dates',
+    'nav.jogos':      '⌗ games ▾',
+    'nav.desculpas':  '♡ apologies',
+    'nav.segredo':    '🔒 secret',
+    'nav.download':   '⬇ install',
+
+    'hdr.profile':       '◈ my profile',
+    'hdr.settings':      '⚙ settings',
+    'hdr.switchUser':    '⇄ switch user',
+    'hdr.logout':        '↩ log out',
+    'hdr.profile.short':    'my profile',
+    'hdr.settings.short':   'settings',
+    'hdr.switchUser.short': 'switch user',
+    'hdr.logout.short':     'log out',
+
+    'sec.cartas':        'letters',
+    'sec.planos':        'plans & dreams',
+    'sec.datas':         'special dates',
+    'sec.jogos':         'games',
+    'sec.desculpas':     'apologies',
+    'sec.segredo':       'secret',
+    'sec.config':        'settings',
+    'sec.download':      'install app',
+    'sec.perfil':        'my profile',
+
+    'cfg.tab.geral':         'general',
+    'cfg.tab.connections':   'connections',
+    'cfg.tab.language':      'language',
+    'cfg.lang.title':        'app language',
+    'cfg.lang.desc':         'choose the interface language — your choice is saved on this device',
+    'cfg.lang.changed':      'language changed ✦',
+
+    'phrase.profile':         '◈ my profile',
+    'phrase.profile.partner': '♡ partner',
+  },
+};
+
+function getCurrentLang() {
+  try { return localStorage.getItem('app_lang') || 'pt-BR'; }
+  catch { return 'pt-BR'; }
+}
+
+function t(key) {
+  const lang = getCurrentLang();
+  return (I18N[lang] && I18N[lang][key]) || (I18N['pt-BR'] && I18N['pt-BR'][key]) || key;
+}
+
+function applyTranslations() {
+  // Aplica em todos elementos com data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (key) el.textContent = t(key);
+  });
+  // Atualiza estado visual dos cards de idioma
+  const lang = getCurrentLang();
+  document.querySelectorAll('.lang-card').forEach(card => {
+    card.classList.toggle('active', card.id === 'lang-' + lang);
+  });
+  // Atualiza HTML lang attribute
+  document.documentElement.setAttribute('lang', lang);
+}
+
+function setLanguage(lang) {
+  if (!I18N[lang]) return;
+  try { localStorage.setItem('app_lang', lang); } catch {}
+  applyTranslations();
+  if (typeof toast === 'function') toast(t('cfg.lang.changed'));
+}
+
+// Aplica traduções assim que o DOM estiver pronto
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyTranslations);
+} else {
+  applyTranslations();
+}
+
 // ─── Config tabs ──────────────────────────────────────────
 function switchCfgTab(tab) {
-  ['geral','conexoes'].forEach(t => {
+  ['geral','conexoes','idioma'].forEach(t => {
     document.getElementById('cfgtab-' + t)?.classList.toggle('active', t === tab);
     document.getElementById('cfgpanel-' + t)?.classList.toggle('active', t === tab);
   });
+  if (tab === 'idioma') applyTranslations();
 }
 
 // ─── Conexões toggle ──────────────────────────────────────
