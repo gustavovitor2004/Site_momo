@@ -1,6 +1,6 @@
 {
   "name": "nosso-espaco",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "nosso espaço — app do casal",
   "main": "electron/main.js",
   "scripts": {
@@ -57,12 +57,12 @@
       "category": "public.app-category.lifestyle"
     },
     "nsis": {
-      "oneClick": false,
+      "oneClick": true,
       "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "nosso espaço",
+      "runAfterFinish": true,
       "installerIcon": "electron/assets/icon.ico",
       "uninstallerIcon": "electron/assets/icon.ico"
     }

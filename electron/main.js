@@ -363,9 +363,12 @@ function setupAutoUpdate() {
 }
 
 // IPC: usuário clicou "instalar agora" no modal customizado
+// quitAndInstall(isSilent=true, isForceRunAfter=true):
+//   - isSilent: instala em background, sem mostrar dialog do NSIS
+//   - isForceRunAfter: reabre o app automaticamente após instalar
 ipcMain.on('update:install', () => {
   isQuitting = true;
-  autoUpdater.quitAndInstall();
+  autoUpdater.quitAndInstall(true, true);
 });
 ipcMain.on('update:dismiss', () => {
   // só fecha o modal — instala automaticamente ao sair (autoInstallOnAppQuit)
