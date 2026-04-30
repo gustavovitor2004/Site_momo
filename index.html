@@ -3686,41 +3686,41 @@
       <div class="form-panel">
         <div class="form-grid">
           <div class="form-group">
-            <div class="field-label">para</div>
+            <div class="field-label" data-i18n="cartas.fieldFor">para</div>
             <select id="carta-para">
-              <option value="player2">jogador 2</option>
-              <option value="player1">jogador 1</option>
-              <option value="ambos">nós dois</option>
+              <option value="player2" data-i18n="common.partner">jogador 2</option>
+              <option value="player1" data-i18n="common.you">jogador 1</option>
+              <option value="ambos" data-i18n="common.both">nós dois</option>
             </select>
           </div>
           <div class="form-group">
-            <div class="field-label">título</div>
-            <input type="text" id="carta-titulo" placeholder="um pensamento de hoje...">
+            <div class="field-label" data-i18n="cartas.fieldTitle">título</div>
+            <input type="text" id="carta-titulo" data-i18n-placeholder="cartas.placeholder.title" placeholder="um pensamento de hoje...">
           </div>
           <div class="form-group">
-            <div class="field-label">mensagem</div>
-            <textarea id="carta-texto" rows="5" placeholder="escreva aqui..."></textarea>
+            <div class="field-label" data-i18n="cartas.fieldText">mensagem</div>
+            <textarea id="carta-texto" rows="5" data-i18n-placeholder="cartas.placeholder.text" placeholder="escreva aqui..."></textarea>
           </div>
           <div class="form-group">
-            <div class="field-label">cor de fundo da carta</div>
+            <div class="field-label" data-i18n="cartas.color">cor de fundo da carta</div>
             <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-muted);font-size:11px;letter-spacing:0.1em">
                 <input type="color" id="carta-color-input" value="#111111"
                   style="width:36px;height:36px;border:1px solid var(--border);background:none;cursor:pointer;padding:2px"
                   oninput="cartaColorSelecionada=this.value">
-                escolher cor
+                <span data-i18n="cartas.chooseColor">escolher cor</span>
               </label>
-              <button type="button" onclick="cartaColorSelecionada='';document.getElementById('carta-color-input').value='#111111'" 
-                style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;cursor:pointer;font-family:inherit;font-size:11px;letter-spacing:0.1em">
+              <button type="button" onclick="cartaColorSelecionada='';document.getElementById('carta-color-input').value='#111111'"
+                style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:6px 12px;cursor:pointer;font-family:inherit;font-size:11px;letter-spacing:0.1em" data-i18n="cartas.resetColor">
                 resetar
               </button>
-              <span id="carta-color-preview" style="font-size:10px;color:var(--text-muted);letter-spacing:0.1em">cor livre — qualquer cor</span>
+              <span id="carta-color-preview" style="font-size:10px;color:var(--text-muted);letter-spacing:0.1em" data-i18n="cartas.freeColor">cor livre — qualquer cor</span>
             </div>
           </div>
           <div class="form-group">
-            <div class="field-label">imagem (opcional)</div>
+            <div class="field-label" data-i18n="cartas.image">imagem (opcional)</div>
             <label class="img-upload-label">
-              ＋ adicionar imagem
+              <span data-i18n="common.addImage">＋ adicionar imagem</span>
               <input type="file" id="carta-img-input" accept="image/*" onchange="previewCartaImg(this)">
             </label>
             <div class="img-preview" id="carta-img-preview" style="display:none">
@@ -3729,7 +3729,7 @@
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn gold" onclick="addCarta()">enviar carta</button>
+            <button class="btn gold" onclick="addCarta()" data-i18n="cartas.send">enviar carta</button>
           </div>
         </div>
       </div>
@@ -3745,25 +3745,25 @@
         <div class="form-grid">
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">nome do plano</div>
-              <input type="text" id="plano-nome" placeholder="ex: viajar pra praia">
+              <div class="field-label" data-i18n="planos.fieldName">nome do plano</div>
+              <input type="text" id="plano-nome" data-i18n-placeholder="planos.placeholder.name" placeholder="ex: viajar pra praia">
             </div>
             <div class="form-group">
-              <div class="field-label">categoria</div>
+              <div class="field-label" data-i18n="planos.fieldCat">categoria</div>
               <select id="plano-cat">
-                <option value="viagem">✈ viagem</option>
-                <option value="experiencia">🎯 experiência</option>
-                <option value="objetivo">⭐ objetivo</option>
-                <option value="sonho">💭 sonho</option>
+                <option value="viagem"      data-i18n="planos.cat.travel">✈ viagem</option>
+                <option value="experiencia" data-i18n="planos.cat.exp">🎯 experiência</option>
+                <option value="objetivo"    data-i18n="planos.cat.goal">⭐ objetivo</option>
+                <option value="sonho"       data-i18n="planos.cat.dream">💭 sonho</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <div class="field-label">descrição</div>
-            <textarea id="plano-desc" rows="3" placeholder="conte mais..."></textarea>
+            <div class="field-label" data-i18n="planos.fieldDesc">descrição</div>
+            <textarea id="plano-desc" rows="3" data-i18n-placeholder="planos.placeholder.desc" placeholder="conte mais..."></textarea>
           </div>
           <div class="form-actions">
-            <button class="btn gold" onclick="addPlano()">adicionar plano</button>
+            <button class="btn gold" onclick="addPlano()" data-i18n="planos.add">adicionar plano</button>
           </div>
         </div>
       </div>
@@ -3781,45 +3781,45 @@
         <div class="form-grid">
           <div class="form-row">
             <div class="form-group">
-              <div class="field-label">nome da data</div>
-              <input type="text" id="data-nome" placeholder="ex: nosso aniversário">
+              <div class="field-label" data-i18n="datas.fieldName">nome da data</div>
+              <input type="text" id="data-nome" data-i18n-placeholder="datas.placeholder.name" placeholder="ex: nosso aniversário">
             </div>
             <div class="form-group" id="data-val-group">
-              <div class="field-label">data</div>
+              <div class="field-label" data-i18n="datas.fieldDate">data</div>
               <input type="date" id="data-val">
             </div>
           </div>
           <div class="form-group">
-            <div class="field-label">tipo</div>
+            <div class="field-label" data-i18n="datas.fieldType">tipo</div>
             <select id="data-tipo" onchange="toggleDataRecorrente(this.value)">
-              <option value="aniversario">💑 aniversário do casal</option>
-              <option value="niver">🎂 aniversário de alguém</option>
-              <option value="especial">✨ data especial</option>
-              <option value="recorrente">🔄 recorrente</option>
+              <option value="aniversario" data-i18n="datas.type.coupleAnn">💑 aniversário do casal</option>
+              <option value="niver"       data-i18n="datas.type.birthday">🎂 aniversário de alguém</option>
+              <option value="especial"    data-i18n="datas.type.special">✨ data especial</option>
+              <option value="recorrente"  data-i18n="datas.type.recurring">🔄 recorrente</option>
             </select>
           </div>
           <div id="data-recorrente-fields" style="display:none">
             <div class="form-row">
               <div class="form-group">
-                <div class="field-label">dia da semana</div>
+                <div class="field-label" data-i18n="datas.weekday">dia da semana</div>
                 <select id="data-dia-semana">
-                  <option value="1">segunda-feira</option>
-                  <option value="2">terça-feira</option>
-                  <option value="3">quarta-feira</option>
-                  <option value="4">quinta-feira</option>
-                  <option value="5" selected>sexta-feira</option>
-                  <option value="6">sábado</option>
-                  <option value="0">domingo</option>
+                  <option value="1" data-i18n="weekday.mon">segunda-feira</option>
+                  <option value="2" data-i18n="weekday.tue">terça-feira</option>
+                  <option value="3" data-i18n="weekday.wed">quarta-feira</option>
+                  <option value="4" data-i18n="weekday.thu">quinta-feira</option>
+                  <option value="5" selected data-i18n="weekday.fri">sexta-feira</option>
+                  <option value="6" data-i18n="weekday.sat">sábado</option>
+                  <option value="0" data-i18n="weekday.sun">domingo</option>
                 </select>
               </div>
               <div class="form-group">
-                <div class="field-label">data limite <span style="opacity:0.5;font-size:10px">(vazio = sem limite)</span></div>
+                <div class="field-label" data-i18n-html="datas.endDate">data limite <span style="opacity:0.5;font-size:10px">(vazio = sem limite)</span></div>
                 <input type="date" id="data-fim">
               </div>
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn gold" onclick="addData()">salvar data</button>
+            <button class="btn gold" onclick="addData()" data-i18n="datas.add">salvar data</button>
           </div>
         </div>
       </div>
@@ -4154,21 +4154,21 @@
       <div class="form-panel">
         <div class="form-grid">
           <div class="form-group">
-            <div class="field-label">título</div>
-            <input type="text" id="apo-titulo" placeholder="um resumo do seu pedido...">
+            <div class="field-label" data-i18n="desculpas.fieldTitle">título</div>
+            <input type="text" id="apo-titulo" data-i18n-placeholder="desculpas.placeholder.title" placeholder="um resumo do seu pedido...">
           </div>
           <div class="form-group">
-            <div class="field-label">mensagem principal</div>
-            <textarea id="apo-msg" rows="4" placeholder="o que você quer dizer do fundo do coração..."></textarea>
+            <div class="field-label" data-i18n="desculpas.fieldMsg">mensagem principal</div>
+            <textarea id="apo-msg" rows="4" data-i18n-placeholder="desculpas.placeholder.msg" placeholder="o que você quer dizer do fundo do coração..."></textarea>
           </div>
           <div class="form-group">
-            <div class="field-label">o que você ama na outra pessoa? (opcional)</div>
-            <textarea id="apo-amor" rows="2" placeholder="lembre o outro do que sente..."></textarea>
+            <div class="field-label" data-i18n="desculpas.fieldLove">o que você ama na outra pessoa? (opcional)</div>
+            <textarea id="apo-amor" rows="2" data-i18n-placeholder="desculpas.placeholder.love" placeholder="lembre o outro do que sente..."></textarea>
           </div>
           <div class="form-group">
-            <div class="field-label">imagem (opcional)</div>
+            <div class="field-label" data-i18n="desculpas.fieldImage">imagem (opcional)</div>
             <label class="img-upload-label">
-              ＋ adicionar imagem
+              <span data-i18n="common.addImage">＋ adicionar imagem</span>
               <input type="file" id="apo-img-input" accept="image/*" onchange="previewApoImg(this)">
             </label>
             <div class="img-preview" id="apo-img-preview" style="display:none">
@@ -4177,7 +4177,7 @@
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn danger" onclick="addDesculpa()">enviar pedido de desculpas</button>
+            <button class="btn danger" onclick="addDesculpa()" data-i18n="desculpas.send">enviar pedido de desculpas</button>
           </div>
         </div>
       </div>
@@ -4212,44 +4212,44 @@
       <div class="dl-win-card">
         <div class="dl-win-badge">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
-          programa para windows
+          <span data-i18n="dl.win.badge">programa para windows</span>
         </div>
         <div class="dl-win-title">nosso espaço</div>
-        <div class="dl-win-sub">app desktop completo — bandeja, atalho global, sem navegador</div>
+        <div class="dl-win-sub" data-i18n="dl.win.sub">app desktop completo — bandeja, atalho global, sem navegador</div>
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.16/nosso-espaco-setup-1.0.16.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.17/nosso-espaco-setup-1.0.17.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="7 10 12 15 17 10"/>
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            baixar instalador — windows
+            <span data-i18n="dl.win.btn">baixar instalador — windows</span>
           </a>
         </div>
 
         <div class="dl-win-meta">
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            versão 1.0.16
+            <span data-i18n="dl.meta.version">versão 1.0.16</span>
           </span>
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            ~74 MB · Windows 10+
+            <span data-i18n="dl.meta.size">~74 MB · Windows 10+</span>
           </span>
           <span class="dl-win-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            instalador com desinstalador
+            <span data-i18n="dl.meta.installer">instalador com desinstalador</span>
           </span>
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.16/nosso-espaco-1.0.16-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.17/nosso-espaco-1.0.17-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          versão portátil (sem instalar)
+          <span data-i18n="dl.portable">versão portátil (sem instalar)</span>
         </a>
       </div>
 
@@ -4258,64 +4258,64 @@
         <div class="dl-feature">
           <div class="dl-feature-icon">🪟</div>
           <div class="dl-feature-body">
-            <div class="dl-feature-title">janela própria</div>
-            <div class="dl-feature-desc">titlebar personalizada, sem barra do Chrome</div>
+            <div class="dl-feature-title" data-i18n="dl.feat.window.title">janela própria</div>
+            <div class="dl-feature-desc"  data-i18n="dl.feat.window.desc">titlebar personalizada, sem barra do Chrome</div>
           </div>
         </div>
         <div class="dl-feature">
           <div class="dl-feature-icon">📌</div>
           <div class="dl-feature-body">
-            <div class="dl-feature-title">bandeja do sistema</div>
-            <div class="dl-feature-desc">continua rodando ao minimizar, ícone na bandeja</div>
+            <div class="dl-feature-title" data-i18n="dl.feat.tray.title">bandeja do sistema</div>
+            <div class="dl-feature-desc"  data-i18n="dl.feat.tray.desc">continua rodando ao minimizar, ícone na bandeja</div>
           </div>
         </div>
         <div class="dl-feature">
           <div class="dl-feature-icon">⚡</div>
           <div class="dl-feature-body">
-            <div class="dl-feature-title">app dedicado</div>
-            <div class="dl-feature-desc">aparece nos programas instalados, sem ficar preso no Chrome</div>
+            <div class="dl-feature-title" data-i18n="dl.feat.dedicated.title">app dedicado</div>
+            <div class="dl-feature-desc"  data-i18n="dl.feat.dedicated.desc">aparece nos programas instalados, sem ficar preso no Chrome</div>
           </div>
         </div>
         <div class="dl-feature">
           <div class="dl-feature-icon">🚀</div>
           <div class="dl-feature-body">
-            <div class="dl-feature-title">iniciar com Windows</div>
-            <div class="dl-feature-desc">opção para abrir automaticamente ao ligar o PC</div>
+            <div class="dl-feature-title" data-i18n="dl.feat.startup.title">iniciar com Windows</div>
+            <div class="dl-feature-desc"  data-i18n="dl.feat.startup.desc">opção para abrir automaticamente ao ligar o PC</div>
           </div>
         </div>
       </div>
 
-      <div class="dl-or">ou</div>
+      <div class="dl-or" data-i18n="common.or">ou</div>
 
       <!-- Card PWA (mobile / alternativa) -->
       <div class="dl-pwa-card">
         <div class="dl-pwa-icon">📱</div>
         <div class="dl-pwa-body">
-          <div class="dl-pwa-title">instalar como PWA</div>
-          <div class="dl-pwa-desc">para celular ou como alternativa no navegador (Chrome / Edge)</div>
+          <div class="dl-pwa-title" data-i18n="dl.pwa.title">instalar como PWA</div>
+          <div class="dl-pwa-desc"  data-i18n="dl.pwa.desc">para celular ou como alternativa no navegador (Chrome / Edge)</div>
           <div class="dl-status" id="dl-status"></div>
         </div>
         <div id="dl-btn-wrap">
           <button class="dl-install-btn" id="dl-install-btn" onclick="dlInstalar()" disabled>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            instalar
+            <span data-i18n="dl.pwa.btn">instalar</span>
           </button>
         </div>
       </div>
 
       <div class="dl-steps" id="dl-manual-steps" style="display:none">
-        <div class="dl-steps-title">instalação manual do PWA (Chrome / Edge)</div>
+        <div class="dl-steps-title" data-i18n="dl.manual.title">instalação manual do PWA (Chrome / Edge)</div>
         <div class="dl-step">
           <div class="dl-step-num">1</div>
-          <div class="dl-step-text">Abra o site no <b>Chrome</b> ou <b>Edge</b> e clique na barra de endereço</div>
+          <div class="dl-step-text" data-i18n-html="dl.manual.step1">Abra o site no <b>Chrome</b> ou <b>Edge</b> e clique na barra de endereço</div>
         </div>
         <div class="dl-step">
           <div class="dl-step-num">2</div>
-          <div class="dl-step-text">Procure o ícone <span>⊕</span> ou <span>⋮</span> → <b>Instalar nosso espaço...</b></div>
+          <div class="dl-step-text" data-i18n-html="dl.manual.step2">Procure o ícone <span>⊕</span> ou <span>⋮</span> → <b>Instalar nosso espaço...</b></div>
         </div>
         <div class="dl-step">
           <div class="dl-step-num">3</div>
-          <div class="dl-step-text">Clique em <span>Instalar</span> na janela que aparece — pronto!</div>
+          <div class="dl-step-text" data-i18n-html="dl.manual.step3">Clique em <span>Instalar</span> na janela que aparece — pronto!</div>
         </div>
       </div>
 
@@ -6146,11 +6146,14 @@ function fmt(iso) {
 function timeAgo(iso) {
   const diff = Date.now() - new Date(iso).getTime();
   const m = Math.floor(diff / 60000);
-  if (m < 1) return 'agora mesmo';
-  if (m < 60) return `há ${m}min`;
+  const lang = (typeof getCurrentLang === 'function') ? getCurrentLang() : 'pt-BR';
+  const isEn = lang === 'en-US';
+  if (m < 1) return isEn ? 'just now' : 'agora mesmo';
+  if (m < 60) return isEn ? `${m}min ago` : `há ${m}min`;
   const h = Math.floor(m / 60);
-  if (h < 24) return `há ${h}h`;
+  if (h < 24) return isEn ? `${h}h ago` : `há ${h}h`;
   const dy = Math.floor(h / 24);
+  if (isEn) return `${dy} day${dy > 1 ? 's' : ''} ago`;
   return `há ${dy} dia${dy > 1 ? 's' : ''}`;
 }
 
@@ -6189,7 +6192,7 @@ let cartasPage = 5;
 function renderCartas(d) {
   const el = document.getElementById('cartas-list');
   const visible = d.cartas.filter(c => c.para === currentUser || c.de === currentUser || c.para === 'ambos');
-  if (!visible.length) { el.innerHTML = emptyState('nenhuma carta ainda — escreva a primeira'); return; }
+  if (!visible.length) { el.innerHTML = emptyState(t('cartas.empty')); return; }
 
   // mark as read only when the section is visible
   let changed = false;
@@ -6204,7 +6207,7 @@ function renderCartas(d) {
 
   el.innerHTML = pagina.map((c, idx) => {
     const deNome = c.de === 'player1' ? d.config.name1 : d.config.name2;
-    const paraNome = c.para === 'ambos' ? 'nós dois' : (c.para === 'player1' ? d.config.name1 : d.config.name2);
+    const paraNome = c.para === 'ambos' ? t('common.both') : (c.para === 'player1' ? d.config.name1 : d.config.name2);
     const mine = c.de === currentUser;
     const borderTopStyle = c.cor ? `border-top-color:${c.cor};` : '';
     const unreadDot = (!c.lida && c.para === currentUser) ? '<span class="carta-env-unread-dot"></span>' : '';
@@ -6222,18 +6225,21 @@ function renderCartas(d) {
         <div class="carta-env-title">${esc(c.titulo)}</div>
         <div class="carta-env-route">${avatarDe}${deNome} <span style="color:var(--accent)">→</span> ${paraNome}${avatarPara}</div>
         <div class="carta-env-divider"></div>
-        <div class="carta-env-hint">✦ clique para abrir</div>
+        <div class="carta-env-hint">${t('cartas.envelope.hint')}</div>
       </div>
       ${mine ? `<div class="card-actions" style="padding:0 14px 12px" onclick="event.stopPropagation()">
-        <button class="icon-btn" onclick="editarItem('carta',${c.id})">editar</button>
-        <button class="icon-btn del" onclick="deleteCarta(${c.id})">apagar</button>
+        <button class="icon-btn" onclick="editarItem('carta',${c.id})">${t('common.edit')}</button>
+        <button class="icon-btn del" onclick="deleteCarta(${c.id})">${t('common.delete')}</button>
       </div>` : ''}
     </div>`;
   }).join('');
 
   if (restantes > 0) {
+    const showMoreLbl = getCurrentLang() === 'en-US'
+      ? `show ${Math.min(restantes,5)} more letters (${restantes} remaining)`
+      : `mostrar mais ${Math.min(restantes,5)} cartas (${restantes} restantes)`;
     el.innerHTML += `<div style="text-align:center;margin-top:8px">
-      <button class="btn" style="font-size:11px;padding:8px 20px" onclick="cartasPage+=5;renderCartas(cachedData)">mostrar mais ${Math.min(restantes,5)} cartas (${restantes} restantes)</button>
+      <button class="btn" style="font-size:11px;padding:8px 20px" onclick="cartasPage+=5;renderCartas(cachedData)">${showMoreLbl}
     </div>`;
   }
   _markAnimated('cartas');
@@ -6275,7 +6281,7 @@ const catColors = { viagem: 'blue', experiencia: '', objetivo: 'green', sonho: '
 
 function renderPlanos(d) {
   const el = document.getElementById('planos-list');
-  if (!d.planos.length) { el.innerHTML = emptyState('nenhum plano ainda — o que vocês sonham fazer?'); return; }
+  if (!d.planos.length) { el.innerHTML = emptyState(t('planos.empty')); return; }
   el.innerHTML = d.planos.map(p => `<div class="card" style="${p.feito ? 'opacity:0.5' : ''}">
     <div class="card-header">
       <div class="card-title" style="${p.feito ? 'text-decoration:line-through' : ''}">${catIcons[p.cat] || '✦'} ${esc(p.nome)}</div>
@@ -6378,7 +6384,7 @@ function renderDatas(d) {
   }).join('');
 
   const el = document.getElementById('datas-list');
-  if (!d.datas.length) { el.innerHTML = emptyState('nenhuma data especial salva ainda'); return; }
+  if (!d.datas.length) { el.innerHTML = emptyState(t('datas.empty')); return; }
   el.innerHTML = `<div style="color:var(--text-muted);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px">todas as datas</div>` +
     d.datas.map(dt => {
       const days = daysUntilNextDt(dt);
@@ -6777,7 +6783,7 @@ async function abrirDesculpaById(id) {
 function renderDesculpas(d) {
   const el = document.getElementById('desculpas-list');
   const visible = d.desculpas.filter(x => x.de === currentUser || x.para === currentUser);
-  if (!visible.length) { el.innerHTML = emptyState('nenhum pedido ainda — espero que fique assim 💛'); return; }
+  if (!visible.length) { el.innerHTML = emptyState(t('desculpas.empty')); return; }
 
   let changed = false;
   const desculpasAtiva = document.getElementById('sec-desculpas')?.classList.contains('active');
@@ -6798,18 +6804,17 @@ function renderDesculpas(d) {
       ? `<img src="${x.img}" loading="lazy" decoding="async" style="width:100%;max-height:280px;object-fit:contain;margin:12px 0;border:1px solid var(--border);content-visibility:auto;contain-intrinsic-size:600px 280px">`
       : '';
     return `<div class="apology-card" style="${animStyle};cursor:pointer" onclick="abrirDesculpaById(${x.id})">
-      <div class="apology-from" style="display:flex;align-items:center;gap:0">${avatarHtml}de ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
+      <div class="apology-from" style="display:flex;align-items:center;gap:0">${avatarHtml}${t('common.from')} ${esc(deNome)} ${!x.lida && !mine ? '<span class="unread-dot"></span>' : ''} · ${timeAgo(x.ts)}</div>
       ${x.titulo ? `<div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin:6px 0 4px">${esc(x.titulo)}</div>` : ''}
       <div class="apology-msg">${esc(x.msg)}</div>
       ${imgHtml}
-      ${x.promessa ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">promessa</span><br>${esc(x.promessa)}</div>` : ''}
-      ${x.amor ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">o que eu amo em você</span><br>${esc(x.amor)}</div>` : ''}
-      ${x.resposta ? `<div class="apology-extra" style="border-left-color:var(--green)"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">↩ resposta</span><br>${esc(x.resposta.msg)}</div>` : ''}
+      ${x.amor ? `<div class="apology-extra"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">${t('desculpas.loveLabel')}</span><br>${esc(x.amor)}</div>` : ''}
+      ${x.resposta ? `<div class="apology-extra" style="border-left-color:var(--green)"><span style="color:var(--text-muted);text-transform:uppercase;font-size:10px;letter-spacing:0.1em">${t('desculpas.responseLabel')}</span><br>${esc(x.resposta.msg)}</div>` : ''}
       <div class="card-actions" onclick="event.stopPropagation()">
-        ${canResponder ? `<button class="icon-btn" onclick="abrirRespostaModal(${x.id})">↩ responder</button>` : ''}
-        ${!mine && x.resposta ? `<button class="icon-btn" onclick="editarResposta(${x.id})">✎ editar resposta</button><button class="icon-btn del" onclick="deletarResposta(${x.id})">✕ apagar resposta</button>` : ''}
-        ${mine ? `<button class="icon-btn" onclick="editarItem('desculpa',${x.id})">editar</button>
-        <button class="icon-btn del" onclick="deleteDesculpa(${x.id})">apagar</button>` : ''}
+        ${canResponder ? `<button class="icon-btn" onclick="abrirRespostaModal(${x.id})">${t('desculpas.respond')}</button>` : ''}
+        ${!mine && x.resposta ? `<button class="icon-btn" onclick="editarResposta(${x.id})">${t('desculpas.editResp')}</button><button class="icon-btn del" onclick="deletarResposta(${x.id})">${t('desculpas.deleteResp')}</button>` : ''}
+        ${mine ? `<button class="icon-btn" onclick="editarItem('desculpa',${x.id})">${t('common.edit')}</button>
+        <button class="icon-btn del" onclick="deleteDesculpa(${x.id})">${t('common.delete')}</button>` : ''}
       </div>
     </div>`;
   }).join('');
@@ -7319,6 +7324,23 @@ const I18N = {
     'common.loading':    'carregando...',
     'common.search':     'buscar',
     'common.empty':      'vazio',
+    'common.or':         'ou',
+    'common.add':        'adicionar',
+    'common.remove':     'remover',
+    'common.send':       'enviar',
+    'common.read':       'lida',
+    'common.unread':     'não lida',
+    'common.optional':   'opcional',
+    'common.required':   'obrigatório',
+    'common.from':       'de',
+    'common.to':         'para',
+    'common.both':       'nós dois',
+    'common.partner':    'parceiro(a)',
+    'common.you':        'você',
+    'common.now':        'agora mesmo',
+    'common.today':      'hoje',
+    'common.yesterday':  'ontem',
+    'common.openTab':    'clique para abrir',
 
     // Nav
     'nav.cartas':     '✦ cartas',
@@ -7357,6 +7379,148 @@ const I18N = {
     'cfg.lang.title':        'idioma do app',
     'cfg.lang.desc':         'escolha o idioma da interface — sua escolha é salva neste dispositivo',
     'cfg.lang.changed':      'idioma alterado ✦',
+    'cfg.photoBanner':       'foto & banner',
+    'cfg.background':        'plano de fundo',
+    'cfg.name':              'seu nome',
+    'cfg.fontDisplay':       'fonte de títulos (display)',
+    'cfg.fontBody':          'fonte de textos (corpo)',
+
+    // Conexões
+    'cfg.con.riot':          'Riot Games',
+    'cfg.con.spotify':       'Spotify',
+    'cfg.con.discord':       'Discord',
+    'cfg.con.connect':       'conectar',
+    'cfg.con.disconnect':    'desconectar',
+    'cfg.con.connected':     'conectado',
+
+    // Profile section
+    'perfil.tabMy':          '◈ meu perfil',
+    'perfil.tabPartner':     '♡ parceiro(a)',
+    'perfil.stats':          'estatísticas',
+    'perfil.matches':        'partidas',
+    'perfil.winrate':        'win rate',
+    'perfil.kda':            'KDA médio',
+    'perfil.connections':    'conexões',
+
+    // Cartas (letters)
+    'cartas.title':          'escrever uma carta',
+    'cartas.fieldTitle':     'título',
+    'cartas.fieldText':      'mensagem',
+    'cartas.fieldFor':       'para quem',
+    'cartas.color':          'cor da carta',
+    'cartas.image':          'imagem (opcional)',
+    'cartas.send':           'enviar carta',
+    'cartas.empty':          'nenhuma carta ainda — escreva a primeira',
+    'cartas.placeholder.title':  'um pensamento de hoje...',
+    'cartas.placeholder.text':   'escreva aqui...',
+    'cartas.chooseColor':        'escolher cor',
+    'cartas.resetColor':         'resetar',
+    'cartas.freeColor':          'cor livre — qualquer cor',
+    'common.addImage':           '＋ adicionar imagem',
+    'cartas.showMore':       'mostrar mais',
+    'cartas.envelope.hint':  '✦ clique para abrir',
+
+    // Planos (plans)
+    'planos.title':          'novo plano',
+    'planos.fieldName':      'nome do plano',
+    'planos.fieldDesc':      'descrição',
+    'planos.fieldCat':       'categoria',
+    'planos.add':            'adicionar plano',
+    'planos.empty':          'nenhum plano ainda — sonhe junto',
+    'planos.done':           'feito',
+    'planos.cat.travel':     '✈ viagem',
+    'planos.cat.exp':        '🎯 experiência',
+    'planos.cat.goal':       '⭐ objetivo',
+    'planos.cat.dream':      '💭 sonho',
+    'planos.placeholder.name': 'ex: viajar pra praia',
+    'planos.placeholder.desc': 'conte mais...',
+    'planos.empty':          'nenhum plano ainda — o que vocês sonham fazer?',
+
+    // Datas (dates)
+    'datas.title':           'nova data especial',
+    'datas.fieldName':       'nome do evento',
+    'datas.fieldDate':       'data',
+    'datas.fieldDesc':       'descrição',
+    'datas.add':             'adicionar data',
+    'datas.empty':           'nenhuma data ainda — adicione um marco especial',
+    'datas.daysUntil':       'dias até',
+    'datas.daysAgo':         'dias atrás',
+    'datas.placeholder.name':'ex: nosso aniversário',
+    'datas.placeholder.desc':'descreva o momento...',
+    'datas.fieldType':       'tipo',
+    'datas.weekday':         'dia da semana',
+    'datas.endDate':         'data limite <span style="opacity:0.5;font-size:10px">(vazio = sem limite)</span>',
+    'datas.add':             'salvar data',
+    'datas.type.coupleAnn':  '💑 aniversário do casal',
+    'datas.type.birthday':   '🎂 aniversário de alguém',
+    'datas.type.special':    '✨ data especial',
+    'datas.type.recurring':  '🔄 recorrente',
+    'weekday.mon':           'segunda-feira',
+    'weekday.tue':           'terça-feira',
+    'weekday.wed':           'quarta-feira',
+    'weekday.thu':           'quinta-feira',
+    'weekday.fri':           'sexta-feira',
+    'weekday.sat':           'sábado',
+    'weekday.sun':           'domingo',
+
+    // Desculpas (apologies)
+    'desculpas.title':       'novo pedido de desculpas',
+    'desculpas.fieldTitle':  'título',
+    'desculpas.fieldMsg':    'mensagem principal',
+    'desculpas.fieldLove':   'o que você ama na outra pessoa? (opcional)',
+    'desculpas.fieldImage':  'imagem (opcional)',
+    'desculpas.send':        'enviar pedido de desculpas',
+    'desculpas.placeholder.msg':   'o que você quer dizer do fundo do coração...',
+    'desculpas.placeholder.love':  'lembre o outro do que sente...',
+    'desculpas.placeholder.title': 'um resumo do seu pedido...',
+    'desculpas.empty':       'nenhum pedido ainda — espero que fique assim 💛',
+    'desculpas.respond':     '↩ responder',
+    'desculpas.editResp':    '✎ editar resposta',
+    'desculpas.deleteResp':  '✕ apagar resposta',
+    'desculpas.responseLabel': '↩ resposta',
+    'desculpas.loveLabel':   'o que eu amo em você',
+    'desculpas.placeholder.title': 'um resumo do seu pedido...',
+    'desculpas.placeholder.msg':   'escreva sua mensagem...',
+    'desculpas.placeholder.love':  'o que você ama nele/nela...',
+
+    // Segredo (secret)
+    'segredo.title':         'segredo',
+    'segredo.add':           'adicionar segredo',
+    'segredo.empty':         'nenhum segredo guardado',
+    'segredo.reveal':        'revelar',
+    'segredo.hide':          'esconder',
+
+    // Download / Install
+    'dl.win.badge':          'programa para windows',
+    'dl.win.sub':            'app desktop completo — bandeja, atualização automática, sem navegador',
+    'dl.win.btn':            'baixar instalador — windows',
+    'dl.meta.version':       'versão 1.0.17',
+    'dl.meta.size':          '~74 MB · Windows 10+',
+    'dl.meta.installer':     'instalador com desinstalador',
+    'dl.portable':           'versão portátil (sem instalar)',
+    'dl.feat.window.title':  'janela própria',
+    'dl.feat.window.desc':   'titlebar personalizada, sem barra do Chrome',
+    'dl.feat.tray.title':    'bandeja do sistema',
+    'dl.feat.tray.desc':     'continua rodando ao minimizar, ícone na bandeja',
+    'dl.feat.dedicated.title':'app dedicado',
+    'dl.feat.dedicated.desc':'aparece nos programas instalados, sem ficar preso no Chrome',
+    'dl.feat.startup.title': 'iniciar com Windows',
+    'dl.feat.startup.desc':  'opção para abrir automaticamente ao ligar o PC',
+    'dl.pwa.title':          'instalar como PWA',
+    'dl.pwa.desc':           'para celular ou como alternativa no navegador (Chrome / Edge)',
+    'dl.pwa.btn':            'instalar',
+    'dl.manual.title':       'instalação manual do PWA (Chrome / Edge)',
+    'dl.manual.step1':       'Abra o site no <b>Chrome</b> ou <b>Edge</b> e clique na barra de endereço',
+    'dl.manual.step2':       'Procure o ícone <span>⊕</span> ou <span>⋮</span> → <b>Instalar nosso espaço...</b>',
+    'dl.manual.step3':       'Clique em <span>Instalar</span> na janela que aparece — pronto!',
+
+    // Time
+    'time.now':              'agora mesmo',
+    'time.minute':           'min',
+    'time.hour':             'h',
+    'time.day':              'dia',
+    'time.days':             'dias',
+    'time.ago':              'há',
 
     // Common phrases
     'phrase.profile':         '◈ meu perfil',
@@ -7364,6 +7528,7 @@ const I18N = {
   },
 
   'en-US': {
+    // Common
     'common.save':       'save',
     'common.cancel':     'cancel',
     'common.delete':     'delete',
@@ -7373,7 +7538,25 @@ const I18N = {
     'common.loading':    'loading...',
     'common.search':     'search',
     'common.empty':      'empty',
+    'common.or':         'or',
+    'common.add':        'add',
+    'common.remove':     'remove',
+    'common.send':       'send',
+    'common.read':       'read',
+    'common.unread':     'unread',
+    'common.optional':   'optional',
+    'common.required':   'required',
+    'common.from':       'from',
+    'common.to':         'to',
+    'common.both':       'both of us',
+    'common.partner':    'partner',
+    'common.you':        'you',
+    'common.now':        'just now',
+    'common.today':      'today',
+    'common.yesterday':  'yesterday',
+    'common.openTab':    'click to open',
 
+    // Nav
     'nav.cartas':     '✦ letters',
     'nav.planos':     '◇ plans',
     'nav.datas':      '◎ dates',
@@ -7407,6 +7590,148 @@ const I18N = {
     'cfg.lang.title':        'app language',
     'cfg.lang.desc':         'choose the interface language — your choice is saved on this device',
     'cfg.lang.changed':      'language changed ✦',
+    'cfg.photoBanner':       'photo & banner',
+    'cfg.background':        'background',
+    'cfg.name':              'your name',
+    'cfg.fontDisplay':       'display font (titles)',
+    'cfg.fontBody':          'body font (text)',
+
+    // Conexões
+    'cfg.con.riot':          'Riot Games',
+    'cfg.con.spotify':       'Spotify',
+    'cfg.con.discord':       'Discord',
+    'cfg.con.connect':       'connect',
+    'cfg.con.disconnect':    'disconnect',
+    'cfg.con.connected':     'connected',
+
+    // Profile
+    'perfil.tabMy':          '◈ my profile',
+    'perfil.tabPartner':     '♡ partner',
+    'perfil.stats':          'stats',
+    'perfil.matches':        'matches',
+    'perfil.winrate':        'win rate',
+    'perfil.kda':            'avg. KDA',
+    'perfil.connections':    'connections',
+
+    // Cartas (letters)
+    'cartas.title':          'write a letter',
+    'cartas.fieldTitle':     'title',
+    'cartas.fieldText':      'message',
+    'cartas.fieldFor':       'who is it for',
+    'cartas.color':          'letter color',
+    'cartas.image':          'image (optional)',
+    'cartas.send':           'send letter',
+    'cartas.empty':          'no letters yet — write the first one',
+    'cartas.placeholder.title':  'a thought from today...',
+    'cartas.placeholder.text':   'write here...',
+    'cartas.chooseColor':        'pick a color',
+    'cartas.resetColor':         'reset',
+    'cartas.freeColor':          'free color — any you want',
+    'common.addImage':           '＋ add image',
+    'cartas.showMore':       'show more',
+    'cartas.envelope.hint':  '✦ click to open',
+
+    // Planos (plans)
+    'planos.title':          'new plan',
+    'planos.fieldName':      'plan name',
+    'planos.fieldDesc':      'description',
+    'planos.fieldCat':       'category',
+    'planos.add':            'add plan',
+    'planos.empty':          'no plans yet — dream together',
+    'planos.done':           'done',
+    'planos.cat.travel':     '✈ travel',
+    'planos.cat.exp':        '🎯 experience',
+    'planos.cat.goal':       '⭐ goal',
+    'planos.cat.dream':      '💭 dream',
+    'planos.placeholder.name': 'e.g. trip to the beach',
+    'planos.placeholder.desc': 'tell us more...',
+    'planos.empty':          'no plans yet — what do you dream of doing?',
+
+    // Datas (dates)
+    'datas.title':           'new special date',
+    'datas.fieldName':       'event name',
+    'datas.fieldDate':       'date',
+    'datas.fieldDesc':       'description',
+    'datas.add':             'add date',
+    'datas.empty':           'no dates yet — add a special milestone',
+    'datas.daysUntil':       'days until',
+    'datas.daysAgo':         'days ago',
+    'datas.placeholder.name':'e.g. our anniversary',
+    'datas.placeholder.desc':'describe the moment...',
+    'datas.fieldType':       'type',
+    'datas.weekday':         'weekday',
+    'datas.endDate':         'end date <span style="opacity:0.5;font-size:10px">(empty = no limit)</span>',
+    'datas.add':             'save date',
+    'datas.type.coupleAnn':  '💑 couple anniversary',
+    'datas.type.birthday':   '🎂 someone\'s birthday',
+    'datas.type.special':    '✨ special date',
+    'datas.type.recurring':  '🔄 recurring',
+    'weekday.mon':           'monday',
+    'weekday.tue':           'tuesday',
+    'weekday.wed':           'wednesday',
+    'weekday.thu':           'thursday',
+    'weekday.fri':           'friday',
+    'weekday.sat':           'saturday',
+    'weekday.sun':           'sunday',
+
+    // Desculpas (apologies)
+    'desculpas.title':       'new apology',
+    'desculpas.fieldTitle':  'title',
+    'desculpas.fieldMsg':    'main message',
+    'desculpas.fieldLove':   'what you love about them (optional)',
+    'desculpas.fieldImage':  'image (optional)',
+    'desculpas.send':        'send apology',
+    'desculpas.placeholder.msg':   'what you want to say from the heart...',
+    'desculpas.placeholder.love':  'remind them how you feel...',
+    'desculpas.placeholder.title': 'a summary of your apology...',
+    'desculpas.empty':       'no apologies yet — hope it stays that way 💛',
+    'desculpas.respond':     '↩ reply',
+    'desculpas.editResp':    '✎ edit reply',
+    'desculpas.deleteResp':  '✕ delete reply',
+    'desculpas.responseLabel': '↩ reply',
+    'desculpas.loveLabel':   'what I love about you',
+    'desculpas.placeholder.title': 'a summary of your apology...',
+    'desculpas.placeholder.msg':   'write your message...',
+    'desculpas.placeholder.love':  'what you love about them...',
+
+    // Segredo
+    'segredo.title':         'secret',
+    'segredo.add':           'add secret',
+    'segredo.empty':         'no secrets stored',
+    'segredo.reveal':        'reveal',
+    'segredo.hide':          'hide',
+
+    // Download / Install
+    'dl.win.badge':          'windows program',
+    'dl.win.sub':            'full desktop app — system tray, auto-updates, no browser',
+    'dl.win.btn':            'download installer — windows',
+    'dl.meta.version':       'version 1.0.17',
+    'dl.meta.size':          '~74 MB · Windows 10+',
+    'dl.meta.installer':     'installer with uninstaller',
+    'dl.portable':           'portable version (no install needed)',
+    'dl.feat.window.title':  'own window',
+    'dl.feat.window.desc':   'custom titlebar, no Chrome bar',
+    'dl.feat.tray.title':    'system tray',
+    'dl.feat.tray.desc':     'keeps running when minimized, icon in system tray',
+    'dl.feat.dedicated.title':'dedicated app',
+    'dl.feat.dedicated.desc':'shows up in installed programs, not stuck inside Chrome',
+    'dl.feat.startup.title': 'start with Windows',
+    'dl.feat.startup.desc':  'option to launch automatically when you turn on the PC',
+    'dl.pwa.title':          'install as PWA',
+    'dl.pwa.desc':           'for mobile or as a browser alternative (Chrome / Edge)',
+    'dl.pwa.btn':            'install',
+    'dl.manual.title':       'manual PWA install (Chrome / Edge)',
+    'dl.manual.step1':       'Open the site in <b>Chrome</b> or <b>Edge</b> and click the address bar',
+    'dl.manual.step2':       'Look for the <span>⊕</span> or <span>⋮</span> icon → <b>Install nosso espaço...</b>',
+    'dl.manual.step3':       'Click <span>Install</span> in the popup window — done!',
+
+    // Time
+    'time.now':              'just now',
+    'time.minute':           'min',
+    'time.hour':             'h',
+    'time.day':              'day',
+    'time.days':             'days',
+    'time.ago':              '',  // English uses suffix order
 
     'phrase.profile':         '◈ my profile',
     'phrase.profile.partner': '♡ partner',
@@ -7418,16 +7743,43 @@ function getCurrentLang() {
   catch { return 'pt-BR'; }
 }
 
-function t(key) {
+// Retorna a tradução, OU null se a chave não existir em nenhum idioma
+function tOrNull(key) {
   const lang = getCurrentLang();
-  return (I18N[lang] && I18N[lang][key]) || (I18N['pt-BR'] && I18N['pt-BR'][key]) || key;
+  if (I18N[lang] && I18N[lang][key] != null) return I18N[lang][key];
+  if (I18N['pt-BR'] && I18N['pt-BR'][key] != null) return I18N['pt-BR'][key];
+  return null;
+}
+
+function t(key) {
+  const v = tOrNull(key);
+  return v != null ? v : key;
 }
 
 function applyTranslations() {
-  // Aplica em todos elementos com data-i18n
+  // textContent — só substitui se a chave existir
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (key) el.textContent = t(key);
+    const val = key ? tOrNull(key) : null;
+    if (val != null) el.textContent = val;
+  });
+  // innerHTML — só substitui se a chave existir
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    const val = key ? tOrNull(key) : null;
+    if (val != null) el.innerHTML = val;
+  });
+  // Placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const val = key ? tOrNull(key) : null;
+    if (val != null) el.setAttribute('placeholder', val);
+  });
+  // Titles
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    const val = key ? tOrNull(key) : null;
+    if (val != null) el.setAttribute('title', val);
   });
   // Atualiza estado visual dos cards de idioma
   const lang = getCurrentLang();
@@ -7436,6 +7788,14 @@ function applyTranslations() {
   });
   // Atualiza HTML lang attribute
   document.documentElement.setAttribute('lang', lang);
+  // Re-renderiza listas dinamicas (cartas, planos, etc.) para que botoes/labels
+  // gerados via JS sejam tambem traduzidos
+  if (typeof cachedData === 'object' && cachedData) {
+    Object.keys(_renderHash || {}).forEach(k => {
+      if (k.startsWith('rendered-') || k.startsWith('anim-')) delete _renderHash[k];
+    });
+    if (typeof _renderFromCache === 'function') _renderFromCache(cachedData);
+  }
 }
 
 function setLanguage(lang) {
