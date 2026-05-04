@@ -3543,8 +3543,8 @@
 
   <!-- Controles fixos (canto superior direito) -->
   <div class="login-controls">
-    <button class="login-ctrl-btn" id="login-theme-toggle-btn" onclick="toggleTheme();syncLoginThemeBtn()" title="claro / escuro">◐</button>
-    <button class="login-ctrl-btn" onclick="toggleLoginThemePanel()" title="escolher fundo">✦</button>
+    <button class="login-ctrl-btn" id="login-theme-toggle-btn" onclick="toggleTheme();syncLoginThemeBtn()" data-i18n-title="login.theme.toggle" title="claro / escuro">◐</button>
+    <button class="login-ctrl-btn" onclick="toggleLoginThemePanel()" data-i18n-title="login.theme.choose" title="escolher fundo">✦</button>
   </div>
 
   <div class="login-orb"></div>
@@ -3561,7 +3561,7 @@
       <span class="login-deco-gem">◆</span>
       <div class="login-deco-line"></div>
     </div>
-    <div class="login-subtitle"><span class="login-subtitle-gems">✦</span> um lugar só nosso <span class="login-subtitle-gems">✦</span></div>
+    <div class="login-subtitle"><span class="login-subtitle-gems">✦</span> <span data-i18n="login.subtitle">um lugar só nosso</span> <span class="login-subtitle-gems">✦</span></div>
   </div>
 
   <div class="login-players">
@@ -3571,7 +3571,7 @@
         <div class="player-avatar-init" id="login-init-p1">G</div>
       </div>
       <div class="player-name" id="login-name-p1">···</div>
-      <div class="player-enter">entrar</div>
+      <div class="player-enter" data-i18n="login.enter">entrar</div>
     </div>
 
     <div class="player-card" id="login-card-p2" onclick="doLogin('player2')">
@@ -3580,18 +3580,18 @@
         <div class="player-avatar-init" id="login-init-p2">M</div>
       </div>
       <div class="player-name" id="login-name-p2">···</div>
-      <div class="player-enter">entrar</div>
+      <div class="player-enter" data-i18n="login.enter">entrar</div>
     </div>
   </div>
 
-  <div class="login-loading" id="login-loading">carregando...</div>
+  <div class="login-loading" id="login-loading" data-i18n="common.loading">carregando...</div>
 
   <!-- Painel de temas (fixo, centro inferior) -->
   <div class="login-theme-panel hidden" id="login-theme-panel">
-    <div class="login-theme-panel-title">✦ escolher fundo</div>
+    <div class="login-theme-panel-title" data-i18n="login.theme.title">✦ escolher fundo</div>
     <div class="login-theme-grid" id="login-theme-grid"></div>
     <div class="theme-panel-footer">
-      <button class="login-rotate-btn" id="login-rotate-btn" onclick="toggleLoginRotate()">⟳ alternar automático</button>
+      <button class="login-rotate-btn" id="login-rotate-btn" onclick="toggleLoginRotate()" data-i18n="login.theme.auto">⟳ alternar automático</button>
     </div>
   </div>
 
@@ -3604,7 +3604,7 @@
       <span class="gem">✦✦✦</span>
       <div class="arrow" id="update-arrow">↻</div>
     </div>
-    <div class="update-title" id="update-title">Atualização disponível</div>
+    <div class="update-title" id="update-title" data-i18n="update.available">Atualização disponível</div>
     <div class="update-version-line" id="update-version-line">
       <span class="v-old" id="update-v-old"></span>
       <span class="v-arrow">→</span>
@@ -3617,12 +3617,12 @@
         <span class="pct" id="update-progress-pct">0%</span>
       </div>
     </div>
-    <div class="update-msg" id="update-msg">
+    <div class="update-msg" id="update-msg" data-i18n="update.downloading">
       Baixando a versão mais recente em segundo plano...
     </div>
     <div class="update-actions" id="update-actions" style="display:none">
-      <button class="update-btn" onclick="dismissUpdateModal()">depois</button>
-      <button class="update-btn primary" onclick="installUpdateNow()">reiniciar agora</button>
+      <button class="update-btn" onclick="dismissUpdateModal()" data-i18n="update.later">depois</button>
+      <button class="update-btn primary" onclick="installUpdateNow()" data-i18n="update.restart">reiniciar agora</button>
     </div>
   </div>
 </div>
@@ -3636,7 +3636,7 @@
       <span class="header-logo-gem">✦✦✦</span>
     </div>
     <div class="header-user">
-      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="alternar tema">◐</button>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" data-i18n-title="hdr.themeToggle" title="alternar tema">◐</button>
 
       <div class="profile-pill" id="profile-pill"
            onclick="toggleProfileDropdown(event)"
@@ -3833,8 +3833,8 @@
 
       <!-- Duas tabs principais: Builds | Monitor -->
       <div class="game-tabs">
-        <button class="game-tab active" onclick="switchJogosTab('builds')"  id="jtab-builds">⚔ builds</button>
-        <button class="game-tab"        onclick="switchJogosTab('monitor')" id="jtab-monitor">⚡ monitor</button>
+        <button class="game-tab active" onclick="switchJogosTab('builds')"  id="jtab-builds"  data-i18n="games.tab.builds">⚔ builds</button>
+        <button class="game-tab"        onclick="switchJogosTab('monitor')" id="jtab-monitor" data-i18n="games.tab.monitor">⚡ monitor</button>
       </div>
 
       <!-- BUILDS: conteúdo do jogo selecionado (LoL por padrão) -->
@@ -3845,9 +3845,9 @@
 
             <!-- Campeão -->
             <div class="form-group">
-              <div class="field-label">campeão / main</div>
+              <div class="field-label" data-i18n="lol.champion">campeão / main</div>
               <div class="lol-search-wrap" id="champ-wrap">
-                <input type="text" id="lol-champ-search" placeholder="buscar campeão..." autocomplete="off"
+                <input type="text" id="lol-champ-search" data-i18n-placeholder="lol.champ.search" placeholder="buscar campeão..." autocomplete="off"
                   oninput="filtrarCampeoes(this.value)" onfocus="abrirDropLol('champ')" onblur="setTimeout(()=>fecharDropLol('champ'),200)">
                 <input type="hidden" id="lol-champ">
                 <div class="lol-dropdown" id="champ-drop" style="display:none"></div>
@@ -3857,7 +3857,7 @@
 
             <!-- Papel -->
             <div class="form-group">
-              <div class="field-label">papel</div>
+              <div class="field-label" data-i18n="lol.role">papel</div>
               <select id="lol-role">
                 <option value="top">Top</option>
                 <option value="jungle">Jungle</option>
@@ -3869,8 +3869,8 @@
 
             <!-- Itens -->
             <div class="form-group" style="position:relative">
-              <div class="field-label">itens da build (clique para adicionar)</div>
-              <input type="text" id="lol-item-search" placeholder="buscar item..." autocomplete="off"
+              <div class="field-label" data-i18n="lol.items">itens da build (clique para adicionar)</div>
+              <input type="text" id="lol-item-search" data-i18n-placeholder="lol.item.search" placeholder="buscar item..." autocomplete="off"
                 oninput="filtrarItens(this.value)" onfocus="abrirDropLol('item')" onblur="setTimeout(()=>fecharDropLol('item'),200)">
               <div class="lol-dropdown" id="item-drop" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:200"></div>
               <div id="itens-selected" class="lol-chips" style="margin-top:8px"></div>
@@ -3879,8 +3879,8 @@
 
             <!-- Runas -->
             <div class="form-group">
-              <div class="field-label">runas</div>
-              <button type="button" class="btn secondary" onclick="abrirRunaPanel()" style="width:auto;padding:10px 20px">
+              <div class="field-label" data-i18n="lol.runes">runas</div>
+              <button type="button" class="btn secondary" onclick="abrirRunaPanel()" style="width:auto;padding:10px 20px" data-i18n="lol.runes.select">
                 🔮 selecionar runas
               </button>
               <div id="runas-selected" class="lol-chips" style="margin-top:8px"></div>
@@ -3888,18 +3888,18 @@
             </div>
 
             <div class="form-group">
-              <div class="field-label">notas / estratégia</div>
-              <textarea id="lol-notas" rows="4" placeholder="dicas de matchup, rotação, timing..."></textarea>
+              <div class="field-label" data-i18n="lol.notes">notas / estratégia</div>
+              <textarea id="lol-notas" rows="4" data-i18n-placeholder="lol.notes.ph" placeholder="dicas de matchup, rotação, timing..."></textarea>
             </div>
             <div class="form-actions">
-              <button class="btn gold" onclick="addJogo('lol')">salvar build LoL</button>
+              <button class="btn gold" onclick="addJogo('lol')" data-i18n="lol.save">salvar build LoL</button>
             </div>
           </div>
         </div>
         <div class="fixado-banner" id="lol-fixados-banner"></div>
         <div class="lane-filter" id="lol-lane-filter" style="display:none">
-          <span class="lane-filter-label">filtrar lane</span>
-          <button class="lane-btn active" data-lane="all" onclick="toggleLaneFilter(this)">todas</button>
+          <span class="lane-filter-label" data-i18n="lol.filterLane">filtrar lane</span>
+          <button class="lane-btn active" data-lane="all" onclick="toggleLaneFilter(this)" data-i18n="lol.lane.all">todas</button>
           <button class="lane-btn" data-lane="top" onclick="toggleLaneFilter(this)">
             <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png" onerror="this.remove()">top
           </button>
@@ -3913,7 +3913,7 @@
             <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png" onerror="this.remove()">adc
           </button>
           <button class="lane-btn" data-lane="support" onclick="toggleLaneFilter(this)">
-            <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png" onerror="this.remove()">suporte
+            <img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png" onerror="this.remove()"><span data-i18n="lol.lane.support">suporte</span>
           </button>
         </div>
         <div id="lol-list"></div>
@@ -3925,11 +3925,11 @@
           <div class="form-grid">
             <div class="form-row">
               <div class="form-group">
-                <div class="field-label">arma / set</div>
-                <input type="text" id="mhw-arma" placeholder="ex: Switch Axe — Almudron">
+                <div class="field-label" data-i18n="mhw.weapon">arma / set</div>
+                <input type="text" id="mhw-arma" data-i18n-placeholder="mhw.weapon.ph" placeholder="ex: Switch Axe — Almudron">
               </div>
               <div class="form-group">
-                <div class="field-label">tipo de caça</div>
+                <div class="field-label" data-i18n="mhw.huntType">tipo de caça</div>
                 <select id="mhw-tipo">
                   <option value="solo">Solo</option>
                   <option value="coop">Co-op</option>
@@ -3938,19 +3938,19 @@
               </div>
             </div>
             <div class="form-group">
-              <div class="field-label">armadura / decorações</div>
-              <input type="text" id="mhw-armor" placeholder="ex: Teostra Head + Narwa Chest...">
+              <div class="field-label" data-i18n="mhw.armor">armadura / decorações</div>
+              <input type="text" id="mhw-armor" data-i18n-placeholder="mhw.armor.ph" placeholder="ex: Teostra Head + Narwa Chest...">
             </div>
             <div class="form-group">
-              <div class="field-label">habilidades ativas</div>
-              <input type="text" id="mhw-skills" placeholder="ex: Attack Boost 7, Critical Eye 5...">
+              <div class="field-label" data-i18n="mhw.skills">habilidades ativas</div>
+              <input type="text" id="mhw-skills" data-i18n-placeholder="mhw.skills.ph" placeholder="ex: Attack Boost 7, Critical Eye 5...">
             </div>
             <div class="form-group">
-              <div class="field-label">estratégia / notas</div>
-              <textarea id="mhw-notas" rows="4" placeholder="dicas de fraquezas, pontos de ataque..."></textarea>
+              <div class="field-label" data-i18n="mhw.notes">estratégia / notas</div>
+              <textarea id="mhw-notas" rows="4" data-i18n-placeholder="mhw.notes.ph" placeholder="dicas de fraquezas, pontos de ataque..."></textarea>
             </div>
             <div class="form-actions">
-              <button class="btn gold" onclick="addJogo('mhw')">salvar build MHW</button>
+              <button class="btn gold" onclick="addJogo('mhw')" data-i18n="mhw.save">salvar build MHW</button>
             </div>
           </div>
         </div>
@@ -3962,29 +3962,29 @@
           <div class="form-grid">
             <div class="form-row">
               <div class="form-group">
-                <div class="field-label">nome do jogo</div>
-                <input type="text" id="out-jogo" placeholder="ex: Valorant, Minecraft...">
+                <div class="field-label" data-i18n="other.gameName">nome do jogo</div>
+                <input type="text" id="out-jogo" data-i18n-placeholder="other.game.ph" placeholder="ex: Valorant, Minecraft...">
               </div>
               <div class="form-group">
-                <div class="field-label">tipo de anotação</div>
+                <div class="field-label" data-i18n="other.noteType">tipo de anotação</div>
                 <select id="out-tipo">
-                  <option value="build">Build</option>
-                  <option value="estrategia">Estratégia</option>
-                  <option value="dica">Dica</option>
-                  <option value="geral">Geral</option>
+                  <option value="build"      data-i18n="other.type.build">Build</option>
+                  <option value="estrategia" data-i18n="other.type.strategy">Estratégia</option>
+                  <option value="dica"       data-i18n="other.type.tip">Dica</option>
+                  <option value="geral"      data-i18n="other.type.general">Geral</option>
                 </select>
               </div>
             </div>
             <div class="form-group">
-              <div class="field-label">título</div>
-              <input type="text" id="out-titulo" placeholder="nome da build ou estratégia">
+              <div class="field-label" data-i18n="other.title">título</div>
+              <input type="text" id="out-titulo" data-i18n-placeholder="other.title.ph" placeholder="nome da build ou estratégia">
             </div>
             <div class="form-group">
-              <div class="field-label">conteúdo</div>
-              <textarea id="out-notas" rows="5" placeholder="anote tudo que precisar..."></textarea>
+              <div class="field-label" data-i18n="other.content">conteúdo</div>
+              <textarea id="out-notas" rows="5" data-i18n-placeholder="other.content.ph" placeholder="anote tudo que precisar..."></textarea>
             </div>
             <div class="form-actions">
-              <button class="btn gold" onclick="addJogo('outros')">salvar anotação</button>
+              <button class="btn gold" onclick="addJogo('outros')" data-i18n="other.save">salvar anotação</button>
             </div>
           </div>
         </div>
@@ -3996,10 +3996,10 @@
       <div id="jpanel-monitor" style="display:none">
         <div id="game-monitor">
           <div class="monitor-nav">
-            <button class="monitor-tab active" id="mtab-home"        onclick="switchMonitor('home')">🏠 hoje</button>
-            <button class="monitor-tab"         id="mtab-analise"     onclick="switchMonitor('analise')">⚔ análise</button>
-            <button class="monitor-tab"         id="mtab-sinergia"    onclick="switchMonitor('sinergia')">⚡ sinergia</button>
-            <button class="monitor-tab"         id="mtab-celebracoes" onclick="switchMonitor('celebracoes')">★ conquistas</button>
+            <button class="monitor-tab active" id="mtab-home"        onclick="switchMonitor('home')"       data-i18n="mon.tab.home">🏠 hoje</button>
+            <button class="monitor-tab"         id="mtab-analise"     onclick="switchMonitor('analise')"     data-i18n="mon.tab.analysis">⚔ análise</button>
+            <button class="monitor-tab"         id="mtab-sinergia"    onclick="switchMonitor('sinergia')"    data-i18n="mon.tab.synergy">⚡ sinergia</button>
+            <button class="monitor-tab"         id="mtab-celebracoes" onclick="switchMonitor('celebracoes')" data-i18n="mon.tab.achievements">★ conquistas</button>
           </div>
           <!-- HOME -->
           <div id="mpanel-home" class="mpanel">
@@ -4011,7 +4011,7 @@
               </div>
               <div class="mon-music-btns">
                 <button class="mon-music-btn" onclick="monMusicPrev()">‹</button>
-                <button class="mon-music-btn" onclick="monMusicPlay()">▶ ouvir</button>
+                <button class="mon-music-btn" onclick="monMusicPlay()" data-i18n="mon.listen">▶ ouvir</button>
                 <button class="mon-music-btn" onclick="monMusicNext()">›</button>
               </div>
             </div>
@@ -4022,21 +4022,21 @@
                   <div class="mon-champ-ph" id="mon-champ-ph">♪</div>
                 </div>
                 <div class="mon-champ-name" id="mon-champ-nm"></div>
-                <button class="mon-champ-btn" onclick="abrirSetChamp()">✦ definir main</button>
+                <button class="mon-champ-btn" onclick="abrirSetChamp()" data-i18n="mon.setMain">✦ definir main</button>
               </div>
               <div class="mon-goal-frac">
                 <div class="mon-goal-done" id="mon-done-cnt">0</div>
                 <div class="mon-goal-bar-line"></div>
                 <div class="mon-goal-total" id="mon-goal-tot">?</div>
-                <div class="mon-goal-label">partidas hoje</div>
+                <div class="mon-goal-label" data-i18n="mon.matchesToday">partidas hoje</div>
               </div>
             </div>
             <div class="form-panel" id="mon-meta-form">
               <div class="form-grid">
-                <div class="field-label">meta de partidas hoje — escolha e trave</div>
+                <div class="field-label" data-i18n="mon.goalLabel">meta de partidas hoje — escolha e trave</div>
                 <div class="mon-goal-opts" id="mon-goal-opts"></div>
                 <div class="form-actions">
-                  <button class="btn gold" onclick="travarMeta()">🔒 travar meta</button>
+                  <button class="btn gold" onclick="travarMeta()" data-i18n="mon.lockGoal">🔒 travar meta</button>
                 </div>
               </div>
             </div>
@@ -4045,13 +4045,13 @@
                 <span class="mon-locked-icon">🔒</span>
                 <div>
                   <div class="mon-locked-num" id="mon-locked-num">—</div>
-                  <div class="mon-locked-lbl">partidas — meta travada</div>
+                  <div class="mon-locked-lbl" data-i18n="mon.goalLocked">partidas — meta travada</div>
                 </div>
                 <div class="mon-prog-wrap">
                   <div class="mon-prog-bar"><div class="mon-prog-fill" id="mon-prog-fill" style="width:0%"></div></div>
                   <div class="mon-prog-pct" id="mon-prog-pct">0%</div>
                 </div>
-                <button class="meta-complete-reset" onclick="cancelarMeta()" style="flex-shrink:0">✕ cancelar</button>
+                <button class="meta-complete-reset" onclick="cancelarMeta()" style="flex-shrink:0" data-i18n="common.cancelX">✕ cancelar</button>
               </div>
             </div>
           </div>
@@ -4061,36 +4061,36 @@
             <div class="mon-analise-header" id="mon-analise-header"></div>
             <!-- Riot sync bar -->
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-              <button class="btn secondary" id="btn-riot-sync" onclick="sincronizarPartida()" style="font-size:11px;padding:8px 16px;letter-spacing:0.08em">↻ sincronizar última partida</button>
+              <button class="btn secondary" id="btn-riot-sync" onclick="sincronizarPartida()" style="font-size:11px;padding:8px 16px;letter-spacing:0.08em" data-i18n="mon.syncLast">↻ sincronizar última partida</button>
               <div id="riot-sync-status" style="font-size:10px;color:var(--text-muted)"></div>
             </div>
             <div class="form-panel">
               <div class="form-grid">
-                <div class="field-label" style="font-size:11px;color:var(--text-muted);letter-spacing:0.18em">registrar partida</div>
+                <div class="field-label" style="font-size:11px;color:var(--text-muted);letter-spacing:0.18em" data-i18n="mon.registerMatch">registrar partida</div>
                 <div class="form-group">
-                  <div class="field-label">resultado</div>
-                  <select id="mon-res"><option value="1">vitória ✓</option><option value="0">derrota ✗</option></select>
+                  <div class="field-label" data-i18n="mon.result">resultado</div>
+                  <select id="mon-res"><option value="1" data-i18n="mon.win">vitória ✓</option><option value="0" data-i18n="mon.loss">derrota ✗</option></select>
                 </div>
                 <div class="mon-kda-grid">
                   <div class="mon-kda-input-wrap kda-k">
                     <input type="number" id="mon-kills" class="mon-kda-input mon-kda-k" min="0" max="60" placeholder="">
-                    <div class="mon-kda-label">abates K</div>
+                    <div class="mon-kda-label" data-i18n="mon.kills">abates K</div>
                   </div>
                   <div class="mon-kda-input-wrap kda-d">
                     <input type="number" id="mon-mortes" class="mon-kda-input mon-kda-d" min="0" max="60" placeholder="">
-                    <div class="mon-kda-label">mortes D</div>
+                    <div class="mon-kda-label" data-i18n="mon.deaths">mortes D</div>
                   </div>
                   <div class="mon-kda-input-wrap">
                     <input type="number" id="mon-assists" class="mon-kda-input" min="0" max="60" placeholder="">
-                    <div class="mon-kda-label">assists A</div>
+                    <div class="mon-kda-label" data-i18n="mon.assists">assists A</div>
                   </div>
                   <div class="mon-kda-input-wrap">
                     <input type="number" id="mon-visao" class="mon-kda-input" min="0" max="300" placeholder="">
-                    <div class="mon-kda-label">visão 👁</div>
+                    <div class="mon-kda-label" data-i18n="mon.vision">visão 👁</div>
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="btn gold" onclick="adicionarPartida()">+ registrar partida</button>
+                  <button class="btn gold" onclick="adicionarPartida()" data-i18n="mon.add">+ registrar partida</button>
                 </div>
               </div>
             </div>
@@ -4099,18 +4099,18 @@
           <!-- SINERGIA -->
           <div id="mpanel-sinergia" class="mpanel" style="display:none">
             <div class="mon-sin-gauge">
-              <div style="font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px">AMA — análise mútua adaptativa</div>
+              <div style="font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px" data-i18n="mon.synergy.title">AMA — análise mútua adaptativa</div>
               <div class="mon-sin-num" id="mon-sin-num">—</div>
-              <div style="font-size:9px;letter-spacing:0.15em;color:var(--text-muted);margin-top:8px">pontos de 100</div>
+              <div style="font-size:9px;letter-spacing:0.15em;color:var(--text-muted);margin-top:8px" data-i18n="mon.synergy.points">pontos de 100</div>
               <div id="mon-sin-status" style="font-size:12px;color:var(--text-muted);margin-top:14px;font-style:italic"></div>
             </div>
             <div class="form-panel" style="margin-bottom:16px">
-              <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px">critérios de avaliação</div>
+              <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px" data-i18n="mon.synergy.criteria">critérios de avaliação</div>
               <div id="mon-sin-criterios"></div>
             </div>
             <div class="form-panel">
               <div class="form-actions">
-                <button class="btn gold" onclick="calcularSinergiaAgora()">⚡ calcular sinergia agora</button>
+                <button class="btn gold" onclick="calcularSinergiaAgora()" data-i18n="mon.synergy.calc">⚡ calcular sinergia agora</button>
               </div>
             </div>
             <div id="mon-sin-log"></div>
@@ -4128,11 +4128,11 @@
     <div class="mon-set-champ-overlay" id="mon-set-champ-overlay" onclick="fecharSetChamp(event)">
       <div class="mon-set-champ-box">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div class="field-label" style="font-size:12px;color:var(--text)">seu campeão principal</div>
+          <div class="field-label" style="font-size:12px;color:var(--text)" data-i18n="mon.yourMain">seu campeão principal</div>
           <button class="carta-modal-close" onclick="document.getElementById('mon-set-champ-overlay').classList.remove('open')">✕</button>
         </div>
         <div class="lol-search-wrap" id="mon-champ-wrap">
-          <input type="text" id="mon-champ-search" placeholder="buscar campeão..." autocomplete="off"
+          <input type="text" id="mon-champ-search" data-i18n-placeholder="lol.champ.search" placeholder="buscar campeão..." autocomplete="off"
             oninput="filtrarCampeoesMon(this.value)" onfocus="abrirDropLol('mon-champ')" onblur="setTimeout(()=>fecharDropLol('mon-champ'),200)">
           <input type="hidden" id="mon-champ-sel-val">
           <div class="lol-dropdown" id="mon-champ-drop" style="display:none"></div>
@@ -4142,7 +4142,7 @@
           <span id="mon-champ-sel-name" style="font-family:var(--font-display);font-style:italic;font-size:1.15rem;color:var(--accent)"></span>
         </div>
         <div class="form-actions" style="margin-top:16px">
-          <button class="btn gold" onclick="salvarMainChamp()">confirmar</button>
+          <button class="btn gold" onclick="salvarMainChamp()" data-i18n="common.confirm">confirmar</button>
         </div>
       </div>
     </div>
@@ -4194,11 +4194,11 @@
       <div class="form-panel">
         <div class="form-grid">
           <div class="form-group">
-            <div class="field-label">novo segredo</div>
-            <textarea id="segredo-texto" rows="5" placeholder="só você vai ler isso..."></textarea>
+            <div class="field-label" data-i18n="segredo.new">novo segredo</div>
+            <textarea id="segredo-texto" rows="5" data-i18n-placeholder="segredo.placeholder" placeholder="só você vai ler isso..."></textarea>
           </div>
           <div class="form-actions">
-            <button class="btn gold" onclick="salvarSegredo()">🔒 guardar segredo</button>
+            <button class="btn gold" onclick="salvarSegredo()" data-i18n="segredo.save">🔒 guardar segredo</button>
           </div>
         </div>
       </div>
@@ -4219,7 +4219,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.17/nosso-espaco-setup-1.0.17.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.18/nosso-espaco-setup-1.0.18.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -4246,7 +4246,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.17/nosso-espaco-1.0.17-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.18/nosso-espaco-1.0.18-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span data-i18n="dl.portable">versão portátil (sem instalar)</span>
@@ -4323,12 +4323,12 @@
 
     <!-- ─── PERFIL ─── -->
     <section id="sec-perfil" class="section">
-      <div class="section-title" id="perfil-section-title">meu perfil</div>
+      <div class="section-title" id="perfil-section-title" data-i18n="sec.perfil">meu perfil</div>
 
       <!-- Toggle meu/parceiro -->
       <div class="perfil-toggle" id="perfil-toggle">
-        <button class="perfil-toggle-btn active" id="ptoggle-eu" onclick="switchPerfil('eu')">◈ meu perfil</button>
-        <button class="perfil-toggle-btn" id="ptoggle-parceiro" onclick="switchPerfil('parceiro')">♡ parceiro(a)</button>
+        <button class="perfil-toggle-btn active" id="ptoggle-eu" onclick="switchPerfil('eu')" data-i18n="perfil.tabMy">◈ meu perfil</button>
+        <button class="perfil-toggle-btn" id="ptoggle-parceiro" onclick="switchPerfil('parceiro')" data-i18n="perfil.tabPartner">♡ parceiro(a)</button>
       </div>
 
       <div id="perfil-content"></div>
@@ -4351,14 +4351,14 @@
           <div class="form-grid">
 
             <!-- Fotos -->
-            <div class="field-label" style="font-size:11px;color:var(--text);margin-bottom:8px">foto & banner</div>
+            <div class="field-label" style="font-size:11px;color:var(--text);margin-bottom:8px" data-i18n="cfg.photoBanner">foto & banner</div>
             <div class="cfg-photos-row">
               <!-- Avatar circle -->
               <div class="cfg-avatar-wrap" id="cfg-avatar-wrap" onclick="document.getElementById('avatar-input').click()">
                 <img class="cfg-avatar-img" id="avatar-thumb" src="" style="display:none">
                 <div class="cfg-avatar-ph" id="cfg-avatar-ph">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                  foto
+                  <span data-i18n="cfg.photo">foto</span>
                 </div>
                 <div class="cfg-avatar-overlay">
                   <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -4371,7 +4371,7 @@
                 <img class="cfg-banner-img" id="banner-thumb" src="" style="display:none">
                 <div class="cfg-banner-ph" id="cfg-banner-ph">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                  banner
+                  <span data-i18n="cfg.banner">banner</span>
                 </div>
                 <div class="cfg-banner-overlay">
                   <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -4381,22 +4381,22 @@
               </div>
             </div>
             <div class="cfg-photo-labels">
-              <div class="cfg-photo-label avatar-lbl">perfil</div>
-              <div class="cfg-photo-label banner-lbl">banner</div>
+              <div class="cfg-photo-label avatar-lbl" data-i18n="cfg.profile">perfil</div>
+              <div class="cfg-photo-label banner-lbl" data-i18n="cfg.banner">banner</div>
             </div>
 
             <!-- Nome -->
-            <div class="field-label" style="font-size:11px;color:var(--text);margin-bottom:-2px">nome de exibição</div>
+            <div class="field-label" style="font-size:11px;color:var(--text);margin-bottom:-2px" data-i18n="cfg.displayName">nome de exibição</div>
             <div class="form-group">
-              <div class="field-label" id="cfg-name-label">seu nome ou apelido</div>
-              <input type="text" id="cfg-name" placeholder="seu nome ou apelido" onchange="saveConfig()">
+              <div class="field-label" id="cfg-name-label" data-i18n="cfg.nameLabel">seu nome ou apelido</div>
+              <input type="text" id="cfg-name" data-i18n-placeholder="cfg.nameLabel" placeholder="seu nome ou apelido" onchange="saveConfig()">
             </div>
 
             <!-- Fonte -->
-            <div class="field-label" style="font-size:11px;color:var(--text);margin-top:16px;margin-bottom:7px">fonte do site</div>
+            <div class="field-label" style="font-size:11px;color:var(--text);margin-top:16px;margin-bottom:7px" data-i18n="cfg.siteFonts">fonte do site</div>
             <div class="font-drawer" id="font-drawer-display">
               <div class="font-drawer-trigger" onclick="toggleFontDrawer('display')">
-                <span class="font-drawer-label">títulos e destaques</span>
+                <span class="font-drawer-label" data-i18n="cfg.fontTitles">títulos e destaques</span>
                 <span class="font-drawer-current" id="font-drawer-cur-display">—</span>
                 <span class="font-drawer-arrow">▾</span>
               </div>
@@ -4406,7 +4406,7 @@
             </div>
             <div class="font-drawer" id="font-drawer-body">
               <div class="font-drawer-trigger" onclick="toggleFontDrawer('body')">
-                <span class="font-drawer-label">texto do corpo</span>
+                <span class="font-drawer-label" data-i18n="cfg.fontBodyText">texto do corpo</span>
                 <span class="font-drawer-current" id="font-drawer-cur-body">—</span>
                 <span class="font-drawer-arrow">▾</span>
               </div>
@@ -4416,12 +4416,12 @@
             </div>
 
             <!-- Background -->
-            <div class="field-label" style="font-size:11px;color:var(--text);margin-top:20px;margin-bottom:8px">background personalizado</div>
+            <div class="field-label" style="font-size:11px;color:var(--text);margin-top:20px;margin-bottom:8px" data-i18n="cfg.customBg">background personalizado</div>
             <div class="cfg-bg-wrap" id="cfg-bg-wrap" onclick="document.getElementById('bg-img-input').click()">
               <img class="cfg-bg-img" id="bg-img-thumb" src="" style="display:none">
               <div class="cfg-bg-ph" id="cfg-bg-ph">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><circle cx="7.5" cy="6" r="0.5" fill="currentColor"/><circle cx="10.5" cy="6" r="0.5" fill="currentColor"/></svg>
-                clique para escolher imagem de fundo
+                <span data-i18n="cfg.bgPick">clique para escolher imagem de fundo</span>
               </div>
               <div class="cfg-bg-overlay">
                 <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -4462,23 +4462,23 @@
 
           <!-- Riot panel -->
           <div class="conexao-panel" id="cpanel-riot">
-            <div class="conexao-panel-title">⚡ League of Legends — Riot API</div>
+            <div class="conexao-panel-title" data-i18n-html="con.riot.title">⚡ League of Legends — Riot API</div>
             <div class="form-group" style="margin-bottom:10px">
-              <div class="field-label">API key <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.08em">developer.riotgames.com · expira em 24h</span></div>
+              <div class="field-label" data-i18n-html="con.riot.apiKey">API key <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.08em">developer.riotgames.com · expira em 24h</span></div>
               <input type="text" id="cfg-riot-key" placeholder="RGAPI-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" style="font-size:11px;letter-spacing:0.04em">
             </div>
             <div class="form-row" style="margin-bottom:10px">
               <div class="form-group">
-                <div class="field-label">Riot ID — player 1</div>
+                <div class="field-label" data-i18n="con.riot.id1">Riot ID — player 1</div>
                 <input type="text" id="cfg-riot-id-p1" placeholder="Nome#TAG">
               </div>
               <div class="form-group">
-                <div class="field-label">Riot ID — player 2</div>
+                <div class="field-label" data-i18n="con.riot.id2">Riot ID — player 2</div>
                 <input type="text" id="cfg-riot-id-p2" placeholder="Nome#TAG">
               </div>
             </div>
             <div class="form-actions" style="margin-top:0">
-              <button class="btn secondary" onclick="saveRiotConfig()" style="font-size:11px">salvar configuração Riot</button>
+              <button class="btn secondary" onclick="saveRiotConfig()" style="font-size:11px" data-i18n="con.riot.save">salvar configuração Riot</button>
             </div>
           </div>
 
@@ -4486,7 +4486,7 @@
           <div class="conexao-panel" id="cpanel-spotify">
             <div class="conexao-panel-title" style="color:#1DB954">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-              Spotify — conectar conta
+              <span data-i18n="con.spotify.title">Spotify — conectar conta</span>
             </div>
 
             <!-- Estado: conectado -->
@@ -4494,27 +4494,27 @@
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 12px;background:rgba(29,185,84,0.08);border:1px solid rgba(29,185,84,0.2);border-radius:4px">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
                 <div>
-                  <div style="font-size:11px;color:#1DB954;letter-spacing:0.06em">conectado</div>
+                  <div style="font-size:11px;color:#1DB954;letter-spacing:0.06em" data-i18n="cfg.con.connected">conectado</div>
                   <div id="sp-connected-name" style="font-size:10px;color:var(--text-muted)"></div>
                 </div>
               </div>
-              <button class="btn secondary" onclick="spotifyDesconectar()" style="font-size:11px;color:var(--red);border-color:var(--red)">desconectar</button>
+              <button class="btn secondary" onclick="spotifyDesconectar()" style="font-size:11px;color:var(--red);border-color:var(--red)" data-i18n="cfg.con.disconnect">desconectar</button>
             </div>
 
             <!-- Estado: não conectado -->
             <div id="sp-connect-state">
-              <div class="field-label" style="margin-bottom:6px;color:var(--text-muted);line-height:1.5">
+              <div class="field-label" style="margin-bottom:6px;color:var(--text-muted);line-height:1.5" data-i18n-html="con.spotify.howto">
                 Crie um app em <span style="color:var(--accent)">developer.spotify.com</span> → Dashboard → Create App.<br>
                 Redirect URI: <span id="sp-redirect-hint" style="color:var(--accent);font-size:9px;word-break:break-all"></span>
               </div>
               <div class="form-group" style="margin-bottom:10px;margin-top:10px">
-                <div class="field-label">Client ID do app Spotify</div>
+                <div class="field-label" data-i18n="con.spotify.clientId">Client ID do app Spotify</div>
                 <input type="text" id="cfg-spotify-client-id" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" style="letter-spacing:0.03em;font-size:11px">
               </div>
               <div class="form-actions" style="margin-top:0">
                 <button class="btn secondary" onclick="spotifyConectar()" style="font-size:11px;background:rgba(29,185,84,0.1);border-color:rgba(29,185,84,0.4);color:#1DB954">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="#1DB954" style="flex-shrink:0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                  conectar com Spotify
+                  <span data-i18n="con.spotify.connect">conectar com Spotify</span>
                 </button>
               </div>
             </div>
@@ -4526,10 +4526,10 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
               Discord
             </div>
-            <div class="field-label" style="margin-bottom:10px;color:var(--text-muted)">adicione seu usuário Discord para exibir no perfil</div>
+            <div class="field-label" style="margin-bottom:10px;color:var(--text-muted)" data-i18n="con.discord.desc">adicione seu usuário Discord para exibir no perfil</div>
             <div class="form-group" style="margin-bottom:10px">
-              <div class="field-label">usuário Discord</div>
-              <input type="text" id="cfg-discord-tag" placeholder="usuario#0000 ou @usuario">
+              <div class="field-label" data-i18n="con.discord.user">usuário Discord</div>
+              <input type="text" id="cfg-discord-tag" data-i18n-placeholder="con.discord.ph" placeholder="usuario#0000 ou @usuario">
             </div>
             <div class="form-actions" style="margin-top:0">
               <button class="btn secondary" onclick="saveDiscordConfig()" style="font-size:11px" data-i18n="common.save">salvar</button>
@@ -4663,27 +4663,27 @@
 <div class="carta-modal-overlay" id="runa-panel-overlay" onclick="fecharRunaPanel(event)" style="z-index:400">
   <div class="carta-modal" id="runa-panel-box" style="max-width:700px;background:var(--bg)">
     <div class="carta-modal-header" style="padding:20px 20px 0;border-bottom:1px solid var(--border);padding-bottom:16px">
-      <div class="carta-modal-title" style="font-size:1.4rem">runas</div>
+      <div class="carta-modal-title" style="font-size:1.4rem" data-i18n="lol.runes">runas</div>
       <button class="carta-modal-close" onclick="document.getElementById('runa-panel-overlay').classList.remove('open')">✕</button>
     </div>
     <div style="padding:16px 20px 24px;overflow-y:auto;max-height:70vh">
       <!-- Seletor de árvore primária -->
       <div style="margin-bottom:16px">
-        <div class="field-label" style="margin-bottom:8px">estilo principal</div>
+        <div class="field-label" style="margin-bottom:8px" data-i18n="lol.runes.primary">estilo principal</div>
         <div id="runa-trees-primary" style="display:flex;gap:8px;flex-wrap:wrap"></div>
       </div>
       <!-- Runas da árvore primária -->
       <div id="runa-primary-slots" style="margin-bottom:20px"></div>
       <!-- Seletor de árvore secundária -->
       <div style="margin-bottom:12px">
-        <div class="field-label" style="margin-bottom:8px">estilo secundário</div>
+        <div class="field-label" style="margin-bottom:8px" data-i18n="lol.runes.secondary">estilo secundário</div>
         <div id="runa-trees-secondary" style="display:flex;gap:8px;flex-wrap:wrap"></div>
       </div>
       <!-- Runas da árvore secundária (2 slots) -->
       <div id="runa-secondary-slots" style="margin-bottom:20px"></div>
       <!-- Selecionadas -->
       <div id="runa-selected-preview" style="margin-bottom:16px"></div>
-      <button class="btn gold" onclick="confirmarRunas()">confirmar runas</button>
+      <button class="btn gold" onclick="confirmarRunas()" data-i18n="lol.runes.confirm">confirmar runas</button>
     </div>
   </div>
 </div>
@@ -4700,16 +4700,16 @@
       <div id="dm-msg" style="font-family:var(--font-display);font-style:italic;font-size:1.25rem;line-height:1.8;margin-bottom:16px"></div>
       <img id="dm-img" src="" style="display:none;width:100%;max-height:260px;object-fit:contain;margin:12px 0;border:1px solid var(--border)">
       <div id="dm-amor" style="display:none;margin-top:12px">
-        <div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">o que eu amo em você</div>
+        <div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px" data-i18n="desculpas.loveLabel">o que eu amo em você</div>
         <div id="dm-amor-text" style="font-size:13px;line-height:1.7"></div>
       </div>
       <div id="dm-promessa" style="display:none;margin-top:12px">
-        <div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">promessa</div>
+        <div style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px" data-i18n="desculpas.promiseLabel">promessa</div>
         <div id="dm-promessa-text" style="font-size:13px;line-height:1.7"></div>
       </div>
       <div id="dm-resposta-wrap" style="display:none;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <div style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted)">↩ resposta</div>
+          <div style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted)" data-i18n="desculpas.responseLabel">↩ resposta</div>
           <div id="dm-resposta-acoes" style="display:none;gap:8px;display:flex"></div>
         </div>
         <div id="dm-resposta-msg" style="font-family:var(--font-display);font-style:italic;font-size:1.1rem;line-height:1.7"></div>
@@ -4781,7 +4781,7 @@ window.addEventListener('beforeinstallprompt', e => {
 window.addEventListener('appinstalled', () => {
   dlDeferredPrompt = null;
   dlAtualizarBotao();
-  toast('app instalado com sucesso ✦');
+  toast(t('toast.installed'));
 });
 
 function dlAtualizarBotao() {
@@ -4892,7 +4892,7 @@ async function abrirRunaPanel() {
     try {
       const r = await fetch(`${DDBase}/data/pt_BR/runesReforged.json`).then(r=>r.json());
       runaTreeData = r;
-    } catch(e) { toast('erro ao carregar runas'); return; }
+    } catch(e) { toast(t('toast.runasError')); return; }
   }
   renderRunaTrees();
   document.getElementById('runa-panel-overlay').classList.add('open');
@@ -5005,7 +5005,7 @@ function selecionarRuna(slotIdx, runa, tipo) {
     } else {
       const totalSec = Object.keys(runaSecSelections).length;
       if (totalSec >= 2 && !runaSecSelections[slotIdx]) {
-        toast('máximo 2 runas secundárias'); return;
+        toast(t('toast.maxRunes2')); return;
       }
       runaSecSelections[slotIdx] = runa;
     }
@@ -5560,7 +5560,7 @@ async function saveData(d) {
     await db.ref(STORAGE_KEY).set(d);
   } catch(e) {
     console.error('saveData error:', e);
-    toast('erro ao salvar — tente uma imagem menor');
+    toast(t('toast.saveError'));
   }
 }
 
@@ -6162,7 +6162,7 @@ async function addCarta() {
   const titulo = document.getElementById('carta-titulo').value.trim();
   const texto = document.getElementById('carta-texto').value.trim();
   const para = document.getElementById('carta-para').value;
-  if (!titulo || !texto) { toast('preencha título e mensagem'); return; }
+  if (!titulo || !texto) { toast(t('toast.fillTitleMsg')); return; }
 
   const novaCarta = { id: Date.now(), de: currentUser, para, titulo, texto,
     cor: cartaColorSelecionada, img: cartaImgBase64,
@@ -6250,7 +6250,7 @@ async function addPlano() {
   const nome = document.getElementById('plano-nome').value.trim();
   const desc = document.getElementById('plano-desc').value.trim();
   const cat = document.getElementById('plano-cat').value;
-  if (!nome) { toast('dê um nome ao plano'); return; }
+  if (!nome) { toast(t('toast.namePlan')); return; }
 
   const d = await loadData();
   d.planos.unshift({ id: Date.now(), nome, desc, cat, feito: false, de: currentUser, ts: new Date().toISOString() });
@@ -6258,7 +6258,7 @@ async function addPlano() {
   document.getElementById('plano-nome').value = '';
   document.getElementById('plano-desc').value = '';
   renderPlanos(d);
-  toast('plano adicionado ✦');
+  toast(t('toast.planAdded'));
 }
 
 async function togglePlano(id) {
@@ -6308,7 +6308,7 @@ function toggleDataRecorrente(val) {
 async function addData() {
   const nome = document.getElementById('data-nome').value.trim();
   const tipo = document.getElementById('data-tipo').value;
-  if (!nome) { toast('preencha o nome da data'); return; }
+  if (!nome) { toast(t('toast.fillDateName')); return; }
 
   const d = await loadData();
   if (tipo === 'recorrente') {
@@ -6318,14 +6318,14 @@ async function addData() {
     document.getElementById('data-fim').value = '';
   } else {
     const val = document.getElementById('data-val').value;
-    if (!val) { toast('preencha a data'); return; }
+    if (!val) { toast(t('toast.fillDate')); return; }
     d.datas.push({ id: Date.now(), nome, val, tipo });
     document.getElementById('data-val').value = '';
   }
   await saveData(d);
   document.getElementById('data-nome').value = '';
   renderDatas(d);
-  toast('data salva ◎');
+  toast(t('toast.dateSaved'));
 }
 
 async function deleteData(id) {
@@ -6416,7 +6416,7 @@ async function addJogo(tipo) {
 
   if (tipo === 'lol') {
     const champ = document.getElementById('lol-champ').value.trim();
-    if (!champ) { toast('selecione um campeão'); return; }
+    if (!champ) { toast(t('toast.selectChamp')); return; }
     const champImg = lolChampSelected ? lolChampSelected.img : '';
     const itensData = lolItensSelected.map(x=>({name:x.name,img:x.img}));
     const runasData = lolRunasSelected.map(x=>({name:x.name,img:x.img}));
@@ -6429,7 +6429,7 @@ async function addJogo(tipo) {
     document.getElementById('lol-notas').value = '';
   } else if (tipo === 'mhw') {
     const arma = document.getElementById('mhw-arma').value.trim();
-    if (!arma) { toast('coloque a arma'); return; }
+    if (!arma) { toast(t('toast.fillWeapon')); return; }
     entry = { ...entry, arma, tipoCaca: document.getElementById('mhw-tipo').value,
       armor: document.getElementById('mhw-armor').value.trim(),
       skills: document.getElementById('mhw-skills').value.trim(),
@@ -6437,7 +6437,7 @@ async function addJogo(tipo) {
     ['mhw-arma','mhw-armor','mhw-skills','mhw-notas'].forEach(id => document.getElementById(id).value = '');
   } else {
     const titulo = document.getElementById('out-titulo').value.trim();
-    if (!titulo) { toast('dê um título'); return; }
+    if (!titulo) { toast(t('toast.giveTitle')); return; }
     entry = { ...entry, jogo: document.getElementById('out-jogo').value.trim(),
       tipoNota: document.getElementById('out-tipo').value,
       titulo, notas: document.getElementById('out-notas').value.trim() };
@@ -6447,7 +6447,7 @@ async function addJogo(tipo) {
   d.jogos[tipo].unshift(entry);
   await saveData(d);
   renderJogos(d);
-  toast('build salva ⌗');
+  toast(t('toast.buildSaved'));
 }
 
 async function deleteJogo(tipo, id) {
@@ -6609,7 +6609,7 @@ async function updateApoTargetUI(d) {
 
 async function addDesculpa() {
   const msg = document.getElementById('apo-msg').value.trim();
-  if (!msg) { toast('escreva sua mensagem'); return; }
+  if (!msg) { toast(t('toast.writeMsg')); return; }
   const titulo = document.getElementById('apo-titulo').value.trim();
   const amor = document.getElementById('apo-amor').value.trim();
 
@@ -6722,7 +6722,7 @@ function removeRespostaImg() {
 
 async function salvarResposta(id) {
   const msg = document.getElementById('resp-msg')?.value.trim();
-  if (!msg) { toast('escreva sua resposta'); return; }
+  if (!msg) { toast(t('toast.writeReply')); return; }
   const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
   const item = d.desculpas.find(x => x.id === id);
   if (!item) return;
@@ -6733,7 +6733,7 @@ async function salvarResposta(id) {
   document.getElementById('modal-overlay').classList.remove('open');
   document.getElementById('desculpa-modal-overlay').classList.remove('open');
   renderDesculpas(d);
-  toast('resposta salva ♡');
+  toast(t('toast.replySaved'));
 }
 
 function editarResposta(id) {
@@ -6771,7 +6771,7 @@ async function deletarResposta(id) {
   if (cachedData) cachedData.desculpas = d.desculpas;
   document.getElementById('desculpa-modal-overlay').classList.remove('open');
   renderDesculpas(d);
-  toast('resposta apagada');
+  toast(t('toast.replyDeleted'));
 }
 
 async function abrirDesculpaById(id) {
@@ -6827,7 +6827,7 @@ const segredosRevelados = new Set();
 async function salvarSegredo() {
   const el = document.getElementById('segredo-texto');
   const texto = el.value.trim();
-  if (!texto) { toast('escreva o segredo primeiro'); return; }
+  if (!texto) { toast(t('toast.writeSecret')); return; }
   const key = currentUser === 'player1' ? 'segredo1' : 'segredo2';
   const d = cachedData ? JSON.parse(JSON.stringify(cachedData)) : await loadData();
   const arr = Array.isArray(d[key]) ? d[key] : [];
@@ -6837,7 +6837,7 @@ async function salvarSegredo() {
   if (cachedData) cachedData[key] = arr;
   el.value = '';
   renderSegredo(cachedData || {});
-  toast('segredo guardado 🔒');
+  toast(t('toast.secretSaved'));
 }
 
 async function deletarSegredo(id) {
@@ -6928,7 +6928,7 @@ async function saveRiotConfig() {
   };
   await db.ref(STORAGE_KEY + '/config').update(updates);
   if (cachedData) Object.assign(cachedData.config, updates);
-  toast('configuração Riot salva ⚡');
+  toast(t('toast.riotSaved'));
 }
 
 function setSyncStatus(msg, color) {
@@ -6941,7 +6941,7 @@ async function sincronizarPartida(opts = {}) {
   const d = cachedData || await loadData();
   const apiKey = d.config.riot_key || '';
   if (!apiKey) {
-    if (!silent) { toast('configure a API key da Riot nas configurações'); showSection('config'); }
+    if (!silent) { toast(t('toast.riotKey')); showSection('config'); }
     return;
   }
 
@@ -6951,7 +6951,7 @@ async function sincronizarPartida(opts = {}) {
   const mainKey   = currentUser === 'player1' ? 'main_p1'       : 'main_p2';
   const riotId    = d.config[riotIdKey] || '';
   if (!riotId) {
-    if (!silent) { toast('configure seu Riot ID nas configurações'); showSection('config'); }
+    if (!silent) { toast(t('toast.riotId')); showSection('config'); }
     return;
   }
 
@@ -7080,7 +7080,7 @@ async function sincronizarPartida(opts = {}) {
 
   } catch(e) {
     setSyncStatus('✗ ' + e.message, 'var(--red)');
-    if (!silent) toast('erro: ' + e.message);
+    if (!silent) toast(t('toast.error') + e.message);
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '↻ sincronizar última partida'; }
   }
@@ -7194,7 +7194,7 @@ async function saveConfig() {
 
   const displayName = name || (cachedData?.config?.[currentUser === 'player1' ? 'name1' : 'name2']) || currentUser;
   document.getElementById('header-username').textContent = displayName;
-  toast('configurações salvas ⚙');
+  toast(t('toast.cfgSaved'));
 }
 
 function atualizarHeaderAvatar(d) {
@@ -7494,7 +7494,7 @@ const I18N = {
     'dl.win.badge':          'programa para windows',
     'dl.win.sub':            'app desktop completo — bandeja, atualização automática, sem navegador',
     'dl.win.btn':            'baixar instalador — windows',
-    'dl.meta.version':       'versão 1.0.17',
+    'dl.meta.version':       'versão 1.0.18',
     'dl.meta.size':          '~74 MB · Windows 10+',
     'dl.meta.installer':     'instalador com desinstalador',
     'dl.portable':           'versão portátil (sem instalar)',
@@ -7521,6 +7521,167 @@ const I18N = {
     'time.day':              'dia',
     'time.days':             'dias',
     'time.ago':              'há',
+
+    // Login screen
+    'login.theme.toggle':    'claro / escuro',
+    'login.theme.choose':    'escolher fundo',
+    'login.subtitle':        'um lugar só nosso',
+    'login.enter':           'entrar',
+    'login.theme.title':     '✦ escolher fundo',
+    'login.theme.auto':      '⟳ alternar automático',
+
+    // Header / update modal
+    'hdr.themeToggle':       'alternar tema',
+    'update.available':      'Atualização disponível',
+    'update.downloading':    'Baixando a versão mais recente em segundo plano...',
+    'update.later':          'depois',
+    'update.restart':        'reiniciar agora',
+
+    // Games tabs
+    'games.tab.builds':      '⚔ builds',
+    'games.tab.monitor':     '⚡ monitor',
+
+    // LoL builds
+    'lol.champion':          'campeão / main',
+    'lol.champ.search':      'buscar campeão...',
+    'lol.role':              'papel',
+    'lol.items':             'itens da build (clique para adicionar)',
+    'lol.item.search':       'buscar item...',
+    'lol.runes':             'runas',
+    'lol.runes.select':      '🔮 selecionar runas',
+    'lol.runes.primary':     'estilo principal',
+    'lol.runes.secondary':   'estilo secundário',
+    'lol.runes.confirm':     'confirmar runas',
+    'lol.notes':             'notas / estratégia',
+    'lol.notes.ph':          'dicas de matchup, rotação, timing...',
+    'lol.save':              'salvar build LoL',
+    'lol.filterLane':        'filtrar lane',
+    'lol.lane.all':          'todas',
+    'lol.lane.support':      'suporte',
+
+    // MHW
+    'mhw.weapon':            'arma / set',
+    'mhw.weapon.ph':         'ex: Switch Axe — Almudron',
+    'mhw.huntType':          'tipo de caça',
+    'mhw.armor':             'armadura / decorações',
+    'mhw.armor.ph':          'ex: Teostra Head + Narwa Chest...',
+    'mhw.skills':            'habilidades ativas',
+    'mhw.skills.ph':         'ex: Attack Boost 7, Critical Eye 5...',
+    'mhw.notes':             'estratégia / notas',
+    'mhw.notes.ph':          'dicas de fraquezas, pontos de ataque...',
+    'mhw.save':              'salvar build MHW',
+
+    // Other games
+    'other.gameName':        'nome do jogo',
+    'other.game.ph':         'ex: Valorant, Minecraft...',
+    'other.noteType':        'tipo de anotação',
+    'other.type.build':      'Build',
+    'other.type.strategy':   'Estratégia',
+    'other.type.tip':        'Dica',
+    'other.type.general':    'Geral',
+    'other.title':           'título',
+    'other.title.ph':        'nome da build ou estratégia',
+    'other.content':         'conteúdo',
+    'other.content.ph':      'anote tudo que precisar...',
+    'other.save':            'salvar anotação',
+
+    // Monitor
+    'mon.tab.home':          '🏠 hoje',
+    'mon.tab.analysis':      '⚔ análise',
+    'mon.tab.synergy':       '⚡ sinergia',
+    'mon.tab.achievements':  '★ conquistas',
+    'mon.listen':            '▶ ouvir',
+    'mon.setMain':           '✦ definir main',
+    'mon.matchesToday':      'partidas hoje',
+    'mon.goalLabel':         'meta de partidas hoje — escolha e trave',
+    'mon.lockGoal':          '🔒 travar meta',
+    'mon.goalLocked':        'partidas — meta travada',
+    'mon.syncLast':          '↻ sincronizar última partida',
+    'mon.registerMatch':     'registrar partida',
+    'mon.result':            'resultado',
+    'mon.win':               'vitória ✓',
+    'mon.loss':              'derrota ✗',
+    'mon.kills':             'abates K',
+    'mon.deaths':            'mortes D',
+    'mon.assists':           'assists A',
+    'mon.vision':            'visão 👁',
+    'mon.add':               '+ registrar partida',
+    'mon.synergy.title':     'AMA — análise mútua adaptativa',
+    'mon.synergy.points':    'pontos de 100',
+    'mon.synergy.criteria':  'critérios de avaliação',
+    'mon.synergy.calc':      '⚡ calcular sinergia agora',
+    'mon.yourMain':          'seu campeão principal',
+    'common.cancelX':        '✕ cancelar',
+
+    // Segredo
+    'segredo.new':           'novo segredo',
+    'segredo.placeholder':   'só você vai ler isso...',
+    'segredo.save':          '🔒 guardar segredo',
+
+    // Config (general)
+    'cfg.photo':             'foto',
+    'cfg.banner':            'banner',
+    'cfg.profile':           'perfil',
+    'cfg.displayName':       'nome de exibição',
+    'cfg.nameLabel':         'seu nome ou apelido',
+    'cfg.siteFonts':         'fonte do site',
+    'cfg.fontTitles':        'títulos e destaques',
+    'cfg.fontBodyText':      'texto do corpo',
+    'cfg.customBg':          'background personalizado',
+    'cfg.bgPick':            'clique para escolher imagem de fundo',
+
+    // Conexões
+    'con.riot.title':        '⚡ League of Legends — Riot API',
+    'con.riot.apiKey':       'API key <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.08em">developer.riotgames.com · expira em 24h</span>',
+    'con.riot.id1':          'Riot ID — player 1',
+    'con.riot.id2':          'Riot ID — player 2',
+    'con.riot.save':         'salvar configuração Riot',
+    'con.spotify.title':     'Spotify — conectar conta',
+    'con.spotify.howto':     'Crie um app em <span style="color:var(--accent)">developer.spotify.com</span> → Dashboard → Create App.<br>Redirect URI: <span id="sp-redirect-hint" style="color:var(--accent);font-size:9px;word-break:break-all"></span>',
+    'con.spotify.clientId':  'Client ID do app Spotify',
+    'con.spotify.connect':   'conectar com Spotify',
+    'con.discord.desc':      'adicione seu usuário Discord para exibir no perfil',
+    'con.discord.user':      'usuário Discord',
+    'con.discord.ph':        'usuario#0000 ou @usuario',
+
+    // Desculpas labels
+    'desculpas.promiseLabel':'promessa',
+
+    // Toast messages
+    'toast.installed':        'app instalado com sucesso ✦',
+    'toast.runasError':       'erro ao carregar runas',
+    'toast.maxRunes2':        'máximo 2 runas secundárias',
+    'toast.saveError':        'erro ao salvar — tente uma imagem menor',
+    'toast.fillTitleMsg':     'preencha título e mensagem',
+    'toast.namePlan':         'dê um nome ao plano',
+    'toast.planAdded':        'plano adicionado ✦',
+    'toast.fillDateName':     'preencha o nome da data',
+    'toast.fillDate':         'preencha a data',
+    'toast.dateSaved':        'data salva ◎',
+    'toast.selectChamp':      'selecione um campeão',
+    'toast.fillWeapon':       'coloque a arma',
+    'toast.giveTitle':        'dê um título',
+    'toast.buildSaved':       'build salva ⌗',
+    'toast.writeMsg':         'escreva sua mensagem',
+    'toast.writeReply':       'escreva sua resposta',
+    'toast.replySaved':       'resposta salva ♡',
+    'toast.replyDeleted':     'resposta apagada',
+    'toast.writeSecret':      'escreva o segredo primeiro',
+    'toast.secretSaved':      'segredo guardado 🔒',
+    'toast.riotSaved':        'configuração Riot salva ⚡',
+    'toast.riotKey':          'configure a API key da Riot nas configurações',
+    'toast.riotId':           'configure seu Riot ID nas configurações',
+    'toast.cfgSaved':         'configurações salvas ⚙',
+    'toast.spotifyClientId':  'informe o Client ID do Spotify',
+    'toast.spotifyConnect':   'conectando Spotify...',
+    'toast.spotifyError':     'erro na autenticação Spotify',
+    'toast.spotifyErrorGeneric':'erro ao conectar Spotify',
+    'toast.selectText':       'selecione um trecho de texto primeiro',
+    'toast.mainSet':          'campeão principal definido ✦',
+    'toast.metaCancel':       'meta cancelada — partidas do dia removidas',
+    'toast.metaPick':         'selecione uma quantidade primeiro',
+    'toast.metaLocked':       'meta travada 🔒',
+    'toast.error':            'erro: ',
 
     // Common phrases
     'phrase.profile':         '◈ meu perfil',
@@ -7705,7 +7866,7 @@ const I18N = {
     'dl.win.badge':          'windows program',
     'dl.win.sub':            'full desktop app — system tray, auto-updates, no browser',
     'dl.win.btn':            'download installer — windows',
-    'dl.meta.version':       'version 1.0.17',
+    'dl.meta.version':       'version 1.0.18',
     'dl.meta.size':          '~74 MB · Windows 10+',
     'dl.meta.installer':     'installer with uninstaller',
     'dl.portable':           'portable version (no install needed)',
@@ -7731,7 +7892,168 @@ const I18N = {
     'time.hour':             'h',
     'time.day':              'day',
     'time.days':             'days',
-    'time.ago':              '',  // English uses suffix order
+    'time.ago':              '',
+
+    // Login screen
+    'login.theme.toggle':    'light / dark',
+    'login.theme.choose':    'choose background',
+    'login.subtitle':        'a place just for us',
+    'login.enter':           'enter',
+    'login.theme.title':     '✦ choose background',
+    'login.theme.auto':      '⟳ auto-rotate',
+
+    // Header / update modal
+    'hdr.themeToggle':       'toggle theme',
+    'update.available':      'Update available',
+    'update.downloading':    'Downloading the latest version in the background...',
+    'update.later':          'later',
+    'update.restart':        'restart now',
+
+    // Games tabs
+    'games.tab.builds':      '⚔ builds',
+    'games.tab.monitor':     '⚡ monitor',
+
+    // LoL builds
+    'lol.champion':          'champion / main',
+    'lol.champ.search':      'search champion...',
+    'lol.role':              'role',
+    'lol.items':             'build items (click to add)',
+    'lol.item.search':       'search item...',
+    'lol.runes':             'runes',
+    'lol.runes.select':      '🔮 select runes',
+    'lol.runes.primary':     'primary tree',
+    'lol.runes.secondary':   'secondary tree',
+    'lol.runes.confirm':     'confirm runes',
+    'lol.notes':             'notes / strategy',
+    'lol.notes.ph':          'matchup tips, rotation, timing...',
+    'lol.save':              'save LoL build',
+    'lol.filterLane':        'filter lane',
+    'lol.lane.all':          'all',
+    'lol.lane.support':      'support',
+
+    // MHW
+    'mhw.weapon':            'weapon / set',
+    'mhw.weapon.ph':         'e.g.: Switch Axe — Almudron',
+    'mhw.huntType':          'hunt type',
+    'mhw.armor':             'armor / decorations',
+    'mhw.armor.ph':          'e.g.: Teostra Head + Narwa Chest...',
+    'mhw.skills':            'active skills',
+    'mhw.skills.ph':         'e.g.: Attack Boost 7, Critical Eye 5...',
+    'mhw.notes':             'strategy / notes',
+    'mhw.notes.ph':          'tips on weaknesses, hit zones...',
+    'mhw.save':              'save MHW build',
+
+    // Other games
+    'other.gameName':        'game name',
+    'other.game.ph':         'e.g.: Valorant, Minecraft...',
+    'other.noteType':        'note type',
+    'other.type.build':      'Build',
+    'other.type.strategy':   'Strategy',
+    'other.type.tip':        'Tip',
+    'other.type.general':    'General',
+    'other.title':           'title',
+    'other.title.ph':        'build or strategy name',
+    'other.content':         'content',
+    'other.content.ph':      'note everything you need...',
+    'other.save':            'save note',
+
+    // Monitor
+    'mon.tab.home':          '🏠 today',
+    'mon.tab.analysis':      '⚔ analysis',
+    'mon.tab.synergy':       '⚡ synergy',
+    'mon.tab.achievements':  '★ achievements',
+    'mon.listen':            '▶ listen',
+    'mon.setMain':           '✦ set main',
+    'mon.matchesToday':      'matches today',
+    'mon.goalLabel':         'today\'s match goal — pick and lock',
+    'mon.lockGoal':          '🔒 lock goal',
+    'mon.goalLocked':        'matches — goal locked',
+    'mon.syncLast':          '↻ sync last match',
+    'mon.registerMatch':     'register match',
+    'mon.result':            'result',
+    'mon.win':               'victory ✓',
+    'mon.loss':              'defeat ✗',
+    'mon.kills':             'kills K',
+    'mon.deaths':            'deaths D',
+    'mon.assists':           'assists A',
+    'mon.vision':            'vision 👁',
+    'mon.add':               '+ register match',
+    'mon.synergy.title':     'AMA — adaptive mutual analysis',
+    'mon.synergy.points':    'points out of 100',
+    'mon.synergy.criteria':  'evaluation criteria',
+    'mon.synergy.calc':      '⚡ calculate synergy now',
+    'mon.yourMain':          'your main champion',
+    'common.cancelX':        '✕ cancel',
+
+    // Segredo
+    'segredo.new':           'new secret',
+    'segredo.placeholder':   'only you will read this...',
+    'segredo.save':          '🔒 save secret',
+
+    // Config (general)
+    'cfg.photo':             'photo',
+    'cfg.banner':            'banner',
+    'cfg.profile':           'profile',
+    'cfg.displayName':       'display name',
+    'cfg.nameLabel':         'your name or nickname',
+    'cfg.siteFonts':         'site fonts',
+    'cfg.fontTitles':        'titles and highlights',
+    'cfg.fontBodyText':      'body text',
+    'cfg.customBg':          'custom background',
+    'cfg.bgPick':            'click to choose a background image',
+
+    // Conexões
+    'con.riot.title':        '⚡ League of Legends — Riot API',
+    'con.riot.apiKey':       'API key <span style="color:var(--text-muted);font-size:9px;letter-spacing:0.08em">developer.riotgames.com · expires in 24h</span>',
+    'con.riot.id1':          'Riot ID — player 1',
+    'con.riot.id2':          'Riot ID — player 2',
+    'con.riot.save':         'save Riot config',
+    'con.spotify.title':     'Spotify — connect account',
+    'con.spotify.howto':     'Create an app at <span style="color:var(--accent)">developer.spotify.com</span> → Dashboard → Create App.<br>Redirect URI: <span id="sp-redirect-hint" style="color:var(--accent);font-size:9px;word-break:break-all"></span>',
+    'con.spotify.clientId':  'Spotify app Client ID',
+    'con.spotify.connect':   'connect with Spotify',
+    'con.discord.desc':      'add your Discord username to display on profile',
+    'con.discord.user':      'Discord username',
+    'con.discord.ph':        'user#0000 or @user',
+
+    // Desculpas labels
+    'desculpas.promiseLabel':'promise',
+
+    // Toast messages
+    'toast.installed':        'app installed successfully ✦',
+    'toast.runasError':       'error loading runes',
+    'toast.maxRunes2':        'maximum 2 secondary runes',
+    'toast.saveError':        'error saving — try a smaller image',
+    'toast.fillTitleMsg':     'fill in title and message',
+    'toast.namePlan':         'give the plan a name',
+    'toast.planAdded':        'plan added ✦',
+    'toast.fillDateName':     'fill in the date name',
+    'toast.fillDate':         'fill in the date',
+    'toast.dateSaved':        'date saved ◎',
+    'toast.selectChamp':      'select a champion',
+    'toast.fillWeapon':       'enter the weapon',
+    'toast.giveTitle':        'give it a title',
+    'toast.buildSaved':       'build saved ⌗',
+    'toast.writeMsg':         'write your message',
+    'toast.writeReply':       'write your reply',
+    'toast.replySaved':       'reply saved ♡',
+    'toast.replyDeleted':     'reply deleted',
+    'toast.writeSecret':      'write the secret first',
+    'toast.secretSaved':      'secret saved 🔒',
+    'toast.riotSaved':        'Riot settings saved ⚡',
+    'toast.riotKey':          'set up your Riot API key in settings',
+    'toast.riotId':           'set up your Riot ID in settings',
+    'toast.cfgSaved':         'settings saved ⚙',
+    'toast.spotifyClientId':  'enter your Spotify Client ID',
+    'toast.spotifyConnect':   'connecting Spotify...',
+    'toast.spotifyError':     'Spotify authentication error',
+    'toast.spotifyErrorGeneric':'error connecting Spotify',
+    'toast.selectText':       'select a text snippet first',
+    'toast.mainSet':          'main champion set ✦',
+    'toast.metaCancel':       'goal canceled — today\'s matches removed',
+    'toast.metaPick':         'pick a quantity first',
+    'toast.metaLocked':       'goal locked 🔒',
+    'toast.error':            'error: ',
 
     'phrase.profile':         '◈ my profile',
     'phrase.profile.partner': '♡ partner',
@@ -7858,7 +8180,7 @@ async function spChallenge(v) {
 
 async function spotifyConectar() {
   const clientId = document.getElementById('cfg-spotify-client-id')?.value.trim();
-  if (!clientId) { toast('informe o Client ID do Spotify'); return; }
+  if (!clientId) { toast(t('toast.spotifyClientId')); return; }
 
   // Salva client_id no Firebase antes de redirecionar
   await db.ref(STORAGE_KEY + '/config').update({ spotify_client_id: clientId });
@@ -7937,7 +8259,7 @@ async function spotifyProcessarPendente() {
       localStorage.setItem('sp_pending', JSON.stringify({ code, verifier, clientId, user }));
       return;
     }
-    toast('conectando Spotify...');
+    toast(t('toast.spotifyConnect'));
     await spotifyExchangeToken(code, verifier, clientId);
   } catch {}
 }
@@ -7954,7 +8276,7 @@ async function spotifyExchangeToken(code, verifier, clientId) {
         code_verifier: verifier,
       })
     });
-    if (!resp.ok) { toast('erro na autenticação Spotify'); return; }
+    if (!resp.ok) { toast(t('toast.spotifyError')); return; }
     const data = await resp.json();
 
     const idx = currentUser === 'player1' ? '1' : '2';
@@ -7988,7 +8310,7 @@ async function spotifyExchangeToken(code, verifier, clientId) {
     switchCfgTab('conexoes');
     toggleConexao('spotify');
   } catch(e) {
-    toast('erro ao conectar Spotify');
+    toast(t('toast.spotifyErrorGeneric'));
   }
 }
 
@@ -8388,7 +8710,7 @@ function aplicarFonteDetalhe(all) {
         document.execCommand('fontName', false, font.split(',')[0].replace(/'/g,'').trim());
       }
     } else {
-      toast('selecione um trecho de texto primeiro');
+      toast(t('toast.selectText'));
     }
   }
 }
@@ -8647,7 +8969,7 @@ async function salvarMainChamp() {
   if (cachedData) cachedData.monitor[key] = monChampSelVal;
   document.getElementById('mon-set-champ-overlay').classList.remove('open');
   renderMonHome(cachedData);
-  toast('campeão principal definido ✦');
+  toast(t('toast.mainSet'));
 }
 
 // ─── Meta diária ─────────────────────────────────────────
@@ -8666,13 +8988,13 @@ function selectMetaOpt(n) {
   renderMonGoalOpts();
 }
 async function travarMeta() {
-  if (!monMetaSelecionada) { toast('selecione uma quantidade primeiro'); return; }
+  if (!monMetaSelecionada) { toast(t('toast.metaPick')); return; }
   const metaKey  = currentUser === 'player1' ? 'meta_p1' : 'meta_p2';
   const dateKey  = currentUser === 'player1' ? 'meta_p1_date' : 'meta_p2_date';
   const today    = todayStr();
   await db.ref(STORAGE_KEY + '/monitor').update({ [metaKey]: monMetaSelecionada, [dateKey]: today });
   if (cachedData) { cachedData.monitor[metaKey] = monMetaSelecionada; cachedData.monitor[dateKey] = today; }
-  toast('meta travada 🔒');
+  toast(t('toast.metaLocked'));
   renderMonHome(cachedData);
 }
 
@@ -8776,7 +9098,7 @@ async function cancelarMeta() {
   const done = document.getElementById('mon-meta-complete');
   if (done) done.remove();
   renderMonitor(cachedData);
-  toast('meta cancelada — partidas do dia removidas');
+  toast(t('toast.metaCancel'));
 }
 
 // ─── Partidas ────────────────────────────────────────────
