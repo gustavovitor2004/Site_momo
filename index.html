@@ -344,6 +344,30 @@
     animation: fadeUp 0.5s ease 0.3s both;
   }
 
+  /* Badge de versão no canto inferior esquerdo da tela de login */
+  .login-version {
+    position: fixed;
+    bottom: 14px;
+    left: 16px;
+    z-index: 25;
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.35);
+    background: rgba(0,0,0,0.4);
+    padding: 4px 9px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 2px;
+    user-select: none;
+    pointer-events: none;
+    animation: fadeIn 0.6s ease 0.5s both;
+  }
+  :root.light .login-version {
+    color: rgba(0,0,0,0.4);
+    background: rgba(255,255,255,0.55);
+    border-color: rgba(0,0,0,0.08);
+  }
+
   /* ─── LOGIN BG & THEMES ─────────────────────────────── */
   #login-bg {
     position: fixed;
@@ -3586,6 +3610,9 @@
 
   <div class="login-loading" id="login-loading" data-i18n="common.loading">carregando...</div>
 
+  <!-- Badge de versão (canto inferior esquerdo) -->
+  <div class="login-version" id="login-version">v —</div>
+
   <!-- Painel de temas (fixo, centro inferior) -->
   <div class="login-theme-panel hidden" id="login-theme-panel">
     <div class="login-theme-panel-title" data-i18n="login.theme.title">✦ escolher fundo</div>
@@ -4219,7 +4246,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.18/nosso-espaco-setup-1.0.18.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.19/nosso-espaco-setup-1.0.19.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -4246,7 +4273,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.18/nosso-espaco-1.0.18-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.19/nosso-espaco-1.0.19-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span data-i18n="dl.portable">versão portátil (sem instalar)</span>
@@ -5580,7 +5607,25 @@ function setAvatarLogin(imgId, initId, src) {
   }
 }
 
+// Versão do app — fallback estático sincronizado com package.json
+const APP_VERSION_FALLBACK = '1.0.19';
+
+async function setLoginVersion() {
+  const el = document.getElementById('login-version');
+  if (!el) return;
+  let v = APP_VERSION_FALLBACK;
+  // Se rodando em Electron, busca a versão real do app instalado
+  try {
+    if (window.electronAPI && typeof window.electronAPI.getAppVersion === 'function') {
+      const real = await window.electronAPI.getAppVersion();
+      if (real) v = real;
+    }
+  } catch {}
+  el.textContent = 'v' + v;
+}
+
 async function initLoginScreen() {
+  setLoginVersion();
   // Mostra cache local instantaneamente (sem esperar Firebase)
   try {
     const cached = JSON.parse(localStorage.getItem('login_cache') || '{}');
@@ -7494,7 +7539,7 @@ const I18N = {
     'dl.win.badge':          'programa para windows',
     'dl.win.sub':            'app desktop completo — bandeja, atualização automática, sem navegador',
     'dl.win.btn':            'baixar instalador — windows',
-    'dl.meta.version':       'versão 1.0.18',
+    'dl.meta.version':       'versão 1.0.19',
     'dl.meta.size':          '~74 MB · Windows 10+',
     'dl.meta.installer':     'instalador com desinstalador',
     'dl.portable':           'versão portátil (sem instalar)',
@@ -7866,7 +7911,7 @@ const I18N = {
     'dl.win.badge':          'windows program',
     'dl.win.sub':            'full desktop app — system tray, auto-updates, no browser',
     'dl.win.btn':            'download installer — windows',
-    'dl.meta.version':       'version 1.0.18',
+    'dl.meta.version':       'version 1.0.19',
     'dl.meta.size':          '~74 MB · Windows 10+',
     'dl.meta.installer':     'installer with uninstaller',
     'dl.portable':           'portable version (no install needed)',
