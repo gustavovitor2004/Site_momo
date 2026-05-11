@@ -157,7 +157,12 @@ function injetarTitlebar() {
       -webkit-app-region: no-drag;
       opacity: 0.35;
       transition: opacity 0.18s ease;
+      /* CRÍTICO: container nao captura cliques — só os botões dele.
+         Sem isso, os 110px no canto top-right cobriam outros botões
+         (ex: salvar/fechar dos guias) tornando-os inclicáveis. */
+      pointer-events: none;
     }
+    #electron-controls > * { pointer-events: auto; }
     #electron-controls:hover { opacity: 1; }
     body.window-blurred #electron-controls { opacity: 0.18; }
 
@@ -165,8 +170,7 @@ function injetarTitlebar() {
     .login-controls { right: 130px !important; -webkit-app-region: no-drag !important; }
     .login-ctrl-btn { -webkit-app-region: no-drag !important; }
 
-    /* Champion detail page — empurra os botões salvar/fechar pra esquerda
-       dos controles do Electron (que estão em z-index 9999 e cobririam) */
+    /* Champion detail page — padding extra como segurança extra também */
     .champ-detail-header { padding-right: 130px !important; }
     .ec-btn {
       width: 26px; height: 26px;
