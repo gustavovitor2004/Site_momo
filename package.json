@@ -1,6 +1,6 @@
 {
   "name": "nosso-espaco",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "nosso espaço — app do casal",
   "main": "electron/main.js",
   "scripts": {

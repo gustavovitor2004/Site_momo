@@ -164,6 +164,10 @@ function injetarTitlebar() {
     /* Empurra os botões da tela de login pra esquerda dos controles do Electron */
     .login-controls { right: 130px !important; -webkit-app-region: no-drag !important; }
     .login-ctrl-btn { -webkit-app-region: no-drag !important; }
+
+    /* Champion detail page — empurra os botões salvar/fechar pra esquerda
+       dos controles do Electron (que estão em z-index 9999 e cobririam) */
+    .champ-detail-header { padding-right: 130px !important; }
     .ec-btn {
       width: 26px; height: 26px;
       background: transparent;
