@@ -3554,6 +3554,486 @@
   .update-card.error { border-color: rgba(220,80,80,0.45); }
   .update-card.error::before { background: linear-gradient(90deg, transparent, rgba(220,80,80,0.7), transparent); }
   .update-card.error .update-icon .arrow { border-color: rgba(220,80,80,0.5); color: #ff7070; }
+
+  /* ═══════════════════════════════════════════════════════
+     CONVITE — Seção cinematográfica/misteriosa (Player 2)
+     ═══════════════════════════════════════════════════════ */
+  .convite-section {
+    /* Quando ativa, ocupa a tela inteira em modo "stage" */
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  .convite-section.active {
+    /* Anula a animação genérica de entrada da seção */
+    animation: none !important;
+  }
+  .convite-stage {
+    position: relative;
+    min-height: 78vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse at 50% 30%, #2a0a18 0%, #110008 50%, #050003 100%);
+    overflow: hidden;
+    contain: layout style;
+    isolation: isolate;
+    border: 1px solid rgba(150,30,60,0.15);
+    box-shadow: inset 0 0 80px rgba(80,0,20,0.4);
+    padding: 60px 20px 80px;
+    border-radius: 4px;
+  }
+  /* Vinheta — sombra escura ao redor */
+  .convite-vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.85) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  /* Glow vermelho pulsante atrás do envelope */
+  .convite-glow-pulse {
+    position: absolute;
+    top: 55%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 460px; height: 460px;
+    background: radial-gradient(circle, rgba(200,30,50,0.16) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 1;
+    animation: convitePulse 4s ease-in-out infinite;
+  }
+  @keyframes convitePulse {
+    0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.65; }
+    50%       { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+  }
+  /* Container das partículas / estrelas flutuantes */
+  .convite-stars {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .conv-star {
+    position: absolute;
+    width: 2px; height: 2px;
+    border-radius: 50%;
+    background: rgba(255,220,180,0.7);
+    box-shadow: 0 0 6px 1px rgba(255,200,150,0.45);
+    animation: convStarFloat linear infinite, convStarTwinkle ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+  @keyframes convStarFloat {
+    0%   { transform: translateY(0) translateX(0); }
+    100% { transform: translateY(-100vh) translateX(var(--dx, 0)); }
+  }
+  @keyframes convStarTwinkle {
+    0%, 100% { opacity: 0.2; }
+    50%       { opacity: 0.9; }
+  }
+
+  /* "Não Abra" — texto gigante e dramático */
+  .convite-warning {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    margin-bottom: 40px;
+    animation: convWarningIn 1.2s cubic-bezier(0.34, 1.1, 0.64, 1) both 0.2s;
+  }
+  @keyframes convWarningIn {
+    0%   { opacity: 0; transform: scale(0.4) translateY(40px); filter: blur(20px); }
+    60%  { opacity: 1; filter: blur(0px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0px); }
+  }
+  .convite-warning-text {
+    font-family: var(--font-display), serif;
+    font-style: italic;
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    font-weight: 700;
+    color: #ffe5d6;
+    letter-spacing: 0.05em;
+    line-height: 0.95;
+    text-shadow:
+      0 0 12px rgba(255,90,60,0.85),
+      0 0 30px rgba(220,40,60,0.7),
+      0 0 60px rgba(180,20,40,0.55),
+      0 4px 0 rgba(0,0,0,0.65),
+      0 6px 22px rgba(0,0,0,0.9);
+    animation: convWarningFlicker 5s ease-in-out infinite 1.4s;
+  }
+  @keyframes convWarningFlicker {
+    0%, 100%       { opacity: 1; }
+    50%             { opacity: 0.92; text-shadow:
+      0 0 18px rgba(255,90,60,1),
+      0 0 50px rgba(220,40,60,0.9),
+      0 0 80px rgba(180,20,40,0.7),
+      0 4px 0 rgba(0,0,0,0.65),
+      0 6px 22px rgba(0,0,0,0.9); }
+    51%, 53%        { opacity: 0.75; }
+    52%             { opacity: 1; }
+  }
+  .convite-warning-sub {
+    margin-top: 14px;
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(255,180,160,0.55);
+    text-shadow: 0 0 8px rgba(150,30,50,0.5);
+    animation: convSubIn 1s ease 1.4s both;
+  }
+  @keyframes convSubIn {
+    from { opacity: 0; letter-spacing: 0.5em; }
+    to   { opacity: 1; letter-spacing: 0.32em; }
+  }
+
+  /* ─── ENVELOPE ─── */
+  .convite-envelope-wrap {
+    position: relative;
+    z-index: 5;
+    perspective: 1400px;
+    perspective-origin: 50% 35%;
+  }
+  .convite-envelope {
+    position: relative;
+    width: clamp(280px, 38vw, 420px);
+    height: clamp(190px, 26vw, 280px);
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+    will-change: transform;
+  }
+  .convite-envelope:hover {
+    transform: translateY(-6px) rotateX(2deg);
+  }
+  .convite-envelope.opening { cursor: default; }
+
+  /* Corpo do envelope */
+  .env-body {
+    position: relative;
+    width: 100%; height: 100%;
+    transform-style: preserve-3d;
+  }
+  .env-back {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(160deg, #8b1830 0%, #5a0815 60%, #3a0008 100%);
+    border: 1px solid rgba(255,180,150,0.18);
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.7),
+      inset 0 0 30px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,200,180,0.12);
+    transform: translateZ(0);
+  }
+  /* Textura sutil de papel envelhecido sobre o envelope */
+  .env-back::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(-45deg, rgba(255,200,180,0.04) 0 1px, transparent 1px 4px);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  /* Bolso interno (onde o papel "fica") */
+  .env-pocket {
+    position: absolute;
+    left: 6%; right: 6%;
+    bottom: 8%;
+    top: 50%;
+    background: linear-gradient(180deg, #3a0008 0%, #1a0004 100%);
+    border-top: 1px solid rgba(80,0,15,0.6);
+    box-shadow: inset 0 6px 14px rgba(0,0,0,0.6);
+    transform: translateZ(2px);
+    z-index: 2;
+  }
+
+  /* Aba (flap) que abre */
+  .env-flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 60%;
+    background:
+      linear-gradient(180deg, #9a2038 0%, #6a1020 100%);
+    /* Forma de triângulo via clip-path (estilo envelope) */
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: 50% 0%;
+    transform: rotateX(0deg) translateZ(8px);
+    transition: transform 1.2s cubic-bezier(0.5, 0.05, 0.3, 1);
+    box-shadow: inset 0 -10px 30px rgba(0,0,0,0.5);
+    z-index: 5;
+    will-change: transform;
+  }
+  /* Brilho sutil na aba */
+  .env-flap::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(255,200,180,0.12) 0%, transparent 50%);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .convite-envelope.opening .env-flap {
+    transform: rotateX(-175deg) translateZ(8px);
+  }
+
+  /* Selo de cera dourado */
+  .env-seal {
+    position: absolute;
+    top: 28%; left: 50%;
+    transform: translate(-50%, -50%) translateZ(15px);
+    width: 64px; height: 64px;
+    background:
+      radial-gradient(circle at 30% 30%, #f4d574 0%, #c8a040 35%, #8a6010 70%, #4a3008 100%);
+    border-radius: 50%;
+    border: 2px solid rgba(255,230,180,0.5);
+    box-shadow:
+      0 0 18px rgba(200,160,60,0.7),
+      0 0 40px rgba(200,160,60,0.4),
+      inset -4px -8px 14px rgba(70,40,0,0.6),
+      inset 4px 4px 12px rgba(255,235,180,0.5);
+    z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition:
+      transform 0.5s cubic-bezier(0.34, 1.3, 0.64, 1),
+      opacity 0.35s ease;
+    will-change: transform, opacity;
+    animation: envSealPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes envSealPulse {
+    0%, 100% { box-shadow:
+      0 0 18px rgba(200,160,60,0.7),
+      0 0 40px rgba(200,160,60,0.4),
+      inset -4px -8px 14px rgba(70,40,0,0.6),
+      inset 4px 4px 12px rgba(255,235,180,0.5); }
+    50%       { box-shadow:
+      0 0 28px rgba(230,180,80,0.95),
+      0 0 60px rgba(230,180,80,0.55),
+      inset -4px -8px 14px rgba(70,40,0,0.6),
+      inset 4px 4px 12px rgba(255,235,180,0.6); }
+  }
+  .env-seal:hover {
+    transform: translate(-50%, -50%) translateZ(15px) scale(1.08);
+  }
+  .env-seal-mark {
+    font-family: var(--font-display), serif;
+    font-style: italic;
+    font-size: 28px;
+    color: #2a1500;
+    text-shadow: 0 1px 0 rgba(255,220,150,0.5), 0 -1px 0 rgba(0,0,0,0.4);
+    pointer-events: none;
+    user-select: none;
+  }
+  .env-seal-shine {
+    position: absolute;
+    top: 18%; left: 28%;
+    width: 18px; height: 10px;
+    background: radial-gradient(ellipse, rgba(255,250,220,0.6) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .convite-envelope.opening .env-seal {
+    transform: translate(-50%, -50%) translateZ(15px) scale(0);
+    opacity: 0;
+    animation: none;
+  }
+
+  /* Fragmentos do selo quebrando */
+  .seal-fragments {
+    position: absolute;
+    top: 28%; left: 50%;
+    transform: translate(-50%, -50%) translateZ(16px);
+    width: 64px; height: 64px;
+    pointer-events: none;
+    z-index: 11;
+  }
+  .frag {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 10px; height: 10px;
+    background: radial-gradient(circle, #f4d574 0%, #8a6010 100%);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 8px rgba(200,160,60,0.7);
+    transform: translate(-50%, -50%);
+  }
+  .convite-envelope.opening .frag {
+    animation: fragBurst 0.85s ease-out forwards;
+  }
+  .convite-envelope.opening .f1 { --fx:  60px; --fy: -50px; --fr:  180deg; animation-delay: 0.05s; }
+  .convite-envelope.opening .f2 { --fx: -70px; --fy: -40px; --fr: -210deg; animation-delay: 0.08s; }
+  .convite-envelope.opening .f3 { --fx:  80px; --fy:  30px; --fr:  120deg; animation-delay: 0.12s; }
+  .convite-envelope.opening .f4 { --fx: -60px; --fy:  50px; --fr: -150deg; animation-delay: 0.06s; }
+  .convite-envelope.opening .f5 { --fx:  20px; --fy: -80px; --fr:  240deg; animation-delay: 0.10s; }
+  .convite-envelope.opening .f6 { --fx: -30px; --fy:  70px; --fr: -180deg; animation-delay: 0.07s; }
+  @keyframes fragBurst {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(0deg); }
+    10%  { opacity: 1; }
+    100% { opacity: 0;
+      transform: translate(calc(-50% + var(--fx, 0))/* */ , calc(-50% + var(--fy, 0))) scale(0.6) rotate(var(--fr, 180deg)); }
+  }
+
+  /* Papel — escondido inicialmente dentro do envelope */
+  .env-paper {
+    position: absolute;
+    left: 7%; right: 7%;
+    bottom: 10%;
+    height: 84%;
+    background: transparent;
+    transform: translateY(0) translateZ(1px);
+    transition:
+      transform 1.6s cubic-bezier(0.25, 0.85, 0.35, 1),
+      opacity 0.6s ease;
+    will-change: transform;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .convite-envelope.opening .env-paper {
+    opacity: 1;
+    transform: translateY(-180%) translateZ(20px);
+    pointer-events: auto;
+    transition-delay: 0.6s;
+  }
+  .env-paper-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    background:
+      linear-gradient(180deg, #f6efd8 0%, #e8dfb8 100%);
+    border: 1px solid rgba(160,120,40,0.45);
+    box-shadow:
+      0 20px 60px rgba(0,0,0,0.65),
+      inset 0 0 30px rgba(180,140,60,0.18);
+    overflow: hidden;
+    transform-origin: 50% 100%;
+    transform: scaleY(0.85) rotateX(15deg);
+    transition: transform 1.4s cubic-bezier(0.25, 0.9, 0.35, 1) 0.8s;
+  }
+  .convite-envelope.opening .env-paper-inner {
+    transform: scaleY(1) rotateX(0deg);
+  }
+  .env-paper-img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 1s ease 1.6s, transform 1.2s cubic-bezier(0.25, 1, 0.35, 1) 1.6s;
+  }
+  .convite-envelope.opening .env-paper-img {
+    opacity: 1;
+    transform: scale(1);
+  }
+  /* Fallback elegante quando a imagem ainda não está disponível */
+  .env-paper-fallback {
+    width: 100%; height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 14px;
+    text-align: center;
+    color: #6a4d20;
+    opacity: 0;
+    transition: opacity 1s ease 1.6s;
+  }
+  .convite-envelope.opening .env-paper-fallback { opacity: 1; }
+  .env-paper-fallback-mark {
+    font-family: var(--font-display), serif;
+    font-style: italic;
+    font-size: 3rem;
+    color: #a87010;
+    text-shadow: 0 1px 0 rgba(255,230,150,0.5);
+  }
+  .env-paper-fallback-text {
+    font-family: var(--font-display), serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: #6a4d20;
+    letter-spacing: 0.05em;
+  }
+  /* Brilho dourado sutil que passa pelo papel */
+  .env-paper-glow {
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at center, rgba(255,230,160,0.3) 0%, transparent 50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease 2s;
+  }
+  .convite-envelope.opening .env-paper-glow { opacity: 1; }
+
+  /* Sombra que cai sob o envelope */
+  .env-shadow {
+    position: absolute;
+    bottom: -28px; left: 10%; right: 10%;
+    height: 30px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.55) 0%, transparent 70%);
+    filter: blur(6px);
+    z-index: 0;
+  }
+
+  /* Hint "clique no selo" */
+  .convite-hint {
+    position: absolute;
+    top: 24%; left: calc(100% + 18px);
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,200,180,0.55);
+    white-space: nowrap;
+    animation: convHintFloat 2s ease-in-out infinite, convFadeIn 1s ease 1.8s both;
+    z-index: 5;
+  }
+  @keyframes convHintFloat {
+    0%, 100% { transform: translateX(0); }
+    50%       { transform: translateX(-6px); }
+  }
+  @keyframes convFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 0.85; }
+  }
+  .convite-envelope.opening ~ .convite-hint { display: none; }
+
+  /* Botão de reset */
+  .convite-reset {
+    position: absolute;
+    bottom: 18px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(200,160,80,0.35);
+    color: rgba(255,220,180,0.7);
+    padding: 8px 18px;
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 2px;
+    transition: background 0.18s, color 0.18s;
+  }
+  .convite-reset:hover {
+    background: rgba(200,160,80,0.15);
+    color: rgba(255,230,200,1);
+  }
+
+  /* Esconde "Não Abra" depois que abre — fica só o papel em foco */
+  .convite-stage.opened .convite-warning {
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 0.6s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .convite-stage.opened .convite-glow-pulse {
+    background: radial-gradient(circle, rgba(200,160,60,0.18) 0%, transparent 65%);
+  }
+
+  /* Responsividade */
+  @media (max-width: 640px) {
+    .convite-hint { display: none; }
+    .convite-warning-sub { font-size: 9px; letter-spacing: 0.22em; }
+  }
 </style>
 </head>
 <body>
@@ -3701,6 +4181,7 @@
     <div    id="nav-jogos"     class="nav-item has-drop" onclick="showSection('jogos')"   data-i18n="nav.jogos">⌗ jogos ▾</div>
     <button id="nav-desculpas" class="nav-item"        onclick="showSection('desculpas')" data-i18n="nav.desculpas">♡ pedido de desculpas</button>
     <button id="nav-segredo"   class="nav-item"        onclick="showSection('segredo')"   data-i18n="nav.segredo">🔒 segredo</button>
+    <button id="nav-convite"   class="nav-item nav-convite-special" onclick="showSection('convite')" data-i18n="nav.convite" style="display:none">✉ convite</button>
     <button id="nav-download"  class="nav-item"        onclick="showSection('download')"  data-i18n="nav.download" style="color:var(--accent);opacity:0.75" title="instalar como app">⬇ instalar</button>
   </nav>
 
@@ -4231,6 +4712,67 @@
       </div>
     </section>
 
+    <!-- ─── CONVITE (somente Player 2 / Maimai) ─── -->
+    <section id="sec-convite" class="section convite-section">
+      <div class="convite-stage" id="convite-stage">
+        <!-- Camada de fundo: partículas + luz ambiente -->
+        <div class="convite-vignette"></div>
+        <div class="convite-stars" id="convite-stars"></div>
+        <div class="convite-glow-pulse"></div>
+
+        <!-- Aviso "Não Abra" -->
+        <div class="convite-warning" id="convite-warning">
+          <div class="convite-warning-text">Não Abra</div>
+          <div class="convite-warning-sub">se você está vendo isso, já é tarde demais</div>
+        </div>
+
+        <!-- O envelope -->
+        <div class="convite-envelope-wrap">
+          <div class="convite-envelope" id="convite-envelope" onclick="convireOpen()">
+            <!-- Corpo do envelope -->
+            <div class="env-body">
+              <div class="env-back"></div>
+              <div class="env-pocket"></div>
+              <!-- Papel/carta que vai deslizar pra fora -->
+              <div class="env-paper" id="env-paper">
+                <div class="env-paper-inner">
+                  <img class="env-paper-img" id="env-paper-img" src="convite-image.png" alt="convite"
+                       onerror="this.style.display='none';document.getElementById('env-paper-fallback').style.display='flex'">
+                  <div class="env-paper-fallback" id="env-paper-fallback" style="display:none">
+                    <div class="env-paper-fallback-mark">✦</div>
+                    <div class="env-paper-fallback-text">para você,<br>maimai</div>
+                  </div>
+                  <div class="env-paper-glow"></div>
+                </div>
+              </div>
+              <!-- Aba (flap) da frente, que abre -->
+              <div class="env-flap" id="env-flap"></div>
+              <!-- Selo de cera dourado -->
+              <div class="env-seal" id="env-seal">
+                <span class="env-seal-mark">✦</span>
+                <span class="env-seal-shine"></span>
+              </div>
+              <!-- Sombra que cai do envelope -->
+              <div class="env-shadow"></div>
+            </div>
+
+            <!-- Stack de fragmentos do selo (pra quebrar) -->
+            <div class="seal-fragments" id="seal-fragments">
+              <span class="frag f1"></span><span class="frag f2"></span>
+              <span class="frag f3"></span><span class="frag f4"></span>
+              <span class="frag f5"></span><span class="frag f6"></span>
+            </div>
+          </div>
+
+          <!-- Instrução sutil de clique -->
+          <div class="convite-hint" id="convite-hint">⟵ clique no selo</div>
+        </div>
+
+        <!-- Botão pra resetar/fechar de novo -->
+        <button class="convite-reset" id="convite-reset" onclick="convireReset()" style="display:none">↺ esconder novamente</button>
+      </div>
+    </section>
+
     <!-- ─── DOWNLOAD / INSTALAR ─── -->
     <section id="sec-download" class="section">
       <div class="section-title" data-i18n="sec.download">instalar app</div>
@@ -4246,7 +4788,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.25/nosso-espaco-setup-1.0.25.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.26/nosso-espaco-setup-1.0.26.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -4273,7 +4815,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.25/nosso-espaco-1.0.25-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.26/nosso-espaco-1.0.26-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span data-i18n="dl.portable">versão portátil (sem instalar)</span>
@@ -5608,7 +6150,7 @@ function setAvatarLogin(imgId, initId, src) {
 }
 
 // Versão do app — fallback estático sincronizado com package.json
-const APP_VERSION_FALLBACK = '1.0.25';
+const APP_VERSION_FALLBACK = '1.0.26';
 
 async function setLoginVersion() {
   const el = document.getElementById('login-version');
@@ -5685,6 +6227,9 @@ async function initLoginScreen() {
 async function doLogin(player) {
   selectedUser = player || selectedUser;
   currentUser = selectedUser;
+
+  // Atualiza visibilidade da aba "Convite" (só player2 vê)
+  if (typeof convireUpdateNavVisibility === 'function') convireUpdateNavVisibility();
 
   // Lembra quem entrou por último
   try { localStorage.setItem('last_user', currentUser); } catch {}
@@ -5864,6 +6409,7 @@ function logout() {
     cachedData = null;
     cartasPage = 5;
     db.ref(STORAGE_KEY).off();
+    if (typeof convireUpdateNavVisibility === 'function') convireUpdateNavVisibility();
 
     const hav = document.getElementById('header-avatar');
     hav.src = ''; hav.style.display = 'none';
@@ -5927,8 +6473,85 @@ function exitSadMode() {
   document.body.classList.remove('sad-mode');
 }
 
+// ─── CONVITE: animação cinematográfica do envelope ─────────
+let _convInitDone = false;
+function convireInit() {
+  if (_convInitDone) return;
+  _convInitDone = true;
+  // Spawn de partículas (estrelas) flutuantes — geradas em DocumentFragment pra performance
+  const wrap = document.getElementById('convite-stars');
+  if (!wrap) return;
+  const frag = document.createDocumentFragment();
+  const count = 50;
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement('div');
+    star.className = 'conv-star';
+    const left = Math.random() * 100;
+    const top  = Math.random() * 100 + 100; // começa abaixo da tela
+    const size = 1 + Math.random() * 2.5;
+    const dur  = 14 + Math.random() * 14;
+    const del  = -(Math.random() * 16);
+    const tw   = 2 + Math.random() * 3;
+    const dx   = -30 + Math.random() * 60;
+    star.style.cssText =
+      `left:${left}%;top:${top}%;width:${size}px;height:${size}px;` +
+      `animation-duration:${dur}s, ${tw}s;` +
+      `animation-delay:${del}s, ${-(Math.random() * 3)}s;` +
+      `--dx:${dx}px;`;
+    frag.appendChild(star);
+  }
+  wrap.appendChild(frag);
+}
+
+// Hooks pra sons (opcional — podem ser implementados depois com Audio API)
+function convPlaySound(kind) {
+  // Stub: pode preencher com new Audio('snd/' + kind + '.mp3').play() futuramente.
+  // 'kind' ∈ { 'sealCrack', 'envOpen', 'paperOut' }
+}
+
+function convireOpen() {
+  const env = document.getElementById('convite-envelope');
+  const stage = document.getElementById('convite-stage');
+  if (!env || env.classList.contains('opening')) return;
+  env.classList.add('opening');
+  convPlaySound('sealCrack');
+  // Em ~600ms o flap começa a abrir → toca som
+  setTimeout(() => convPlaySound('envOpen'), 600);
+  // Em ~1.4s o papel desliza pra fora → toca som
+  setTimeout(() => convPlaySound('paperOut'), 1400);
+  // Em ~2.5s a cena entra em modo "opened" — esconde warning, foco no papel
+  setTimeout(() => stage && stage.classList.add('opened'), 2500);
+  // Mostra botão de reset depois da animação
+  setTimeout(() => {
+    const btn = document.getElementById('convite-reset');
+    if (btn) btn.style.display = '';
+  }, 3000);
+}
+
+function convireReset() {
+  const env = document.getElementById('convite-envelope');
+  const stage = document.getElementById('convite-stage');
+  const btn = document.getElementById('convite-reset');
+  if (env) env.classList.remove('opening');
+  if (stage) stage.classList.remove('opened');
+  if (btn) btn.style.display = 'none';
+}
+
+// Mostra/esconde nav-convite baseado no usuário logado
+function convireUpdateNavVisibility() {
+  const navBtn = document.getElementById('nav-convite');
+  if (!navBtn) return;
+  navBtn.style.display = (currentUser === 'player2') ? '' : 'none';
+}
+
 // ─── Navigation ─────────────────────────────────────────
 function showSection(id) {
+  // ─── CONVITE: somente player2 pode entrar
+  if (id === 'convite' && currentUser !== 'player2') {
+    // Player1 não tem acesso — redireciona pra home
+    id = 'cartas';
+  }
+
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   const sec = document.getElementById('sec-' + id);
@@ -5940,6 +6563,9 @@ function showSection(id) {
     const badge = event.target.querySelector('.nav-badge');
     if (badge) badge.remove();
   }
+
+  // Convite: inicializa as partículas (uma única vez por sessão)
+  if (id === 'convite') convireInit();
 
   // Tema triste ao entrar/sair da aba de desculpas
   if (id === 'desculpas') enterSadMode();
@@ -7394,6 +8020,7 @@ const I18N = {
     'nav.jogos':      '⌗ jogos ▾',
     'nav.desculpas':  '♡ pedido de desculpas',
     'nav.segredo':    '🔒 segredo',
+    'nav.convite':    '✉ convite',
     'nav.download':   '⬇ instalar',
 
     // Header dropdown
@@ -7539,7 +8166,7 @@ const I18N = {
     'dl.win.badge':          'programa para windows',
     'dl.win.sub':            'app desktop completo — bandeja, atualização automática, sem navegador',
     'dl.win.btn':            'baixar instalador — windows',
-    'dl.meta.version':       'versão 1.0.25',
+    'dl.meta.version':       'versão 1.0.26',
     'dl.meta.size':          '~74 MB · Windows 10+',
     'dl.meta.installer':     'instalador com desinstalador',
     'dl.portable':           'versão portátil (sem instalar)',
@@ -7769,6 +8396,7 @@ const I18N = {
     'nav.jogos':      '⌗ games ▾',
     'nav.desculpas':  '♡ apologies',
     'nav.segredo':    '🔒 secret',
+    'nav.convite':    '✉ invitation',
     'nav.download':   '⬇ install',
 
     'hdr.profile':       '◈ my profile',
@@ -7911,7 +8539,7 @@ const I18N = {
     'dl.win.badge':          'windows program',
     'dl.win.sub':            'full desktop app — system tray, auto-updates, no browser',
     'dl.win.btn':            'download installer — windows',
-    'dl.meta.version':       'version 1.0.25',
+    'dl.meta.version':       'version 1.0.26',
     'dl.meta.size':          '~74 MB · Windows 10+',
     'dl.meta.installer':     'installer with uninstaller',
     'dl.portable':           'portable version (no install needed)',
