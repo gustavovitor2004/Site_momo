@@ -1,6 +1,6 @@
 {
   "name": "nosso-espaco",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "nosso espaço — app do casal",
   "main": "electron/main.js",
   "scripts": {
@@ -21,7 +21,8 @@
       "electron/**/*",
       "index.html",
       "icon.svg",
-      "manifest.json"
+      "manifest.json",
+      "convite-image.png"
     ],
     "extraResources": [],
     "publish": [

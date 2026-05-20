@@ -3635,7 +3635,8 @@
     position: relative;
     z-index: 5;
     text-align: center;
-    margin-bottom: 40px;
+    /* Espaço extra abaixo pra acomodar o papel quando ele sair do envelope */
+    margin-bottom: clamp(360px, 38vw, 460px);
     animation: convWarningIn 1.2s cubic-bezier(0.34, 1.1, 0.64, 1) both 0.2s;
   }
   @keyframes convWarningIn {
@@ -3694,8 +3695,8 @@
   }
   .convite-envelope {
     position: relative;
-    width: clamp(280px, 38vw, 420px);
-    height: clamp(190px, 26vw, 280px);
+    width: clamp(300px, 38vw, 440px);
+    height: clamp(200px, 26vw, 290px);
     cursor: pointer;
     transform-style: preserve-3d;
     transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
@@ -3870,16 +3871,21 @@
       transform: translate(calc(-50% + var(--fx, 0))/* */ , calc(-50% + var(--fy, 0))) scale(0.6) rotate(var(--fr, 180deg)); }
   }
 
-  /* Papel — escondido inicialmente dentro do envelope */
+  /* Papel — escondido inicialmente DENTRO do envelope.
+     Quando abre, desliza pra cima ficando totalmente visível, com largura
+     maior que o envelope (efeito de imponência). */
   .env-paper {
     position: absolute;
-    left: 7%; right: 7%;
-    bottom: 10%;
-    height: 84%;
+    left: 50%; bottom: 6%;
+    /* Papel é proporcional à imagem do convite (vertical, 1:1.5) */
+    width: 88%;
+    aspect-ratio: 1 / 1.45;
+    height: auto;
+    max-height: 92%;
     background: transparent;
-    transform: translateY(0) translateZ(1px);
+    transform: translate(-50%, 0) translateZ(1px);
     transition:
-      transform 1.6s cubic-bezier(0.25, 0.85, 0.35, 1),
+      transform 1.4s cubic-bezier(0.25, 0.85, 0.35, 1),
       opacity 0.6s ease;
     will-change: transform;
     z-index: 1;
@@ -3888,9 +3894,11 @@
   }
   .convite-envelope.opening .env-paper {
     opacity: 1;
-    transform: translateY(-180%) translateZ(20px);
+    /* Sai do envelope, fica diretamente acima — completamente visível */
+    transform: translate(-50%, -116%) translateZ(50px);
     pointer-events: auto;
-    transition-delay: 0.6s;
+    transition-delay: 0.5s;
+    transition-duration: 1.5s;
   }
   .env-paper-inner {
     position: relative;
@@ -3899,24 +3907,19 @@
       linear-gradient(180deg, #f6efd8 0%, #e8dfb8 100%);
     border: 1px solid rgba(160,120,40,0.45);
     box-shadow:
-      0 20px 60px rgba(0,0,0,0.65),
+      0 20px 60px rgba(0,0,0,0.85),
+      0 0 30px rgba(200,160,60,0.3),
       inset 0 0 30px rgba(180,140,60,0.18);
     overflow: hidden;
-    transform-origin: 50% 100%;
-    transform: scaleY(0.85) rotateX(15deg);
-    transition: transform 1.4s cubic-bezier(0.25, 0.9, 0.35, 1) 0.8s;
-  }
-  .convite-envelope.opening .env-paper-inner {
-    transform: scaleY(1) rotateX(0deg);
   }
   .env-paper-img {
     width: 100%; height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
     display: block;
     opacity: 0;
-    transform: scale(0.92);
-    transition: opacity 1s ease 1.6s, transform 1.2s cubic-bezier(0.25, 1, 0.35, 1) 1.6s;
+    transform: scale(1.05);
+    transition: opacity 0.9s ease 1.4s, transform 1.4s cubic-bezier(0.25, 1, 0.35, 1) 1.4s;
   }
   .convite-envelope.opening .env-paper-img {
     opacity: 1;
@@ -4788,7 +4791,7 @@
 
         <div>
           <a class="dl-win-btn"
-             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.26/nosso-espaco-setup-1.0.26.exe"
+             href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.27/nosso-espaco-setup-1.0.27.exe"
              download>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -4815,7 +4818,7 @@
         </div>
 
         <a class="dl-portable-link"
-           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.26/nosso-espaco-1.0.26-portable.exe"
+           href="https://github.com/gustavovitor2004/Site_momo/releases/download/v1.0.27/nosso-espaco-1.0.27-portable.exe"
            download>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span data-i18n="dl.portable">versão portátil (sem instalar)</span>
@@ -6150,7 +6153,7 @@ function setAvatarLogin(imgId, initId, src) {
 }
 
 // Versão do app — fallback estático sincronizado com package.json
-const APP_VERSION_FALLBACK = '1.0.26';
+const APP_VERSION_FALLBACK = '1.0.27';
 
 async function setLoginVersion() {
   const el = document.getElementById('login-version');
@@ -8166,7 +8169,7 @@ const I18N = {
     'dl.win.badge':          'programa para windows',
     'dl.win.sub':            'app desktop completo — bandeja, atualização automática, sem navegador',
     'dl.win.btn':            'baixar instalador — windows',
-    'dl.meta.version':       'versão 1.0.26',
+    'dl.meta.version':       'versão 1.0.27',
     'dl.meta.size':          '~74 MB · Windows 10+',
     'dl.meta.installer':     'instalador com desinstalador',
     'dl.portable':           'versão portátil (sem instalar)',
@@ -8539,7 +8542,7 @@ const I18N = {
     'dl.win.badge':          'windows program',
     'dl.win.sub':            'full desktop app — system tray, auto-updates, no browser',
     'dl.win.btn':            'download installer — windows',
-    'dl.meta.version':       'version 1.0.26',
+    'dl.meta.version':       'version 1.0.27',
     'dl.meta.size':          '~74 MB · Windows 10+',
     'dl.meta.installer':     'installer with uninstaller',
     'dl.portable':           'portable version (no install needed)',
